@@ -7,8 +7,6 @@ public class EndTurn {
 		Game.turn++;
 		
 		hiring();
-		
-		//Game.jlp.
 	}
 	
 	//Наем войск
@@ -39,6 +37,13 @@ public class EndTurn {
 					Game.town.get(i).line.get(i).lineNumber --;
 				}
 			}
+		}
+		
+		//Перерисовать панель с армиями если она открыта
+		if (Game.downCenter.current == Game.downCenter.armyL) {
+			Game.downCenter.armButtonRemove();
+			Game.downCenter.armies();
+			Game.downCenter.repaint();
 		}
 	}
 	

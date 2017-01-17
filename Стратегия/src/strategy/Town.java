@@ -109,12 +109,16 @@ public class Town extends JLabel implements MouseListener {
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (owner == 0) {
+			//Добавляет информацию в правую панель
 			RigthPanel.name = name;
 			RigthPanel.townId = id;
 			Game.downInf.inform.repaint();
+			//Подготавливает центральную панель
 			CenterPanel.focus = true;
 			CenterPanel.townId = id;
 			Game.downCenter.unlocked();
+			Game.downCenter.city.setColor(Game.downCenter.active);
+			Game.downCenter.addPanel();
 		}
 	}
 	@Override

@@ -44,8 +44,10 @@ public class CenterPanel extends JLabel implements MouseListener {
 		agents.setBounds(400, 0, 200, 20);
 		agents.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
 		add(agents);
-		
-		armyL.setBounds(0, 20, 600, 135);
+	}
+	
+	protected void addPanel() {
+		armyL.setBounds(0, 20, 600, 135);//135
 		armyL.addMouseListener(this);
 		cityL.setBounds(0, 20, 600, 135);
 		cityL.addMouseListener(this);
@@ -53,9 +55,22 @@ public class CenterPanel extends JLabel implements MouseListener {
 		agentsL.setBounds(0, 20, 600, 135);
 		agentsL.addMouseListener(this);
 		
-		current = armyL;
+		current = cityL;
 	}
 	
+	protected void removePanel() {
+		remove(current);
+		current = null;
+	}
+	
+	//Удаляет кнопки - отряды, чтобы потом поставить их заново
+	protected void armButtonRemove() {
+		for (int i = 0; i < arb.length; i++) {
+			arb[i] = null;
+		}
+	}
+	
+	//Устанавливает войска на панели
 	protected void armies() {
 		for (int i = 0; i < Game.emp.get(0).troop.size(); i++) {
 			if (Game.emp.get(0).troop.get(i).id == Game.town.get(townId).idArmy) {
@@ -68,15 +83,20 @@ public class CenterPanel extends JLabel implements MouseListener {
 						break;
 					}
 				}
-				//Заполнять arb массив
-				int x = 10, y = 7;
+				//Заполнять arb массив (отриосвка в нижней панели войск)
+				int sizeT = 68; //Размеры изображения и кнопок
+				int x = (getWidth() - sizeT * 6) / 2, y = 0;
 				for (int j = 0; j < Game.emp.get(0).troop.get(i).arm.size(); j++) {
+					if (j == 6) {
+						y += sizeT;
+						x = (getWidth() - sizeT * 6) / 2;
+					}
 					arb[size] = new ArmButton(Game.emp.get(0).troop.get(i).arm.get(j));
-					arb[size].setIcon(arb[size].ta.icon);
-					arb[size].setBounds(x, y, 100, 100);
+					arb[size].setIcon(Resize.resizeIcon(arb[size].ta.icon.getImage(), sizeT, sizeT));
+					arb[size].setBounds(x, y, sizeT, sizeT);
 					armyL.add(arb[size]);
 					size++;
-					x += 100;
+					x += sizeT;
 				}
 			}
 		}
@@ -102,7 +122,7 @@ public class CenterPanel extends JLabel implements MouseListener {
 		repaint();
 	}
 	
-	private class CityButton extends JLabel {
+	protected class CityButton extends JLabel {
 		Color cl = locked;
 		public CityButton() {
 			addMouseListener(CenterPanel.this);

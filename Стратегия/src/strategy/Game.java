@@ -80,6 +80,8 @@ public class Game extends JFrame implements ActionListener {
 			if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 				downCenter.locked();
 				CenterPanel.focus = false;
+				downCenter.removePanel();
+				
 				RigthPanel.name = null;
 				downInf.inform.repaint();
 			}
@@ -226,7 +228,7 @@ public class Game extends JFrame implements ActionListener {
 					//<350
 					move(2); //Курсор вверх
 				}
-				if (e.getX() > 950 & e.getY() > 10 & e.getY() < 660) {
+				if (e.getX() > 980 & e.getY() > 10 & e.getY() < 660) {
 					//>500
 					move(3); //Курсор вправо
 				}
