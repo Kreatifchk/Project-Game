@@ -73,7 +73,17 @@ public class ArmyTownHiring extends JLabel implements MouseListener, ActionListe
 		for (int i = 0; i < arm.length; i++) {
 			if (e.getSource() == arm[i]) {
 				if (Game.town.get(townId).line.size() < 12) {
-					Game.town.get(townId).line.add(arm[i].ta);
+					if (Game.town.get(townId).army == true) {
+						//Если армия в городе уже есть
+						int och = Game.town.get(townId).line.size() + 1;
+						int numb = Game.emp.get(0).troop.get(Game.town.get(townId).idArmy).arm.size();
+						if (och + numb <= 12) {
+							//Если поставив в очередь новых юнитов их не станет больше лимита
+							Game.town.get(townId).line.add(arm[i].ta);
+						}
+					} else {
+						Game.town.get(townId).line.add(arm[i].ta);
+					}
 				}
 				repaint();
 				armDel();
