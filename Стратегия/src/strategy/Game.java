@@ -17,6 +17,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.SwingWorker;
 import javax.swing.Timer;
 
+/** Main game frame */
 @SuppressWarnings("serial")
 public class Game extends JFrame implements ActionListener {
 	
