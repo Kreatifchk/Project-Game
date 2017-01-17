@@ -5,6 +5,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.JLabel;
+import javax.swing.SwingWorker;
 
 @SuppressWarnings("serial")
 public class Town extends JLabel implements MouseListener {
@@ -16,6 +17,11 @@ public class Town extends JLabel implements MouseListener {
 	String name;
 	
 	int x, y; //На каком тайле
+	
+	boolean ent;
+	
+	boolean army; //Есть ли в этом городе армия
+	int idArmy = -1; //Номер армии
 	
 	ArrayList<Building> build = new ArrayList<Building>();
 	ArrayList<TypeArmy> line = new ArrayList<TypeArmy>();
@@ -59,20 +65,65 @@ public class Town extends JLabel implements MouseListener {
 	public void setId(int id) {
 		this.id = id;
 	}
-
+	
+	//Отображает всплывающую подсказку о городе
+	private void informTown() {
+		ent = true;
+		new SwingWorker<Object, Object>() {
+			@Override
+			protected Object doInBackground() throws Exception {
+				boolean z = true;
+				for (int i = 0; i <= 16; i++) {
+					if (ent != false) {
+						Sleep.sleep(25);
+					} else {
+						z = false;
+						break;
+					}
+				}
+				if (z == true) {
+					String name = Game.emp.get(owner).name;
+					Tip inf = new Tip("<html><p align=\"center\">Владелец: " + name + "</p><html>");
+					int x = Town.this.getParent().getX() + 50;
+					int y = 0;
+					if (Town.this.getY() == 46) {
+						y = Town.this.getParent().getY() + 60;
+						x += 40;
+					} else {
+						y = Town.this.getParent().getY() + 28;
+					}
+					inf.setBounds(x, y, 160, 40);
+					Game.jlp.add(inf, new Integer(10));
+					while (ent != false) {
+						Sleep.sleep(50);
+					}
+					Sleep.sleep(80);
+					Game.jlp.remove(inf);
+					Game.jlp.repaint();
+				}
+				return null;
+			}
+		}.execute();
+	}
+	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		RigthPanel.name = name;
-		RigthPanel.townId = id;
-		Game.downInf.inform.repaint();
-		CenterPanel.focus = true;
-		Game.downCenter.unlocked();
+		if (owner == 0) {
+			RigthPanel.name = name;
+			RigthPanel.townId = id;
+			Game.downInf.inform.repaint();
+			CenterPanel.focus = true;
+			CenterPanel.townId = id;
+			Game.downCenter.unlocked();
+		}
 	}
 	@Override
 	public void mouseEntered(MouseEvent e) {
+		informTown();
 	}
 	@Override
 	public void mouseExited(MouseEvent e) {
+		ent = false;
 	}
 	@Override
 	public void mousePressed(MouseEvent e) {

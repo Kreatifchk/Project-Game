@@ -55,6 +55,7 @@ public class RigthPanel extends JLabel implements MouseListener {
 		add(inform);
 	}
 
+
 	@Override
 	public void mouseClicked(MouseEvent a) {
 		if (a.getSource() == arms & CenterPanel.focus == true) {
@@ -108,4 +109,5 @@ public class RigthPanel extends JLabel implements MouseListener {
 		}
 	}
 
+	
 }

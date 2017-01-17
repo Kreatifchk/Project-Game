@@ -11,7 +11,7 @@ public class Empery {
 	int town; //Количество городов
 	
 	ArrayList<Integer> towns = new ArrayList<Integer>(); //Номера городов 
-	ArrayList<Army> troop = new ArrayList<Army>(); //Отряды
+	ArrayList<Army> troop = new ArrayList<Army>(); //Армии
 	
 	int capital; //Город - столица
 	

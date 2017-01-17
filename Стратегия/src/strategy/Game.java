@@ -24,8 +24,8 @@ public class Game extends JFrame implements ActionListener {
 	
 	static JLabel downPanel = new JLabel();
 	static JLabel miniMap = new JLabel();
-	static CenterPanel downCenter = new CenterPanel();
-	static RigthPanel downInf = new RigthPanel();
+	static CenterPanel downCenter;
+	static RigthPanel downInf;
 	
 	//JLabel base = new JLabel();
 	
@@ -50,14 +50,14 @@ public class Game extends JFrame implements ActionListener {
 		setFocusable(true);
 		addKeyListener(new Key());
 		
-		down();
-		
 		@SuppressWarnings("unused")
 		Images img = new Images();
 		
 		init();
 		TownList.list();
 		empery();
+		
+		down();
 	}
 	
 	public class Key extends KeyAdapter {
@@ -96,11 +96,13 @@ public class Game extends JFrame implements ActionListener {
 		miniMap.setOpaque(true);
 		downPanel.add(miniMap);
 		
+		downCenter = new CenterPanel();
 		downCenter.setBounds(200, 4, 600, 184);
 		downCenter.setBackground(new Color(150, 75, 0));
 		downCenter.setOpaque(true);
 		downPanel.add(downCenter);
 		
+		downInf = new RigthPanel();
 		downInf.setBounds(800, 4, 200, 184);
 		downInf.setBorder(BorderFactory.createLineBorder(Color.BLACK, 4));
 		downInf.setBackground(new Color(150, 75, 0));
@@ -133,6 +135,7 @@ public class Game extends JFrame implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		repaint();
+		jlp.repaint();
 	}
 	
 	public class Mouse implements MouseListener, MouseMotionListener {
