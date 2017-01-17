@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: rpg.Main
+Class-Path: lib//basicplayer2.3.jar lib/commons-logging-api.jar lib/jl1.0.jar lib/jogg-0.0.7.jar lib/jorbis-0.0.13.jar lib/jspeex0.9.3.jar lib/mp3spi1.9.2.jar lib/tritonus_share.jar lib/vorbisspi1.0.1.jar
+
