@@ -1,4 +1,4 @@
-package strategy;
+п»їpackage strategy;
 
 import java.util.ArrayList;
 
@@ -8,14 +8,14 @@ public class Empery {
 	
 	int id;
 	
-	int town; //Количество городов
+	int town; //РљРѕР»РёС‡РµСЃС‚РІРѕ РіРѕСЂРѕРґРѕРІ
 	
-	ArrayList<Integer> towns = new ArrayList<Integer>(); //Номера городов 
-	ArrayList<Army> troop = new ArrayList<Army>(); //Армии
+	ArrayList<Integer> towns = new ArrayList<Integer>(); //РќРѕРјРµСЂР° РіРѕСЂРѕРґРѕРІ 
+	ArrayList<Army> troop = new ArrayList<Army>(); //РђСЂРјРёРё
 	
-	int capital; //Город - столица
+	int capital; //Р“РѕСЂРѕРґ - СЃС‚РѕР»РёС†Р°
 	
-	int gold = 1000; //Деньги империи
+	int gold = 1000; //Р”РµРЅСЊРіРё РёРјРїРµСЂРёРё
 	
 	public Empery(int id) {
 		this.id = id;

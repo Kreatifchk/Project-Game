@@ -1,4 +1,4 @@
-package strategy;
+ï»¿package strategy;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -74,11 +74,11 @@ public class ArmyTownHiring extends JLabel implements MouseListener, ActionListe
 			if (e.getSource() == arm[i]) {
 				if (Game.town.get(townId).line.size() < 12) {
 					if (Game.town.get(townId).army == true) {
-						//Åñëè àðìèÿ â ãîðîäå óæå åñòü
+						//Ð•ÑÐ»Ð¸ Ð°Ñ€Ð¼Ð¸Ñ Ð² Ð³Ð¾Ñ€Ð¾Ð´Ðµ ÑƒÐ¶Ðµ ÐµÑÑ‚ÑŒ
 						int och = Game.town.get(townId).line.size() + 1;
 						int numb = Game.emp.get(0).troop.get(Game.town.get(townId).idArmy).arm.size();
 						if (och + numb <= 12) {
-							//Åñëè ïîñòàâèâ â î÷åðåäü íîâûõ þíèòîâ èõ íå ñòàíåò áîëüøå ëèìèòà
+							//Ð•ÑÐ»Ð¸ Ð¿Ð¾ÑÑ‚Ð°Ð²Ð¸Ð² Ð² Ð¾Ñ‡ÐµÑ€ÐµÐ´ÑŒ Ð½Ð¾Ð²Ñ‹Ñ… ÑŽÐ½Ð¸Ñ‚Ð¾Ð² Ð¸Ñ… Ð½Ðµ ÑÑ‚Ð°Ð½ÐµÑ‚ Ð±Ð¾Ð»ÑŒÑˆÐµ Ð»Ð¸Ð¼Ð¸Ñ‚Ð°
 							Game.town.get(townId).line.add(arm[i].ta);
 						}
 					} else {

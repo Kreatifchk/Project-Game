@@ -1,4 +1,4 @@
-package strategy;
+п»їpackage strategy;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -32,15 +32,15 @@ public class Game extends JFrame implements ActionListener {
 	
 	Timer t = new Timer(20, this);
 	
-	static BcTile[][] bcTiles = new BcTile[15][15]; //Размер карты
+	static BcTile[][] bcTiles = new BcTile[15][15]; //Р Р°Р·РјРµСЂ РєР°СЂС‚С‹
 	
 	static ArrayList<Empery> emp = new ArrayList<Empery>();
 	static ArrayList<Town> town = new ArrayList<Town>();
 	
-	static int turn = 1; //Номер хода
+	static int turn = 1; //РќРѕРјРµСЂ С…РѕРґР°
 	
 	public Game() {
-		super("Стратегия");
+		super("РЎС‚СЂР°С‚РµРіРёСЏ");
 		setLayout(null);
 		jlp.setBounds(0, 0, 1000, 700);
 		jlp.setLayout(null);
@@ -131,9 +131,9 @@ public class Game extends JFrame implements ActionListener {
 	}
 	
 	private void empery() {
-		emp.add(new Empery(0).setName("Первая империя"));
-		emp.add(new Empery(1).setName("Великая империя"));
-		emp.add(new Empery(2).setName("Свободные племена"));
+		emp.add(new Empery(0).setName("РџРµСЂРІР°СЏ РёРјРїРµСЂРёСЏ"));
+		emp.add(new Empery(1).setName("Р’РµР»РёРєР°СЏ РёРјРїРµСЂРёСЏ"));
+		emp.add(new Empery(2).setName("РЎРІРѕР±РѕРґРЅС‹Рµ РїР»РµРјРµРЅР°"));
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -153,11 +153,11 @@ public class Game extends JFrame implements ActionListener {
 							break;
 						}
 						if (direction == 1) {
-							//Цикл переносит каждый тайл на 32 пикселя влево (в данном случае)
+							//Р¦РёРєР» РїРµСЂРµРЅРѕСЃРёС‚ РєР°Р¶РґС‹Р№ С‚Р°Р№Р» РЅР° 32 РїРёРєСЃРµР»СЏ РІР»РµРІРѕ (РІ РґР°РЅРЅРѕРј СЃР»СѓС‡Р°Рµ)
 							for (int z = 0; z < bcTiles.length; z++) {
 								for (int f = 0; f < bcTiles[0].length; f++) {
 									if (bcTiles[14][bcTiles.length-1].getX() < (bcTiles[0].length - 1) * 128) {
-										//Проверяет не находится ли посл. тайл на границе (так чтобы начало первого было у рамки)
+										//РџСЂРѕРІРµСЂСЏРµС‚ РЅРµ РЅР°С…РѕРґРёС‚СЃСЏ Р»Рё РїРѕСЃР». С‚Р°Р№Р» РЅР° РіСЂР°РЅРёС†Рµ (С‚Р°Рє С‡С‚РѕР±С‹ РЅР°С‡Р°Р»Рѕ РїРµСЂРІРѕРіРѕ Р±С‹Р»Рѕ Сѓ СЂР°РјРєРё)
 										bcTiles[z][f].setLocation(bcTiles[z][f].getX() + 32, bcTiles[z][f].getY());
 									} else {
 										break;
@@ -223,19 +223,19 @@ public class Game extends JFrame implements ActionListener {
 				over = true;
 				if (e.getX() < 100 & e.getY() > 10 & e.getY() < 660) {
 					//< 500
-					move(1); //Курсор влево
+					move(1); //РљСѓСЂСЃРѕСЂ РІР»РµРІРѕ
 				}
 				if (e.getY() < 100 & e.getX() > 10 & e.getX() < 990) {
 					//<350
-					move(2); //Курсор вверх
+					move(2); //РљСѓСЂСЃРѕСЂ РІРІРµСЂС…
 				}
 				if (e.getX() > 980 & e.getY() > 10 & e.getY() < 660) {
 					//>500
-					move(3); //Курсор вправо
+					move(3); //РљСѓСЂСЃРѕСЂ РІРїСЂР°РІРѕ
 				}
 				if (e.getY() > 650 & e.getX() > 10 & e.getX() < 990) {
 					//>350
-					move(4); //Курсор вниз
+					move(4); //РљСѓСЂСЃРѕСЂ РІРЅРёР·
 				}
 			}
 		}

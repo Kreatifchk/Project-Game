@@ -1,20 +1,20 @@
-package strategy;
+п»їpackage strategy;
 
 import java.util.ArrayList;
 
 import javax.swing.JLabel;
 
-/** Класс для армии на карте */
+/** РљР»Р°СЃСЃ РґР»СЏ Р°СЂРјРёРё РЅР° РєР°СЂС‚Рµ */
 @SuppressWarnings("serial")
 public class Army extends JLabel {
 	
 	int id;
-	int owner; //Владелец
+	int owner; //Р’Р»Р°РґРµР»РµС†
 	
-	int town; //В каком городе находится, если вне города то -1
-	int tile; //На каком тайле
+	int town; //Р’ РєР°РєРѕРј РіРѕСЂРѕРґРµ РЅР°С…РѕРґРёС‚СЃСЏ, РµСЃР»Рё РІРЅРµ РіРѕСЂРѕРґР° С‚Рѕ -1
+	int tile; //РќР° РєР°РєРѕРј С‚Р°Р№Р»Рµ
 	
-	ArrayList<TypeArmy> arm = new ArrayList<TypeArmy>(); //Типы отрядов
+	ArrayList<TypeArmy> arm = new ArrayList<TypeArmy>(); //РўРёРїС‹ РѕС‚СЂСЏРґРѕРІ
 	
 	public Army() {
 	}

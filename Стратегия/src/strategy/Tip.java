@@ -1,11 +1,11 @@
-package strategy;
+п»їpackage strategy;
 
 import java.awt.Color;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 
-/** Всплывающие подсказки */
+/** Р’СЃРїР»С‹РІР°СЋС‰РёРµ РїРѕРґСЃРєР°Р·РєРё */
 @SuppressWarnings("serial")
 public class Tip extends JLabel {
 	

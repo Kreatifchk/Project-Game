@@ -1,4 +1,4 @@
-package strategy;
+п»їpackage strategy;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,12 +9,12 @@ import javax.swing.JFrame;
 @SuppressWarnings("serial")
 public class Menu extends JFrame implements ActionListener {
 	
-	JButton start = new JButton("Начать игру");
+	JButton start = new JButton("РќР°С‡Р°С‚СЊ РёРіСЂСѓ");
 	
 	static Game g;
 	
 	public Menu() {
-		super("Стратегия");
+		super("РЎС‚СЂР°С‚РµРіРёСЏ");
 		setLayout(null);
 		
 		start.setBounds(215, 50, 170, 30);

@@ -1,4 +1,4 @@
-package strategy;
+п»їpackage strategy;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -10,23 +10,23 @@ import javax.swing.SwingWorker;
 @SuppressWarnings("serial")
 public class Town extends JLabel implements MouseListener {
 	
-	int owner; //Владелец
+	int owner; //Р’Р»Р°РґРµР»РµС†
 	
 	int id;
 	
 	String name;
 	
-	int x, y; //На каком тайле
+	int x, y; //РќР° РєР°РєРѕРј С‚Р°Р№Р»Рµ
 	
 	boolean ent;
 	
-	boolean army; //Есть ли в этом городе армия
-	int idArmy = -1; //Номер армии
+	boolean army; //Р•СЃС‚СЊ Р»Рё РІ СЌС‚РѕРј РіРѕСЂРѕРґРµ Р°СЂРјРёСЏ
+	int idArmy = -1; //РќРѕРјРµСЂ Р°СЂРјРёРё
 	
 	ArrayList<Building> build = new ArrayList<Building>();
 	ArrayList<TypeArmy> line = new ArrayList<TypeArmy>();
 	
-	//Констаты, определяющие в какой части тайла будет находится город
+	//РљРѕРЅСЃС‚Р°С‚С‹, РѕРїСЂРµРґРµР»СЏСЋС‰РёРµ РІ РєР°РєРѕР№ С‡Р°СЃС‚Рё С‚Р°Р№Р»Р° Р±СѓРґРµС‚ РЅР°С…РѕРґРёС‚СЃСЏ РіРѕСЂРѕРґ
 	static final LocationTile UP_LEFT = new LocationTile(0, 0),
 			UP_RIGTH = new LocationTile(92, 0),
 			DOWN_RIGTH = new LocationTile(92, 92),
@@ -66,7 +66,7 @@ public class Town extends JLabel implements MouseListener {
 		this.id = id;
 	}
 	
-	//Отображает всплывающую подсказку о городе
+	//РћС‚РѕР±СЂР°Р¶Р°РµС‚ РІСЃРїР»С‹РІР°СЋС‰СѓСЋ РїРѕРґСЃРєР°Р·РєСѓ Рѕ РіРѕСЂРѕРґРµ
 	private void informTown() {
 		ent = true;
 		new SwingWorker<Object, Object>() {
@@ -83,7 +83,7 @@ public class Town extends JLabel implements MouseListener {
 				}
 				if (z == true) {
 					String name = Game.emp.get(owner).name;
-					Tip inf = new Tip("<html><p align=\"center\">Владелец: " + name + "</p><html>");
+					Tip inf = new Tip("<html><p align=\"center\">Р’Р»Р°РґРµР»РµС†: " + name + "</p><html>");
 					int x = Town.this.getParent().getX() + 50;
 					int y = 0;
 					if (Town.this.getY() == 46) {
@@ -109,11 +109,11 @@ public class Town extends JLabel implements MouseListener {
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (owner == 0) {
-			//Добавляет информацию в правую панель
+			//Р”РѕР±Р°РІР»СЏРµС‚ РёРЅС„РѕСЂРјР°С†РёСЋ РІ РїСЂР°РІСѓСЋ РїР°РЅРµР»СЊ
 			RigthPanel.name = name;
 			RigthPanel.townId = id;
 			Game.downInf.inform.repaint();
-			//Подготавливает центральную панель
+			//РџРѕРґРіРѕС‚Р°РІР»РёРІР°РµС‚ С†РµРЅС‚СЂР°Р»СЊРЅСѓСЋ РїР°РЅРµР»СЊ
 			CenterPanel.focus = true;
 			CenterPanel.townId = id;
 			Game.downCenter.unlocked();

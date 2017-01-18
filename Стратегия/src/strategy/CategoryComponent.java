@@ -1,4 +1,4 @@
-package strategy;
+п»їpackage strategy;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -10,7 +10,7 @@ import javax.swing.JComponent;
 
 @SuppressWarnings("serial")
 public class CategoryComponent extends JComponent {
-	//Пример кастомной кнопки
+	//РџСЂРёРјРµСЂ РєР°СЃС‚РѕРјРЅРѕР№ РєРЅРѕРїРєРё
 
 	//private BufferedImage img;
 	private Color componentColor = new Color(232, 143, 23);

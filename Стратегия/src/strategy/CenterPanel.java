@@ -1,4 +1,4 @@
-package strategy;
+п»їpackage strategy;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -9,6 +9,7 @@ import java.awt.event.MouseListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.border.LineBorder;
 
 @SuppressWarnings("serial")
 public class CenterPanel extends JLabel implements MouseListener {
@@ -16,22 +17,24 @@ public class CenterPanel extends JLabel implements MouseListener {
 	static boolean focus;
 	static int townId;
 	
+	int focusUnit; //РќР° РєР°РєРѕРіРѕ СЋРЅРёС‚Р° РЅР°Р¶Р°Р»Рё
+	
 	Color locked = new Color(220, 255, 120);
 	Color active = new Color(255, 255, 10);
 	Color notActive = new Color(245, 255, 71);
 	
-	//Кнопки - переключатели панелей
+	//РљРЅРѕРїРєРё - РїРµСЂРµРєР»СЋС‡Р°С‚РµР»Рё РїР°РЅРµР»РµР№
 	CityButton city = new CityButton();
 	ArmyButton army = new ArmyButton();
 	AgentsButton agents = new AgentsButton();
 	
-	//Меняющиеся панели с различным содержимым
+	//РњРµРЅСЏСЋС‰РёРµСЃСЏ РїР°РЅРµР»Рё СЃ СЂР°Р·Р»РёС‡РЅС‹Рј СЃРѕРґРµСЂР¶РёРјС‹Рј
 	JLabel current;
 	JLabel armyL = new JLabel();
 	JLabel cityL = new JLabel();
 	JLabel agentsL = new JLabel();
 	
-	//Кнопки отрядов
+	//РљРЅРѕРїРєРё РѕС‚СЂСЏРґРѕРІ
 	ArmButton[] arb = new ArmButton[12];
 	
 	public CenterPanel() {
@@ -63,47 +66,47 @@ public class CenterPanel extends JLabel implements MouseListener {
 		current = null;
 	}
 	
-	//Удаляет кнопки - отряды, чтобы потом поставить их заново
+	//РЈРґР°Р»СЏРµС‚ РєРЅРѕРїРєРё - РѕС‚СЂСЏРґС‹, С‡С‚РѕР±С‹ РїРѕС‚РѕРј РїРѕСЃС‚Р°РІРёС‚СЊ РёС… Р·Р°РЅРѕРІРѕ
 	protected void armButtonRemove() {
 		for (int i = 0; i < arb.length; i++) {
+			try {
+				armyL.remove(arb[i]);
+				repaint();
+			} catch (NullPointerException e) {
+			} catch (ArrayIndexOutOfBoundsException e) {
+			}
 			arb[i] = null;
 		}
 	}
 	
-	//Устанавливает войска на панели
+	//РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ РІРѕР№СЃРєР° РЅР° РїР°РЅРµР»Рё
 	protected void armies() {
 		for (int i = 0; i < Game.emp.get(0).troop.size(); i++) {
 			if (Game.emp.get(0).troop.get(i).id == Game.town.get(townId).idArmy) {
-				//Если армия в городе найдена - отобразить ее
-				//Проверить с какого элемента заполнять массив
-				int size = 0;
-				for (int z = 0; z < arb.length; z++) {
-					if (arb[z] == null) {
-						size = z;
-						break;
-					}
-				}
-				//Заполнять arb массив (отриосвка в нижней панели войск)
-				int sizeT = 68; //Размеры изображения и кнопок
+				//Р•СЃР»Рё Р°СЂРјРёСЏ РІ РіРѕСЂРѕРґРµ РЅР°Р№РґРµРЅР° - РѕС‚РѕР±СЂР°Р·РёС‚СЊ РµРµ
+				//Р—Р°РїРѕР»РЅСЏС‚СЊ arb РјР°СЃСЃРёРІ (РѕС‚СЂРёРѕСЃРІРєР° РІ РЅРёР¶РЅРµР№ РїР°РЅРµР»Рё РІРѕР№СЃРє)
+				int sizeT = 68; //Р Р°Р·РјРµСЂС‹ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ Рё РєРЅРѕРїРѕРє
 				int x = (getWidth() - sizeT * 6) / 2, y = 0;
 				for (int j = 0; j < Game.emp.get(0).troop.get(i).arm.size(); j++) {
 					if (j == 6) {
 						y += sizeT;
 						x = (getWidth() - sizeT * 6) / 2;
 					}
-					arb[size] = new ArmButton(Game.emp.get(0).troop.get(i).arm.get(j));
-					arb[size].setIcon(Resize.resizeIcon(arb[size].ta.icon.getImage(), sizeT, sizeT));
-					arb[size].setBounds(x, y, sizeT, sizeT);
-					armyL.add(arb[size]);
-					size++;
+					if (arb[j] == null) {
+						arb[j] = new ArmButton(Game.emp.get(0).troop.get(i).arm.get(j));
+					}
+					arb[j].setIcon(Resize.resizeIcon(arb[j].ta.icon.getImage(), sizeT, sizeT));
+					arb[j].setBounds(x, y, sizeT, sizeT);
+					armyL.add(arb[j]);
 					x += sizeT;
 				}
+				break;
 			}
 		}
 		repaint();
 	}
 	
-	//Если убрали фокус с города
+	//Р•СЃР»Рё СѓР±СЂР°Р»Рё С„РѕРєСѓСЃ СЃ РіРѕСЂРѕРґР°
 	protected void locked() {
 		city.setColor(locked);
 		army.setColor(locked);
@@ -114,7 +117,7 @@ public class CenterPanel extends JLabel implements MouseListener {
 		repaint();
 	}
 	
-	//Если нажали на город
+	//Р•СЃР»Рё РЅР°Р¶Р°Р»Рё РЅР° РіРѕСЂРѕРґ
 	protected void unlocked() {
 		city.setColor(notActive);
 		army.setColor(notActive);
@@ -134,7 +137,7 @@ public class CenterPanel extends JLabel implements MouseListener {
 			g2d.setColor(cl);
 			g2d.fillRect(0, 0, 200, 20);
 			g2d.setColor(Color.BLACK);
-			g2d.drawString("Город", 80, 14);
+			g2d.drawString("Р“РѕСЂРѕРґ", 80, 14);
 		}
 		public void setColor(Color cl) {
 			this.cl = cl;
@@ -153,7 +156,7 @@ public class CenterPanel extends JLabel implements MouseListener {
 			g2d.setColor(cl);
 			g2d.fillRect(0, 0, 200, 20);
 			g2d.setColor(Color.BLACK);
-			g2d.drawString("Армия", 80, 14);
+			g2d.drawString("РђСЂРјРёСЏ", 80, 14);
 		}
 		public void setColor(Color cl) {
 			this.cl = cl;
@@ -172,7 +175,7 @@ public class CenterPanel extends JLabel implements MouseListener {
 			g2d.setColor(cl);
 			g2d.fillRect(0, 0, 200, 20);
 			g2d.setColor(Color.BLACK);
-			g2d.drawString("Агенты", 80, 14);
+			g2d.drawString("РђРіРµРЅС‚С‹", 80, 14);
 		}
 		public void setColor(Color cl) {
 			this.cl = cl;
@@ -183,6 +186,7 @@ public class CenterPanel extends JLabel implements MouseListener {
 		TypeArmy ta;
 		public ArmButton(TypeArmy ta) {
 			this.ta = ta;
+			addMouseListener(CenterPanel.this);
 		}
 	}
 	
@@ -221,6 +225,13 @@ public class CenterPanel extends JLabel implements MouseListener {
 				current = agentsL;
 				
 				repaint();
+			}
+			for (int i = 0; i < arb.length; i++) {
+				if (e.getComponent() == arb[i]) {
+					arb[i].setBorder(new LineBorder(Color.BLACK, 2));
+					focusUnit = i;
+					break;
+				}
 			}
 		}
 	}

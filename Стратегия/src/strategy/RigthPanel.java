@@ -1,4 +1,4 @@
-package strategy;
+п»їpackage strategy;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -19,7 +19,7 @@ public class RigthPanel extends JLabel implements MouseListener {
 	JLabel building = new JLabel();
 	JLabel arms = new JLabel();
 	JLabel empery = new JLabel();
-	JLabel end = new JLabel(); //Кнопка - конец хода
+	JLabel end = new JLabel(); //В РєРЅРѕРїРєР° - РєРѕРЅРµС† С…РѕРґР°
 	
 	ArmyTownHiring ath;
 	
@@ -104,8 +104,8 @@ public class RigthPanel extends JLabel implements MouseListener {
 					g2d.drawString(name, 15, 20);
 				}
 			}
-			g2d.drawString("Золото: " + Game.emp.get(0).gold, 10, 50);
-			g2d.drawString("Ход: " + Game.turn, 10, 80);
+			g2d.drawString("Р—РѕР»РѕС‚Рѕ: " + Game.emp.get(0).gold, 10, 50);
+			g2d.drawString("РҐРѕРґ: " + Game.turn, 10, 80);
 		}
 	}
 

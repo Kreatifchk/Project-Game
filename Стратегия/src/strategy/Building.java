@@ -1,9 +1,9 @@
-package strategy;
+п»їpackage strategy;
 
 public abstract class Building {
 	
-	protected boolean built; //Здание построено или нет
-	protected int cost; //Стоимость
-	protected int time; //Сколько ходов будет строиться
+	protected boolean built; //Р—РґР°РЅРёРµ РїРѕСЃС‚СЂРѕРµРЅРѕ РёР»Рё РЅРµС‚
+	protected int cost; //РЎС‚РѕРёРјРѕСЃС‚СЊ
+	protected int time; //РЎРєРѕР»СЊРєРѕ С…РѕРґРѕРІ Р±СѓРґРµС‚ СЃС‚СЂРѕРёС‚СЊСЃСЏ
 	
 }

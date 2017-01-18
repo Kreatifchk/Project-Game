@@ -1,6 +1,6 @@
-package strategy;
+п»їpackage strategy;
 
-/** Класс - конец хода */
+/** РљР»Р°СЃСЃ - РєРѕРЅРµС† С…РѕРґР° */
 public class EndTurn {
 	
 	public EndTurn() {
@@ -9,16 +9,16 @@ public class EndTurn {
 		hiring();
 	}
 	
-	//Наем войск
+	//РќР°РµРј РІРѕР№СЃРє
 	private void hiring() {
 		for (int i = 0; i < Game.town.size(); i++) {
 			if (Game.town.get(i).line.size() > 0) {
-				//Добавить в армию отряд, или если армии нет - создать ее
+				//Р”РѕР±Р°РІРёС‚СЊ РІ Р°СЂРјРёСЋ РѕС‚СЂСЏРґ, РёР»Рё РµСЃР»Рё Р°СЂРјРёРё РЅРµС‚ - СЃРѕР·РґР°С‚СЊ РµРµ
 				int number, own;
-				/* number - кол-во армий в империи (чтоб определить место след.) 
-				   own - владелец город (империя такая-то) */
+				/* number - РєРѕР»-РІРѕ Р°СЂРјРёР№ РІ РёРјРїРµСЂРёРё (С‡С‚РѕР± РѕРїСЂРµРґРµР»РёС‚СЊ РјРµСЃС‚Рѕ СЃР»РµРґ.) 
+				   own - РІР»Р°РґРµР»РµС† РіРѕСЂРѕРґ (РёРјРїРµСЂРёСЏ С‚Р°РєР°СЏ-С‚Рѕ) */
 				if (Game.town.get(i).army != true) {
-					//Если армии в городе еще нету
+					//Р•СЃР»Рё Р°СЂРјРёРё РІ РіРѕСЂРѕРґРµ РµС‰Рµ РЅРµС‚Сѓ
 					Game.town.get(i).army = true;
 					Game.town.get(i).idArmy = Game.emp.get(0).troop.size();
 					own = Game.town.get(i).owner;
@@ -26,12 +26,12 @@ public class EndTurn {
 					Game.emp.get(own).troop.add(new Army().setTown(i).setId(number));
 					Game.emp.get(own).troop.get(number).arm.add(Game.town.get(i).line.get(0));
 				} else {
-					//Если армия уже существует в этом городе
+					//Р•СЃР»Рё Р°СЂРјРёСЏ СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚ РІ СЌС‚РѕРј РіРѕСЂРѕРґРµ
 					own = Game.town.get(i).owner;
-					number = Game.town.get(i).idArmy; //ID армии в этом городе
+					number = Game.town.get(i).idArmy; //ID Р°СЂРјРёРё РІ СЌС‚РѕРј РіРѕСЂРѕРґРµ
 					Game.emp.get(own).troop.get(number).arm.add(Game.town.get(i).line.get(0));
 				}
-				//Убрать из очереди отряд
+				//РЈР±СЂР°С‚СЊ РёР· РѕС‡РµСЂРµРґРё РѕС‚СЂСЏРґ
 				Game.town.get(i).line.remove(0);
 				for (int z = 0; z < Game.town.get(i).line.size(); z++) {
 					Game.town.get(i).line.get(i).lineNumber --;
@@ -39,7 +39,7 @@ public class EndTurn {
 			}
 		}
 		
-		//Перерисовать панель с армиями если она открыта
+		//РџРµСЂРµСЂРёСЃРѕРІР°С‚СЊ РїР°РЅРµР»СЊ СЃ Р°СЂРјРёСЏРјРё РµСЃР»Рё РѕРЅР° РѕС‚РєСЂС‹С‚Р°
 		if (Game.downCenter.current == Game.downCenter.armyL) {
 			Game.downCenter.armButtonRemove();
 			Game.downCenter.armies();

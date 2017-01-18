@@ -1,21 +1,21 @@
-package strategy;
+п»їpackage strategy;
 
 import javax.swing.ImageIcon;
 
-/** Типы воинов, на основе этого класса делаются наследники */
+/** РўРёРїС‹ РІРѕРёРЅРѕРІ, РЅР° РѕСЃРЅРѕРІРµ СЌС‚РѕРіРѕ РєР»Р°СЃСЃР° РґРµР»Р°СЋС‚СЃСЏ РЅР°СЃР»РµРґРЅРёРєРё */
 public abstract class TypeArmy {
 	
 	@SuppressWarnings("unused")
-	private int count; //Количество юнитов в отряде
+	private int count; //РљРѕР»РёС‡РµСЃС‚РІРѕ СЋРЅРёС‚РѕРІ РІ РѕС‚СЂСЏРґРµ
 	
-	protected int cost; //Стоимость юнита
-	protected int force; //Сила
-	protected int speedAttack; //Скорость атаки
-	protected int lineNumber; //Место в очереди наема
+	protected int cost; //РЎС‚РѕРёРјРѕСЃС‚СЊ СЋРЅРёС‚Р°
+	protected int force; //РЎРёР»Р°
+	protected int speedAttack; //РЎРєРѕСЂРѕСЃС‚СЊ Р°С‚Р°РєРё
+	protected int lineNumber; //РњРµСЃС‚Рѕ РІ РѕС‡РµСЂРµРґРё РЅР°РµРјР°
 	
-	protected String name; //Имя юнита
+	protected String name; //РРјСЏ СЋРЅРёС‚Р°
 	
-	protected ImageIcon icon; //Иконка воина
+	protected ImageIcon icon; //РРєРѕРЅРєР° РІРѕРёРЅР°
 	
 	protected void setCount(int count) {
 		this.count = count;
