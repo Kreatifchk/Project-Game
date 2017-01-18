@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -15,9 +16,12 @@ import javax.swing.border.LineBorder;
 public class CenterPanel extends JLabel implements MouseListener {
 	
 	static boolean focus;
-	static int townId;
+	static int townId = - 1;
+	static int idArmy; //id армии на панеле
+	static boolean pressedShift; //Если нажата shift
+	static boolean selection; //Выделены ли войска
 	
-	int focusUnit; //На какого юнита нажали
+	int one = -1; //На какого юнита нажал в начале (для выделения)
 	
 	Color locked = new Color(220, 255, 120);
 	Color active = new Color(255, 255, 10);
@@ -35,7 +39,8 @@ public class CenterPanel extends JLabel implements MouseListener {
 	JLabel agentsL = new JLabel();
 	
 	//Кнопки отрядов
-	ArmButton[] arb = new ArmButton[12];
+	static ArmButton[] arb = new ArmButton[12];
+	static ArrayList<Integer> selected = new ArrayList<Integer>();
 	
 	public CenterPanel() {
 		city.setBounds(0, 0, 200, 20);
@@ -47,6 +52,8 @@ public class CenterPanel extends JLabel implements MouseListener {
 		agents.setBounds(400, 0, 200, 20);
 		agents.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
 		add(agents);
+		
+		addKeyListener(new Key());
 	}
 	
 	protected void addPanel() {
@@ -97,9 +104,11 @@ public class CenterPanel extends JLabel implements MouseListener {
 					}
 					arb[j].setIcon(Resize.resizeIcon(arb[j].ta.icon.getImage(), sizeT, sizeT));
 					arb[j].setBounds(x, y, sizeT, sizeT);
+					arb[j].setFocusable(false);
 					armyL.add(arb[j]);
 					x += sizeT;
 				}
+				idArmy = i;
 				break;
 			}
 		}
@@ -112,9 +121,22 @@ public class CenterPanel extends JLabel implements MouseListener {
 		army.setColor(locked);
 		agents.setColor(locked);
 		
-		remove(current);
+		try {
+			remove(current);
+		} catch (NullPointerException e) {
+		}
 		
 		repaint();
+	}
+	
+	//Возвращает стандартные рамки кнопкам
+	protected void standBorder() {
+		try {
+			for (int i = 0; i < arb.length; i++) {
+				arb[i].setBorder(new JButton().getBorder());
+			}
+		} catch (NullPointerException e) {
+		}
 	}
 	
 	//Если нажали на город
@@ -190,6 +212,35 @@ public class CenterPanel extends JLabel implements MouseListener {
 		}
 	}
 	
+	//Выход армии из города
+	protected static void outputArmy() {
+		int size = Game.emp.get(0).troop.size();
+		//Создаем новую армию
+		Game.emp.get(0).troop.add(new Army().setTown(-1).setId(size));
+		Game.emp.get(0).troop.get(size).setBounds(0, 0, 36, 36);
+		//Определяем на каком тайле находится город и ставим там армию
+		int xTile = Game.town.get(townId).x, yTile = Game.town.get(townId).y;
+		Game.bcTiles[xTile][yTile].add(Game.emp.get(0).troop.get(size));
+		
+		/*for (TypeArmy i: Game.emp.get(0).troop.get(idArmy).arm) {
+			
+		}*/
+		for (int i = 0; i < selected.size(); i++) {
+			int sel = selected.get(i);
+			TypeArmy x = Game.emp.get(0).troop.get(idArmy).arm.get(sel);
+			//Добавляем отряды в новую армию
+			Game.emp.get(0).troop.get(size).arm.add(x);
+			//Убираем из старой
+			Game.emp.get(0).troop.get(idArmy).arm.remove(sel);
+			//Game.downCenter.remove(arb[sel]);
+		}
+		//Если отрядов больше не осталось - удалить армию
+		if (Game.emp.get(0).troop.get(idArmy).arm.size() == 0) {
+			Game.emp.get(0).troop.remove(idArmy);
+		}
+		Game.downCenter.repaint();
+	}
+	
 	public void mouseClicked(MouseEvent e) {
 		if (focus == true) {
 			if (e.getSource() == city) {
@@ -201,9 +252,12 @@ public class CenterPanel extends JLabel implements MouseListener {
 				add(cityL);
 				current = cityL;
 				
+				selection = false;
+				selected.clear();
+				
 				repaint();
 			}
-			if (e.getSource() == army) {
+			else if (e.getSource() == army) {
 				city.setColor(notActive);
 				army.setColor(active);
 				agents.setColor(notActive);
@@ -213,9 +267,12 @@ public class CenterPanel extends JLabel implements MouseListener {
 				armies();
 				current = armyL;
 				
+				selection = false;
+				selected.clear();
+				
 				repaint();
 			}
-			if (e.getSource() == agents) {
+			else if (e.getSource() == agents) {
 				city.setColor(notActive);
 				army.setColor(notActive);
 				agents.setColor(active);
@@ -224,15 +281,40 @@ public class CenterPanel extends JLabel implements MouseListener {
 				add(agentsL);
 				current = agentsL;
 				
+				selection = false;
+				selected.clear();
+				
 				repaint();
+			} else {
+				standBorder();
+				selection = false;
+				selected.clear();
 			}
 			for (int i = 0; i < arb.length; i++) {
 				if (e.getComponent() == arb[i]) {
-					arb[i].setBorder(new LineBorder(Color.BLACK, 2));
-					focusUnit = i;
+					if (pressedShift == true) {
+						standBorder();
+						if (one == - 1) {
+							arb[i].setBorder(new LineBorder(Color.BLACK, 2));
+							one = i;
+						} else {
+							for (int z = one; z <= i; z++) {
+								arb[z].setBorder(new LineBorder(Color.BLACK, 2));
+								selected.add(new Integer(z));
+							}
+							one = - 1;
+						}
+					} else {
+						one = i;
+						standBorder();
+						arb[i].setBorder(new LineBorder(Color.BLACK, 2));
+						selected.add(new Integer(i));
+					}
+					selection = true;
 					break;
 				}
 			}
+			
 		}
 	}
 	@Override

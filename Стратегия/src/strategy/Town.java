@@ -26,6 +26,8 @@ public class Town extends JLabel implements MouseListener {
 	ArrayList<Building> build = new ArrayList<Building>();
 	ArrayList<TypeArmy> line = new ArrayList<TypeArmy>();
 	
+	LocationTile locTile; //Для запросов от других классов
+	
 	//Констаты, определяющие в какой части тайла будет находится город
 	static final LocationTile UP_LEFT = new LocationTile(0, 0),
 			UP_RIGTH = new LocationTile(92, 0),
@@ -35,6 +37,7 @@ public class Town extends JLabel implements MouseListener {
 	
 	public Town(LocationTile lt, int x, int y) {
 		super();
+		this.locTile = lt;
 		setIcon(Images.town);
 		setBounds(lt.getX(), lt.getY(), 36, 36);
 		this.x = x;
@@ -44,6 +47,7 @@ public class Town extends JLabel implements MouseListener {
 	
 	public Town(LocationTile lt, int x, int y, int owner) {
 		super();
+		this.locTile = lt;
 		setIcon(Images.town);
 		setBounds(x, y, 36, 36);
 		this.x = x;
@@ -119,6 +123,7 @@ public class Town extends JLabel implements MouseListener {
 			Game.downCenter.unlocked();
 			Game.downCenter.city.setColor(Game.downCenter.active);
 			Game.downCenter.addPanel();
+			//Указывает тайлу что ID города на которыц нажали
 		}
 	}
 	@Override

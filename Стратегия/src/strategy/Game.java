@@ -3,8 +3,6 @@
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -59,34 +57,7 @@ public class Game extends JFrame implements ActionListener {
 		empery();
 		
 		down();
-	}
-	
-	public class Key extends KeyAdapter {
-		@Override
-		public void keyPressed(KeyEvent e) {
-			if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-				Menu.g.setLocation(Menu.g.getX() + 70, Menu.g.getY());
-			}
-			if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-				Menu.g.setLocation(Menu.g.getX() - 70, Menu.g.getY());
-			}
-			if (e.getKeyCode() == KeyEvent.VK_0) {
-				for (int i = 0; i < town.get(0).line.size(); i++) {
-					System.out.println(town.get(0).line.get(i).lineNumber);
-				}
-			}
-			if (e.getKeyCode() == KeyEvent.VK_DELETE) {
-				System.exit(0);
-			}
-			if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-				downCenter.locked();
-				CenterPanel.focus = false;
-				downCenter.removePanel();
-				
-				RigthPanel.name = null;
-				downInf.inform.repaint();
-			}
-		}
+		//System.out.println(Runtime.getRuntime().freeMemory() / 1024 / 1024);
 	}
 	
 	private void down() {
