@@ -23,7 +23,7 @@ public class EndTurn {
 					Game.town.get(i).idArmy = Game.emp.get(0).troop.size();
 					own = Game.town.get(i).owner;
 					number = Game.emp.get(own).troop.size();
-					Game.emp.get(own).troop.add(new Army().setTown(i).setId(number));
+					Game.emp.get(own).troop.add(new Army().setTown(i).setId(number).setOwner(0));
 					Game.emp.get(own).troop.get(number).arm.add(Game.town.get(i).line.get(0));
 				} else {
 					//Если армия уже существует в этом городе

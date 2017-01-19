@@ -1,5 +1,7 @@
 ﻿package strategy;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -10,7 +12,7 @@ import javax.swing.JLabel;
 public class Army extends JLabel {
 	
 	int id;
-	int owner; //Владелец
+	int owner = -1; //Владелец
 	
 	int town; //В каком городе находится, если вне города то -1
 	int tile; //На каком тайле
@@ -21,6 +23,7 @@ public class Army extends JLabel {
 	
 	public Army() {
 		setIcon(icon);
+		addMouseListener(new Mouse());
 	}
 	
 	public Army setTown(int town) {
@@ -31,6 +34,21 @@ public class Army extends JLabel {
 	public Army setId(int id) {
 		this.id = id;
 		return this;
+	}
+	
+	public Army setOwner(int owner) {
+		this.owner = owner;
+		return this;
+	}
+	
+	private class Mouse extends MouseAdapter {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			if (owner == 0) {
+				CenterPanel.idArmy = id;
+				Game.downCenter.clickArmy();
+			}
+		}
 	}
 	
 }

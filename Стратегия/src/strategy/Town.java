@@ -120,6 +120,7 @@ public class Town extends JLabel implements MouseListener {
 			//Подготавливает центральную панель
 			CenterPanel.focus = true;
 			CenterPanel.townId = id;
+			Game.downCenter.armButtonRemove();
 			Game.downCenter.unlocked();
 			Game.downCenter.city.setColor(Game.downCenter.active);
 			Game.downCenter.addPanel();

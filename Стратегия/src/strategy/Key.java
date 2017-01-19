@@ -18,15 +18,7 @@ public class Key extends KeyAdapter {
 			System.exit(0);
 		}
 		if (key == KeyEvent.VK_ESCAPE) {
-			Game.downCenter.locked();
-			CenterPanel.focus = false;
-			Game.downCenter.removePanel();
-			CenterPanel.townId = -1;
-			CenterPanel.selection = false;
-			CenterPanel.selected.clear();
-			
-			RigthPanel.name = null;
-			Game.downInf.inform.repaint();
+			escape();
 		}
 		if (key == KeyEvent.VK_SHIFT) {
 			CenterPanel.pressedShift = true;
@@ -39,6 +31,19 @@ public class Key extends KeyAdapter {
 		if (key == KeyEvent.VK_SHIFT) {
 			CenterPanel.pressedShift = false;
 		}
+	}
+	
+	//Потеря фокуса нижней центральной панели
+	public static void escape() {
+		Game.downCenter.locked();
+		CenterPanel.focus = false;
+		Game.downCenter.removePanel();
+		CenterPanel.townId = -1;
+		CenterPanel.selection = false;
+		CenterPanel.selected.clear();
+		
+		RigthPanel.name = null;
+		Game.downInf.inform.repaint();
 	}
 	
 }

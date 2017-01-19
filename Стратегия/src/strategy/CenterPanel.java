@@ -69,8 +69,11 @@ public class CenterPanel extends JLabel implements MouseListener {
 	}
 	
 	protected void removePanel() {
-		remove(current);
-		current = null;
+		try {
+			remove(current);
+			current = null;
+		} catch (NullPointerException e) {
+		}
 	}
 	
 	//Удаляет кнопки - отряды, чтобы потом поставить их заново
@@ -139,11 +142,82 @@ public class CenterPanel extends JLabel implements MouseListener {
 		}
 	}
 	
+	//Выход армии из города
+	protected static void outputArmy() {
+		int size = Game.emp.get(0).troop.size();
+		//Создаем новую армию
+		Game.emp.get(0).troop.add(new Army().setTown(-1).setId(size).setOwner(0));
+		Game.emp.get(0).troop.get(size).setBounds(0, 0, 36, 36);
+		//Определяем на каком тайле находится город и ставим там армию
+		int xTile = Game.town.get(townId).x, yTile = Game.town.get(townId).y;
+		Game.bcTiles[xTile][yTile].add(Game.emp.get(0).troop.get(size));
+		
+		int sel = selected.get(0); //Удалять всегда будем 1 элемент
+		//потому что размер массива с каждым удалением будет скоращаться
+		//и элементы сдвигаться влево
+		for (int i = 0; i < selected.size(); i++) {
+			TypeArmy x = Game.emp.get(0).troop.get(idArmy).arm.get(sel);
+			//Добавляем отряды в новую армию
+			Game.emp.get(0).troop.get(size).arm.add(x);
+			//Убираем из старой
+			Game.emp.get(0).troop.get(idArmy).arm.remove(sel);
+		}
+		//Если отрядов больше не осталось - удалить армию
+		if (Game.emp.get(0).troop.get(idArmy).arm.size() == 0) {
+			Game.emp.get(0).troop.remove(idArmy);
+		}
+		Game.downCenter.armButtonRemove();
+		Game.downCenter.armies();
+		Game.downCenter.repaint();
+	}
+	
+	//Происходит при клике на армию вне города
+	protected void clickArmy() {
+		if (focus == true) {
+			focus = false;
+			city.setColor(locked);
+			agents.setColor(locked);
+			
+			changeArmy();
+			
+			repaint();
+		} else {
+			add(armyL);
+			current = armyL;
+			army.setColor(active);
+			changeArmy();
+			repaint();
+		}
+	}
+	
+	//Меняет армию с городской на внегородскую или отрисовывает с нуля
+	private void changeArmy() {
+		armButtonRemove();
+		int sizeT = 68;
+		int x = (getWidth() - sizeT * 6) / 2, y = 0;
+		for (int i = 0; i < Game.emp.get(0).troop.get(idArmy).arm.size(); i++) {
+			if (i == 6) {
+				y += sizeT;
+				x = (getWidth() - sizeT * 6) / 2;
+			}
+			if (arb[i] == null) {
+				arb[i] = new ArmButton(Game.emp.get(0).troop.get(idArmy).arm.get(i));
+			}
+			arb[i].setIcon(Resize.resizeIcon(arb[i].ta.icon.getImage(), sizeT, sizeT));
+			arb[i].setBounds(x, y, sizeT, sizeT);
+			arb[i].setFocusable(false);
+			armyL.add(arb[i]);
+			x += sizeT;
+		}
+	}
+	
 	//Если нажали на город
 	protected void unlocked() {
 		city.setColor(notActive);
+		city.setEnabled(true);
 		army.setColor(notActive);
 		agents.setColor(notActive);
+		agents.setEnabled(true);
 		repaint();
 	}
 	
@@ -211,38 +285,7 @@ public class CenterPanel extends JLabel implements MouseListener {
 			addMouseListener(CenterPanel.this);
 		}
 	}
-	
-	//Выход армии из города
-	protected static void outputArmy() {
-		int size = Game.emp.get(0).troop.size();
-		//Создаем новую армию
-		Game.emp.get(0).troop.add(new Army().setTown(-1).setId(size));
-		Game.emp.get(0).troop.get(size).setBounds(0, 0, 36, 36);
-		//Определяем на каком тайле находится город и ставим там армию
-		int xTile = Game.town.get(townId).x, yTile = Game.town.get(townId).y;
-		Game.bcTiles[xTile][yTile].add(Game.emp.get(0).troop.get(size));
-		
-		/*for (TypeArmy i: Game.emp.get(0).troop.get(idArmy).arm) {
-			
-		}*/
-		int sel = selected.get(0); //Удалять всегда будем 1 элемент
-		//потому что размер массива с каждым удалением будет скоращаться
-		//и элементы сдвигаться влево
-		for (int i = 0; i < selected.size(); i++) {
-			TypeArmy x = Game.emp.get(0).troop.get(idArmy).arm.get(sel);
-			//Добавляем отряды в новую армию
-			Game.emp.get(0).troop.get(size).arm.add(x);
-			//Убираем из старой
-			Game.emp.get(0).troop.get(idArmy).arm.remove(sel);
-		}
-		//Если отрядов больше не осталось - удалить армию
-		if (Game.emp.get(0).troop.get(idArmy).arm.size() == 0) {
-			Game.emp.get(0).troop.remove(idArmy);
-		}
-		Game.downCenter.armButtonRemove();
-		Game.downCenter.armies();
-		Game.downCenter.repaint();
-	}
+
 	
 	public void mouseClicked(MouseEvent e) {
 		if (focus == true) {
