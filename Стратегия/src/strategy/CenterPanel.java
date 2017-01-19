@@ -225,19 +225,22 @@ public class CenterPanel extends JLabel implements MouseListener {
 		/*for (TypeArmy i: Game.emp.get(0).troop.get(idArmy).arm) {
 			
 		}*/
+		int sel = selected.get(0); //Удалять всегда будем 1 элемент
+		//потому что размер массива с каждым удалением будет скоращаться
+		//и элементы сдвигаться влево
 		for (int i = 0; i < selected.size(); i++) {
-			int sel = selected.get(i);
 			TypeArmy x = Game.emp.get(0).troop.get(idArmy).arm.get(sel);
 			//Добавляем отряды в новую армию
 			Game.emp.get(0).troop.get(size).arm.add(x);
 			//Убираем из старой
 			Game.emp.get(0).troop.get(idArmy).arm.remove(sel);
-			//Game.downCenter.remove(arb[sel]);
 		}
 		//Если отрядов больше не осталось - удалить армию
 		if (Game.emp.get(0).troop.get(idArmy).arm.size() == 0) {
 			Game.emp.get(0).troop.remove(idArmy);
 		}
+		Game.downCenter.armButtonRemove();
+		Game.downCenter.armies();
 		Game.downCenter.repaint();
 	}
 	
