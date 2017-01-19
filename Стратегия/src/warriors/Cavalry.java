@@ -3,19 +3,19 @@ package warriors;
 import strategy.Images;
 import strategy.TypeArmy;
 
-public class Archer extends TypeArmy {
+public class Cavalry extends TypeArmy {
 	
-	public Archer(int count) {
-		cost = 150;
+	public Cavalry(int count) {
+		cost = 300;
 		
-		force = 8;
+		force = 12;
 		speedAttack = 7;
 		
 		setCount(count);
 		
 		name = "Лучник";
 		
-		icon = Images.archer;
+		icon = Images.cavalry;
 	}
 	
 }

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.border.LineBorder;
 
@@ -143,11 +144,12 @@ public class CenterPanel extends JLabel implements MouseListener {
 	}
 	
 	//Выход армии из города
-	protected static void outputArmy() {
+	protected static void outputArmy(int xR, int yR) {
+		//Аргументы: x и y координата где размещать войско
 		int size = Game.emp.get(0).troop.size();
 		//Создаем новую армию
 		Game.emp.get(0).troop.add(new Army().setTown(-1).setId(size).setOwner(0));
-		Game.emp.get(0).troop.get(size).setBounds(0, 0, 36, 36);
+		Game.emp.get(0).troop.get(size).setBounds(xR-18, yR-18, 36, 36);
 		//Определяем на каком тайле находится город и ставим там армию
 		int xTile = Game.town.get(townId).x, yTile = Game.town.get(townId).y;
 		Game.bcTiles[xTile][yTile].add(Game.emp.get(0).troop.get(size));
@@ -168,6 +170,7 @@ public class CenterPanel extends JLabel implements MouseListener {
 		}
 		Game.downCenter.armButtonRemove();
 		Game.downCenter.armies();
+		Game.downCenter.removeBord();
 		Game.downCenter.repaint();
 	}
 	
@@ -190,7 +193,7 @@ public class CenterPanel extends JLabel implements MouseListener {
 		}
 	}
 	
-	//Меняет армию с городской на внегородскую или отрисовывает с нуля
+	//Меняет армию на панеле с городской на внегородскую или отрисовывает с нуля
 	private void changeArmy() {
 		armButtonRemove();
 		int sizeT = 68;
@@ -219,6 +222,37 @@ public class CenterPanel extends JLabel implements MouseListener {
 		agents.setColor(notActive);
 		agents.setEnabled(true);
 		repaint();
+	}
+	
+	static JLabel bord;
+	//Показывает где можно разместить войска
+	private void bord() {
+		int x = Game.town.get(townId).getX(), y = Game.town.get(townId).getY();
+		int xT = Game.town.get(townId).x, yT = Game.town.get(townId).x;
+		if (bord == null) {
+			bord = new JLabel() {
+				@Override
+				public void paintComponent(Graphics g) {
+					super.paintComponent(g);
+					Graphics2D g2d = (Graphics2D) g;
+					g2d.setColor(new Color(32, 32, 128, 128));
+					g2d.fillRect(0, 0, 102, 102);
+				}
+			};
+			bord.setBounds(x-30, y-30, 102, 102);
+			Game.bcTiles[xT][yT].add(bord);
+			Game.bcTiles[xT][yT].repaint();
+		}
+	}
+	
+	//Убирает рамку размещения войска
+	protected void removeBord() {
+		if (bord != null) {
+			JComponent x = (JComponent) bord.getParent();
+			x.remove(bord);
+			x.repaint();
+			bord = null;
+		}
 	}
 	
 	protected class CityButton extends JLabel {
@@ -300,6 +334,7 @@ public class CenterPanel extends JLabel implements MouseListener {
 				
 				selection = false;
 				selected.clear();
+				removeBord();
 				
 				repaint();
 			}
@@ -315,6 +350,7 @@ public class CenterPanel extends JLabel implements MouseListener {
 				
 				selection = false;
 				selected.clear();
+				removeBord();
 				
 				repaint();
 			}
@@ -329,12 +365,14 @@ public class CenterPanel extends JLabel implements MouseListener {
 				
 				selection = false;
 				selected.clear();
+				removeBord();
 				
 				repaint();
 			} else {
 				standBorder();
 				selection = false;
 				selected.clear();
+				removeBord();
 			}
 			for (int i = 0; i < arb.length; i++) {
 				if (e.getComponent() == arb[i]) {
@@ -356,6 +394,7 @@ public class CenterPanel extends JLabel implements MouseListener {
 						arb[i].setBorder(new LineBorder(Color.BLACK, 2));
 						selected.add(new Integer(i));
 					}
+					bord();
 					selection = true;
 					break;
 				}

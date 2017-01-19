@@ -38,8 +38,14 @@ public class BcTile extends JLabel {
 				int y = Game.town.get(CenterPanel.townId).y;
 				if (BcTile.this.x == x & BcTile.this.y == y) {
 					if (CenterPanel.selection == true) {
-						CenterPanel.outputArmy();
-						BcTile.this.repaint();
+						int bX = CenterPanel.bord.getX(), bY = CenterPanel.bord.getY();
+						int bW = CenterPanel.bord.getWidth(), bH = CenterPanel.bord.getHeight();
+						if (e.getX() > bX & e.getX() < bW + bX &
+								e.getY() > bY & e.getY() < bH + bY) {
+							//Если попадает в область размещения войска
+							CenterPanel.outputArmy(e.getX(), e.getY());
+							BcTile.this.repaint();
+						}
 					}
 				}
 			} catch (ArrayIndexOutOfBoundsException ex) {

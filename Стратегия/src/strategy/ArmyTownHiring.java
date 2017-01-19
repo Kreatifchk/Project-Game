@@ -16,8 +16,10 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 
 import warriors.Archer;
+import warriors.Cavalry;
 import warriors.Footman;
 
+/** Окно наема армии */
 @SuppressWarnings("serial")
 public class ArmyTownHiring extends JLabel implements MouseListener, ActionListener {
 	
@@ -28,7 +30,7 @@ public class ArmyTownHiring extends JLabel implements MouseListener, ActionListe
 	
 	ExitButton exit;
 	
-	ArmButton[] arm = new ArmButton[2];
+	ArmButton[] arm = new ArmButton[3];
 	
 	public ArmyTownHiring() {
 		setSize(498, 470);
@@ -47,6 +49,7 @@ public class ArmyTownHiring extends JLabel implements MouseListener, ActionListe
 	private void armAdd() {
 		arm[0] = new ArmButton(new Footman(0));
 		arm[1] = new ArmButton(new Archer(0));
+		arm[2] = new ArmButton(new Cavalry(0));
 		
 		int x = 4, y = 49;
 		int size = 98;

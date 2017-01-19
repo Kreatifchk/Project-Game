@@ -13,7 +13,7 @@ public class Footman extends TypeArmy {
 		
 		setCount(count);
 		
-		name = "Пехотинец";
+		name = "РџРµС…РѕС‚РёРЅРµС†";
 		
 		icon = Images.footman;
 	}

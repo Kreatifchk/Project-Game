@@ -41,6 +41,7 @@ public class Key extends KeyAdapter {
 		CenterPanel.townId = -1;
 		CenterPanel.selection = false;
 		CenterPanel.selected.clear();
+		Game.downCenter.removeBord();
 		
 		RigthPanel.name = null;
 		Game.downInf.inform.repaint();
