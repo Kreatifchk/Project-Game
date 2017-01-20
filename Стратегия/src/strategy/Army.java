@@ -41,6 +41,20 @@ public class Army extends JLabel {
 		return this;
 	}
 	
+	//Слияние отрядов в случае если их общее кол-во не больше 12
+	private void merge() {
+		int sel = CenterPanel.selected.get(0);
+		for (int i = 0; i < CenterPanel.selected.size(); i++) {
+			TypeArmy x = Game.emp.get(0).troop.get(CenterPanel.idArmy).arm.get(sel);
+			arm.add(x);
+			Game.emp.get(0).troop.get(CenterPanel.idArmy).arm.remove(sel);
+		}
+		Game.downCenter.armButtonRemove();
+		Game.downCenter.armies();
+		Game.downCenter.removeBord();
+		Game.downCenter.repaint();
+	}
+	
 	private class Mouse extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent e) {
@@ -52,7 +66,13 @@ public class Army extends JLabel {
 					Game.downCenter.clickArmy();
 				} else {
 					//Если размещаем
-					new JoinArmy(id);
+					if (arm.size() + CenterPanel.selected.size() <= 12) {
+						//Если общее кол-во отрядов меньше или равно 12
+						merge();
+					} else {
+						//Иначе создаем окно с выбором кого перенести, кого оставить
+						new JoinArmy(id);
+					}
 				}
 			}
 		}
