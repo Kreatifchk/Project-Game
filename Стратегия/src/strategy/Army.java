@@ -44,9 +44,16 @@ public class Army extends JLabel {
 	private class Mouse extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent e) {
+			//Клик мышью по армии
 			if (owner == 0) {
-				CenterPanel.idArmy = id;
-				Game.downCenter.clickArmy();
+				if (CenterPanel.bordB != true) {
+					//Если мы при этом не размещаем войско
+					CenterPanel.idArmy = id;
+					Game.downCenter.clickArmy();
+				} else {
+					//Если размещаем
+					new JoinArmy(id);
+				}
 			}
 		}
 	}

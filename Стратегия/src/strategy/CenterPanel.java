@@ -225,6 +225,7 @@ public class CenterPanel extends JLabel implements MouseListener {
 	}
 	
 	static JLabel bord;
+	static boolean bordB;
 	//Показывает где можно разместить войска
 	private void bord() {
 		int x = Game.town.get(townId).getX(), y = Game.town.get(townId).getY();
@@ -239,6 +240,7 @@ public class CenterPanel extends JLabel implements MouseListener {
 					g2d.fillRect(0, 0, 102, 102);
 				}
 			};
+			bordB = true;
 			bord.setBounds(x-30, y-30, 102, 102);
 			Game.bcTiles[xT][yT].add(bord);
 			Game.bcTiles[xT][yT].repaint();
@@ -252,6 +254,7 @@ public class CenterPanel extends JLabel implements MouseListener {
 			x.remove(bord);
 			x.repaint();
 			bord = null;
+			bordB = false;
 		}
 	}
 	

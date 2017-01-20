@@ -85,7 +85,7 @@ public class Game extends JFrame implements ActionListener {
 	}
 	
 	private void init() {
-		int x = 129 * (-0), y = 129 * (-0);
+		int x = 128 * (-0), y = 128 * (-0);
 		for (int i = 0; i < bcTiles.length; i++) {
 			for (int j = 0; j < bcTiles[0].length; j++) {
 				bcTiles[i][j] = new BcTile(i, j);
@@ -93,11 +93,11 @@ public class Game extends JFrame implements ActionListener {
 				bcTiles[i][j].setIcon(Images.grass);
 				//base.add(bcTiles[i][j]);
 				jlp.add(bcTiles[i][j], new Integer(1));
-				x += 129;
+				x += 128;
 			}
 			
-			x = 129 * (-0);
-			y += 129;
+			x = 128 * (-0);
+			y += 128;
 		}
 	}
 	
