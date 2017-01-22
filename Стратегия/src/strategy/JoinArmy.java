@@ -1,9 +1,10 @@
 package strategy;
 
 import java.awt.Color;
-
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
+
+import others.ArrowButton;
 
 /** Окно - объединение армий */
 @SuppressWarnings("serial")
@@ -11,11 +12,24 @@ public class JoinArmy {
 	
 	int widthL = 300;
 	
+	OneLabel ol;
+	TwoLabel tl;
+	
+	ArrowButton ab = new ArrowButton();
+	
 	public JoinArmy(int idArmy) {
-		OneLabel ol = new OneLabel();
-		TwoLabel tl = new TwoLabel();
+		ol = new OneLabel();
+		tl = new TwoLabel();
+		
+		int x = (tl.getX() - (ol.getX() + ol.getWidth()) - 160)
+				/ 2 + ol.getX() + ol.getWidth();
+		System.out.println(x);
+		ab.setBounds(x, 100, 160, 160);
+		
 		Game.jlp.add(ol, new Integer(10));
 		Game.jlp.add(tl, new Integer(10));
+		Game.jlp.add(ab, new Integer(10));
+		//Game.jlp.add(new Arrow(2), new Integer(10));
 	}
 	
 	//Первое окно - первая армия

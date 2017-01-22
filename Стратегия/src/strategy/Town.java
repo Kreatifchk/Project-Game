@@ -87,7 +87,7 @@ public class Town extends JLabel implements MouseListener {
 				}
 				if (z == true) {
 					String name = Game.emp.get(owner).name;
-					Tip inf = new Tip("<html><p align=\"center\">Владелец: " + name + "</p><html>");
+					Tip inf = new Tip("<html><p align = \"center\">" + Town.this.name + "</p><p align=\"center\">Владелец: " + name + "</p><html>");
 					int x = Town.this.getParent().getX() + 50;
 					int y = 0;
 					if (Town.this.getY() == 46) {
@@ -96,7 +96,7 @@ public class Town extends JLabel implements MouseListener {
 					} else {
 						y = Town.this.getParent().getY() + 28;
 					}
-					inf.setBounds(x, y, 160, 40);
+					inf.setBounds(x, y, 160, 50);
 					Game.jlp.add(inf, new Integer(10));
 					while (ent != false) {
 						Sleep.sleep(50);

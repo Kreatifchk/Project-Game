@@ -205,7 +205,7 @@ public class Game extends JFrame implements ActionListener {
 					move(3); //Курсор вправо
 				}
 				if (e.getY() > 650 & e.getX() > 10 & e.getX() < 990) {
-					//>350
+					//>350 -> 650
 					move(4); //Курсор вниз
 				}
 			}
