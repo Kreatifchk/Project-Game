@@ -11,6 +11,7 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 
+/** Кнопка - стрелка */
 @SuppressWarnings("serial")
 public class ArrowButton extends JButton  implements MouseListener {
 	
