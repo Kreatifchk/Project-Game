@@ -167,7 +167,7 @@ public class ArmyTownHiring extends JLabel implements MouseListener, ActionListe
 		}
 	}
 	
-	private class ExitButton extends JButton {
+	public class ExitButton extends JButton {
 		public ExitButton() {
 			setBounds(ArmyTownHiring.this.getWidth()-44, 4, 40, 40);
 			setOpaque(false);

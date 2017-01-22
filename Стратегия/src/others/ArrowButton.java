@@ -1,4 +1,4 @@
-package others;
+﻿package others;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -21,11 +21,13 @@ public class ArrowButton extends JButton  implements MouseListener {
 	private int b;
 	private int startY;
 	private int sizeY = 4;
+	private int type;
 	
 	private Color bcColor = Color.WHITE;
 	private Color borderColor = Color.BLACK;
 	
-	public ArrowButton() {
+	public ArrowButton(int type) {
+		this.type = type;
 		setContentAreaFilled(false);
 		addMouseListener(this);
 		
@@ -33,35 +35,64 @@ public class ArrowButton extends JButton  implements MouseListener {
 	}
 	
 	private void init() {
-		int sizeY = getWidth() / this.sizeY; //���������������� ������ ������ �� Y
-		startY = (getWidth() - sizeY) / 2; //��������� ���������� �� y (�������� ��������)
+		int sizeY = getWidth() / this.sizeY; //Непосредственный размер стрелки по Y
+		startY = (getWidth() - sizeY) / 2; //Начальная координата по Y
 		//startX = (getWidth() / 2) - (razmX / 2);
 		
 		arrayX = new int[7];
 		arrayY = new int[7];
 		
-		arrayX[0] = 0;
-		arrayY[0] = startY;
-		
-		arrayX[1] = getWidth() / 10 * 6; // 60% - �� ������
-		arrayY[1] = startY;
-		
-		arrayX[2] = getWidth() / 10 * 6;
-		arrayY[2] = startY - sizeY / 4;
-		int prob = startY - sizeY / 4;
-		
-		arrayX[3] = getWidth();
-		arrayY[3] = startY + sizeY / 2;
-		
-		arrayX[4] = getWidth() / 10 * 6;
-		arrayY[4] = getHeight() - prob;
-		
-		arrayX[5] = getWidth() / 10 * 6;
-		arrayY[5] = getHeight() - startY;
-		
-		arrayX[6] = 0;
-		arrayY[6] = getHeight() - startY;
-		p = new Polygon(arrayX, arrayY, 7);
+		if (type == 1) {
+			arrayX[0] = 0;
+			arrayY[0] = startY;
+			
+			arrayX[1] = getWidth() / 10 * 6; //1 - элемент, 60 % от общего квадрата
+			arrayY[1] = startY;
+			
+			arrayX[2] = getWidth() / 10 * 6;
+			arrayY[2] = startY - sizeY / 4;
+			int prob = startY - sizeY / 4;
+			
+			arrayX[3] = getWidth();
+			arrayY[3] = startY + sizeY / 2;
+			
+			arrayX[4] = getWidth() / 10 * 6;
+			arrayY[4] = getHeight() - prob;
+			
+			arrayX[5] = getWidth() / 10 * 6;
+			arrayY[5] = getHeight() - startY;
+			
+			arrayX[6] = 0;
+			arrayY[6] = getHeight() - startY;
+			p = new Polygon(arrayX, arrayY, 7);
+		}
+		if (type == 2) {
+			arrayX[0] = getWidth();
+			arrayY[0] = startY;
+			
+			int xx = getWidth() - (getWidth() / 10 * 6);
+			 //1 - элемент, 60 % от общего квадрата
+			
+			arrayX[1] = xx;
+			arrayY[1] = startY;
+			
+			arrayX[2] = xx;
+			arrayY[2] = startY - sizeY / 4;
+			int prob = startY - sizeY / 4;
+			
+			arrayX[3] = 0;
+			arrayY[3] = startY + sizeY / 2;
+			
+			arrayX[4] = xx;
+			arrayY[4] = getHeight() - prob;
+			
+			arrayX[5] = xx;
+			arrayY[5] = getHeight() - startY;
+			
+			arrayX[6] = getWidth();
+			arrayY[6] = getHeight() - startY;
+			p = new Polygon(arrayX, arrayY, 7);
+		}
 	}
 	
 	@Override
@@ -71,7 +102,7 @@ public class ArrowButton extends JButton  implements MouseListener {
 		repaint();
 	}
 	
-	/** ������������� ������ ������� �� Y (� ����������� � ����� ���������) */
+	/** Устанавливает размер стрелки по Y */
 	public void setSizeY(int sizeY) {
 		this.sizeY = sizeY;
 		repaint();
@@ -119,6 +150,7 @@ public class ArrowButton extends JButton  implements MouseListener {
 		g2d.drawLine(arrayX[4], arrayY[4], arrayX[4], arrayY[5]);
 		g2d.drawLine(arrayX[5], arrayY[5], arrayX[6], arrayY[5]);
 		g2d.drawLine(arrayX[6], arrayY[5], arrayX[6], arrayY[0]);
+		//Также можно было использовать drawPolygon(p);
 	}
 
 	@Override
