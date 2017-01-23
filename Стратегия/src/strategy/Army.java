@@ -71,7 +71,7 @@ public class Army extends JLabel {
 						merge();
 					} else {
 						//Иначе создаем окно с выбором кого перенести, кого оставить
-						new JoinArmy(id);
+						new JoinArmy(CenterPanel.idArmy, id);
 					}
 				}
 			}

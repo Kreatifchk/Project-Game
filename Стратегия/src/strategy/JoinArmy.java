@@ -19,6 +19,7 @@ public class JoinArmy {
 	
 	int widthL = 302;
 	
+	int idArmy;
 	int idArmy2;
 	
 	OneLabel ol;
@@ -30,8 +31,9 @@ public class JoinArmy {
 	JButton[] armyLeft = new JButton[12];
 	JButton[] armyRigth = new JButton[12];
 	
-	public JoinArmy(int idArmy) {
-		idArmy2 = idArmy;
+	public JoinArmy(int idArmy, int idArmy2) {
+		this.idArmy = idArmy;
+		this.idArmy2 = idArmy2;
 		
 		ol = new OneLabel();
 		tl = new TwoLabel();
@@ -51,6 +53,7 @@ public class JoinArmy {
 	}
 	
 	Exit exit = new Exit();
+	Exit exit2 = new Exit();
 	//Первое окно - первая армия
 	private class OneLabel extends JLabel {
 		public OneLabel() {
@@ -58,9 +61,28 @@ public class JoinArmy {
 			setBackground(new Color(150, 75, 0));
 			setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 4));
 			int x = (Menu.g.getWidth()/2 - widthL) /2;
-			setBounds(x, 30, widthL, 440);
-			exit.setBounds(getWidth()-40, 4, 36, 35);
-			add(exit);
+			setBounds(x, 30, widthL, 438);
+			int razm = CenterPanel.selected.size();
+			int start = CenterPanel.selected.get(0);
+			//int razm = Game.emp.get(0).troop.get(idArmy).arm.size();
+			int xx = 4, y = 42;
+			int iter = 0; //Сколко раз прошел цикл
+			for (int i = start; i < start + razm; i++) {
+				armyLeft[i] = new JButton();
+				if (iter == 3 || i == 6 || i == 9) {
+					y += 98;
+					xx = 4;
+				}
+				armyLeft[i].setBounds(xx, y, 98, 98);
+				armyLeft[i].setIcon(Resize.resizeIcon
+						(Game.emp.get(0).troop.get(idArmy).arm.get(i).icon.getImage()
+								, 98, 98));
+				add(armyLeft[i]);
+				xx += 98;
+				iter++;
+			}
+			exit2.setBounds(getWidth()-40, 4, 36, 35);
+			add(exit2);
 		}
 		@Override
 		public void paintComponent(Graphics g) {
@@ -95,6 +117,8 @@ public class JoinArmy {
 				add(armyRigth[i]);
 				xx += 98;
 			}
+			exit.setBounds(getWidth()-40, 4, 36, 35);
+			add(exit);
 		}
 		@Override
 		public void paintComponent(Graphics g) {
@@ -127,7 +151,7 @@ public class JoinArmy {
 	private class Mouse extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			if (e.getSource() == exit) {
+			if (e.getSource() == exit || e.getSource() == exit2) {
 				Game.jlp.remove(ol);
 				Game.jlp.remove(tl);
 				Game.jlp.remove(ab);
