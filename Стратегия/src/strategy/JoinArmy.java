@@ -48,9 +48,13 @@ public class JoinArmy {
 		int x = (tl.getX() - (ol.getX() + ol.getWidth()) - 160)
 				/ 2 + ol.getX() + ol.getWidth();
 		ab.setBounds(x, 120, 160, 160);
+		ab.addMouseListener(new Mouse());
 		ab.setColor(Color.ORANGE);
+		ab.setFocusable(false);
 		ab2.setBounds(x, 220, 160, 160);
+		ab2.addMouseListener(new Mouse());
 		ab2.setColor(Color.ORANGE);
+		ab2.setFocusable(false);
 		
 		Game.jlp.add(ol, new Integer(6));
 		Game.jlp.add(tl, new Integer(6));
@@ -69,9 +73,18 @@ public class JoinArmy {
 			setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 4));
 			int x = (Menu.g.getWidth()/2 - widthL) /2;
 			setBounds(x, 30, widthL, 438);
-			int razm = CenterPanel.selected.size();
+			addButton(-1);
+			
+			exit2.setBounds(getWidth()-40, 4, 36, 35);
+			add(exit2);
+			addMouseListener(new Mouse());
+			setFocusable(false);
+		}
+		public void addButton(int razm) {
+			if (razm == -1) {
+				razm = CenterPanel.selected.size();
+			}
 			int start = CenterPanel.selected.get(0);
-			//int razm = Game.emp.get(0).troop.get(idArmy).arm.size();
 			int xx = 4, y = 42;
 			int iter = 0; //Сколко раз прошел цикл
 			for (int i = start; i < start + razm; i++) {
@@ -90,10 +103,6 @@ public class JoinArmy {
 				xx += 98;
 				iter++;
 			}
-			exit2.setBounds(getWidth()-40, 4, 36, 35);
-			add(exit2);
-			addMouseListener(new Mouse());
-			setFocusable(false);
 		}
 		@Override
 		public void paintComponent(Graphics g) {
@@ -113,6 +122,14 @@ public class JoinArmy {
 			setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 4));
 			int x = (Menu.g.getWidth()/2 - widthL) /2 + 500;
 			setBounds(x, 30, widthL, 438);
+			addButton();
+
+			exit.setBounds(getWidth()-40, 4, 36, 35);
+			add(exit);
+			addMouseListener(new Mouse());
+			setFocusable(false);
+		}
+		public void addButton() {
 			int razm = Game.emp.get(0).troop.get(idArmy2).arm.size();
 			int xx = 4, y = 42;
 			for (int i = 0; i < razm; i++) {
@@ -130,10 +147,6 @@ public class JoinArmy {
 				add(armyRigth[i]);
 				xx += 98;
 			}
-			exit.setBounds(getWidth()-40, 4, 36, 35);
-			add(exit);
-			addMouseListener(new Mouse());
-			setFocusable(false);
 		}
 		@Override
 		public void paintComponent(Graphics g) {
@@ -160,6 +173,16 @@ public class JoinArmy {
 			g2d.setColor(Color.LIGHT_GRAY);
 			g2d.drawLine(0, 0, getWidth(), getHeight());
 			g2d.drawLine(0, getHeight(), getWidth(), 0);
+		}
+	}
+	
+	@SuppressWarnings("static-access")
+	private void remButton(JButton[] but) {
+		try {
+			for (int i = 0; i < but.length; i++) {
+				but[i].getParent().remove(but[i]);
+			}
+		} catch (NullPointerException e) {
 		}
 	}
 	
@@ -207,6 +230,43 @@ public class JoinArmy {
 		tl.repaint();
 	}
 	
+	enum type {LEFT, RIGTH};
+	
+	//Перемещение войск
+	@SuppressWarnings("static-access")
+	private void change(type type) {
+		if (type == type.LEFT) {
+			int sel = selected.get(0);
+			for (int i = 0; i < selected.size(); i++) {
+				TypeArmy x = Game.emp.get(0).troop.get(idArmy).arm.get(sel);
+				Game.emp.get(0).troop.get(idArmy2).arm.add(x);
+				Game.emp.get(0).troop.get(idArmy).arm.remove(sel);
+			}
+			remButton(armyLeft);
+			remButton(armyRigth);
+			ol.addButton(Game.emp.get(0).troop.get(idArmy).arm.size());
+			tl.addButton();
+		}
+		if (type == type.RIGTH) {
+			int sel = selected.get(0);
+			for (int i = 0; i < selected.size(); i++) {
+				TypeArmy x = Game.emp.get(0).troop.get(idArmy2).arm.get(sel);
+				Game.emp.get(0).troop.get(idArmy).arm.add(x);
+				Game.emp.get(0).troop.get(idArmy2).arm.remove(sel);
+			}
+			remButton(armyLeft);
+			remButton(armyRigth);
+			ol.addButton(Game.emp.get(0).troop.get(idArmy).arm.size());
+			tl.addButton();
+		}
+		
+		ol.repaint();
+		tl.repaint();
+		Game.downCenter.armButtonRemove();
+		Game.downCenter.armies();
+		Game.downCenter.repaint();
+	}
+	
 	private class Mouse extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent e) {
@@ -222,6 +282,18 @@ public class JoinArmy {
 			}
 			else if (e.getComponent().getParent() == tl) {
 				select(armyRigth, e);
+			}
+			else if (e.getComponent() == ab) {
+				change(type.LEFT);
+				selected.clear();
+				standBorder(armyLeft);
+				standBorder(armyRigth);
+			}
+			else if (e.getComponent() == ab2) {
+				change(type.RIGTH);
+				selected.clear();
+				standBorder(armyLeft);
+				standBorder(armyRigth);
 			}
 			else {
 				selected.clear();
