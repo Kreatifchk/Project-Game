@@ -22,6 +22,7 @@ public class Key extends KeyAdapter {
 		}
 		if (key == KeyEvent.VK_SHIFT) {
 			CenterPanel.pressedShift = true;
+			JoinArmy.pressedShift = true;
 		}
 	}
 	
@@ -30,6 +31,7 @@ public class Key extends KeyAdapter {
 		int key = e.getExtendedKeyCode();
 		if (key == KeyEvent.VK_SHIFT) {
 			CenterPanel.pressedShift = false;
+			JoinArmy.pressedShift = false;
 		}
 	}
 	

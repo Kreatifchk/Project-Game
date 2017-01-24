@@ -6,10 +6,12 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.border.LineBorder;
 
 import others.ArrowButton;
 
@@ -22,6 +24,9 @@ public class JoinArmy {
 	int idArmy;
 	int idArmy2;
 	
+	static boolean pressedShift;
+	int one = -1;
+	
 	OneLabel ol;
 	TwoLabel tl;
 	
@@ -30,6 +35,8 @@ public class JoinArmy {
 	
 	JButton[] armyLeft = new JButton[12];
 	JButton[] armyRigth = new JButton[12];
+	
+	ArrayList<Integer> selected = new ArrayList<Integer>();
 	
 	public JoinArmy(int idArmy, int idArmy2) {
 		this.idArmy = idArmy;
@@ -77,12 +84,16 @@ public class JoinArmy {
 				armyLeft[i].setIcon(Resize.resizeIcon
 						(Game.emp.get(0).troop.get(idArmy).arm.get(i).icon.getImage()
 								, 98, 98));
+				armyLeft[i].addMouseListener(new Mouse());
+				armyLeft[i].setFocusable(false);
 				add(armyLeft[i]);
 				xx += 98;
 				iter++;
 			}
 			exit2.setBounds(getWidth()-40, 4, 36, 35);
 			add(exit2);
+			addMouseListener(new Mouse());
+			setFocusable(false);
 		}
 		@Override
 		public void paintComponent(Graphics g) {
@@ -114,11 +125,15 @@ public class JoinArmy {
 				armyRigth[i].setIcon(Resize.resizeIcon
 						(Game.emp.get(0).troop.get(idArmy2).arm.get(i).icon.getImage()
 								, 98, 98));
+				armyRigth[i].addMouseListener(new Mouse());
+				armyRigth[i].setFocusable(false);
 				add(armyRigth[i]);
 				xx += 98;
 			}
 			exit.setBounds(getWidth()-40, 4, 36, 35);
 			add(exit);
+			addMouseListener(new Mouse());
+			setFocusable(false);
 		}
 		@Override
 		public void paintComponent(Graphics g) {
@@ -148,6 +163,49 @@ public class JoinArmy {
 		}
 	}
 	
+	//Возвращает стандартные рамки кнопкам
+	protected void standBorder(JButton[] but) {
+		try {
+			for (int i = 0; i < but.length; i++) {
+				if (but[i] != null) {
+					but[i].setBorder(null);
+					but[i].setBorder(new JButton().getBorder());
+					but[i].repaint();
+				}
+			}
+		} catch (NullPointerException e) {
+		}
+	}
+	
+	private void select(JButton[] but, MouseEvent e) {
+		for (int i = 0; i < but.length; i++) {
+			if (e.getSource() == but[i]) {
+				standBorder(armyLeft);
+				standBorder(armyRigth);
+				selected.clear();
+				if (pressedShift == true) {
+					if (one == -1) {
+						one = i;
+						but[i].setBorder(new LineBorder(Color.BLACK, 2));
+						selected.add(new Integer(i));
+					} else {
+						for (int j = one; j <= i; j++) {
+							but[j].setBorder(new LineBorder(Color.BLACK, 2));
+							selected.add(new Integer(j));
+						}
+						one = -1;
+					}
+				} else {
+					one = i;
+					but[i].setBorder(new LineBorder(Color.BLACK, 2));
+					selected.add(new Integer(i));
+				}
+			}
+		}
+		ol.repaint();
+		tl.repaint();
+	}
+	
 	private class Mouse extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent e) {
@@ -157,6 +215,20 @@ public class JoinArmy {
 				Game.jlp.remove(ab);
 				Game.jlp.remove(ab2);
 				Game.jlp.repaint();
+			}
+			else if (e.getComponent().getParent() == ol) {
+				select(armyLeft, e);
+			}
+			else if (e.getComponent().getParent() == tl) {
+				select(armyRigth, e);
+			}
+			else {
+				selected.clear();
+				standBorder(armyLeft);
+				standBorder(armyRigth);
+				one = -1;
+				ol.repaint();
+				tl.repaint();
 			}
 		}
 		@Override
