@@ -177,6 +177,7 @@ public class JoinArmy {
 		}
 	}
 	
+	//Выделение войск
 	private void select(JButton[] but, MouseEvent e) {
 		for (int i = 0; i < but.length; i++) {
 			if (e.getSource() == but[i]) {
