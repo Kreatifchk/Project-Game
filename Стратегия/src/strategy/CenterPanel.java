@@ -171,6 +171,7 @@ public class CenterPanel extends JLabel implements MouseListener {
 			for (int i = 0; i < Game.emp.get(0).troop.size(); i++) {
 				Game.emp.get(0).troop.get(i).id -= 1;
 			}
+			//В городе нет армий
 			Game.town.get(townId).army = false;
 			Game.town.get(townId).idArmy = -1;
 		}
