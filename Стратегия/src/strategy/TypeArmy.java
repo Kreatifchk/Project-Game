@@ -13,6 +13,8 @@ public abstract class TypeArmy {
 	protected int speedAttack; //Скорость атаки
 	protected int lineNumber; //Место в очереди наема
 	
+	protected int speed; //Сколько может за ход пройти
+	
 	protected String name; //Имя юнита
 	
 	protected ImageIcon icon; //Иконка воина

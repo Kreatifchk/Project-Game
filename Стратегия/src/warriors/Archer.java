@@ -11,6 +11,8 @@ public class Archer extends TypeArmy {
 		force = 8;
 		speedAttack = 7;
 		
+		speed = 2;
+		
 		setCount(count);
 		
 		name = "Лучник";

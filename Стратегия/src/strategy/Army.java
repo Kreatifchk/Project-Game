@@ -17,6 +17,8 @@ public class Army extends JLabel {
 	int town; //В каком городе находится, если вне города то -1
 	int tile; //На каком тайле
 	
+	int speed = -1; //Средняя скорость армии (расчитывается по скорости отрядов)
+	
 	ImageIcon icon = new ImageIcon(getClass().getResource("res/pers.png"));
 	
 	ArrayList<TypeArmy> arm = new ArrayList<TypeArmy>(); //Типы отрядов
@@ -39,6 +41,16 @@ public class Army extends JLabel {
 	public Army setOwner(int owner) {
 		this.owner = owner;
 		return this;
+	}
+	
+	public void initSpeed() {
+		int s = 0; //Сумма
+		int z = 0; //Количество
+		for (int i = 0; i < arm.size(); i++) {
+			s += arm.get(0).speed;
+			z++;
+		}
+		speed = s / z;
 	}
 	
 	//Слияние отрядов в случае если их общее кол-во не больше 12
@@ -64,6 +76,7 @@ public class Army extends JLabel {
 					//Если мы при этом не размещаем войско
 					CenterPanel.idArmy = id;
 					Game.downCenter.clickArmy();
+					initSpeed();
 				} else {
 					//Если размещаем
 					if (arm.size() + CenterPanel.selected.size() <= 12) {

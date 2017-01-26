@@ -167,6 +167,12 @@ public class CenterPanel extends JLabel implements MouseListener {
 		//Если отрядов больше не осталось - удалить армию
 		if (Game.emp.get(0).troop.get(idArmy).arm.size() == 0) {
 			Game.emp.get(0).troop.remove(idArmy);
+			//После удаления армии меняет всем армиям id
+			for (int i = 0; i < Game.emp.get(0).troop.size(); i++) {
+				Game.emp.get(0).troop.get(i).id -= 1;
+			}
+			Game.town.get(townId).army = false;
+			Game.town.get(townId).idArmy = -1;
 		}
 		Game.downCenter.armButtonRemove();
 		Game.downCenter.armies();

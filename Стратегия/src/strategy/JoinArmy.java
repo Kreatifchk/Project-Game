@@ -176,7 +176,6 @@ public class JoinArmy {
 		}
 	}
 	
-	@SuppressWarnings("static-access")
 	private void remButton(JButton[] but) {
 		try {
 			for (int i = 0; i < but.length; i++) {

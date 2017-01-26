@@ -11,6 +11,8 @@ public class Footman extends TypeArmy {
 		force = 10;
 		speedAttack = 5;
 		
+		speed = 1;
+		
 		setCount(count);
 		
 		name = "Пехотинец";

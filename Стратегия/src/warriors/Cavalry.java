@@ -11,6 +11,8 @@ public class Cavalry extends TypeArmy {
 		force = 12;
 		speedAttack = 7;
 		
+		speed = 4;
+		
 		setCount(count);
 		
 		name = "Лучник";
