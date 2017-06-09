@@ -7,6 +7,9 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.BufferedInputStream;
 import java.util.NoSuchElementException;
 
@@ -26,6 +29,7 @@ public class Menu extends JFrame {
 	Image bc = new ImageIcon(getClass().getResource("res/bc.png")).getImage();
 	Image icon = new ImageIcon(getClass().getResource("res/icon.png")).getImage();
 	Image startI = new ImageIcon(getClass().getResource("res/menu/start.png")).getImage();
+	Image start2I = new ImageIcon(getClass().getResource("res/menu/start2.png")).getImage();
 	Image continuedI = new ImageIcon(getClass().getResource("res/menu/continued.png")).getImage();
 	Image editorI = new ImageIcon(getClass().getResource("res/menu/editor.png")).getImage();
 	Image aboutI = new ImageIcon(getClass().getResource("res/menu/about.png")).getImage();
@@ -42,6 +46,7 @@ public class Menu extends JFrame {
 	ExButton exit = new ExButton();
 	
 	MenuListener ml = new MenuListener();
+	ButtonListener bl = new ButtonListener();
 	
 	static BasicPlayer player = new BasicPlayer();
 	
@@ -70,27 +75,28 @@ public class Menu extends JFrame {
 		jp.setLayout(null);
 		jp.setBounds(0, 0, 600, 541);
 		Font font = new Font("Verdana", Font.BOLD, 20);
-		start.setBounds(220, 110, 150, 30);
+		start.setBounds(215, 105, 155, 35); //220, 110, 150 30
 		start.setOpaque(false);
 		start.setBorderPainted(false);
-		continued.setBounds(220, 170, 150, 30);
+		continued.setBounds(220, 170, 150, 30); //220, 170
 		continued.setOpaque(false);
 		continued.setBorderPainted(false);
-		editor.setBounds(220, 230, 150, 30);
+		editor.setBounds(220, 230, 150, 30); //220, 230
 		editor.setOpaque(false);
 		editor.setBorderPainted(false);
-		history.setBounds(220, 310, 150, 30);
-		about.setBounds(220, 370, 150, 30);
+		history.setBounds(220, 310, 150, 30); //220, 310
+		about.setBounds(220, 370, 150, 30); //220, 370
 		about.setOpaque(false);
 		about.setBorderPainted(false);
-		settings.setBounds(220, 430, 150, 30);
+		settings.setBounds(220, 430, 150, 30); //220, 430
 		settings.setOpaque(false);
 		settings.setBorderPainted(false);
-		exit.setBounds(220, 490, 150, 30);
+		exit.setBounds(220, 490, 150, 30); //220, 490
 		exit.setOpaque(false);
 		exit.setBorderPainted(false);
 
-		start.addActionListener(ml);
+		//start.addActionListener(ml);
+		start.addMouseListener(bl);
 		continued.addActionListener(ml);
 		editor.addActionListener(ml);
 		history.addActionListener(ml);
@@ -133,10 +139,11 @@ public class Menu extends JFrame {
 	}
 	
 	public class SButton extends JButton {
+		Image active = startI;
 		public void paintComponent(Graphics g) {
 			super.paintComponents(g);
 			Graphics2D g2d = (Graphics2D)g;
-			g2d.drawImage(startI, 0, 0, null);
+			g2d.drawImage(active, 0, 0, null);
 		}
 	}
 	
@@ -177,6 +184,36 @@ public class Menu extends JFrame {
 			super.paintComponents(g);
 			Graphics2D g2d = (Graphics2D)g;
 			g2d.drawImage(exitI, 0, 0, null);
+		}
+	}
+	
+	public class ButtonListener extends MouseAdapter {
+		@Override
+		public void mousePressed(MouseEvent e) {
+			if (e.getSource() == start) {
+				start.active = start2I;
+			}
+		}
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			if (e.getSource() == start) {
+				start.active = startI;
+				
+				g = new Game(false, false);
+				
+				dispose();
+				try {
+					player.stop();
+				} catch (BasicPlayerException e1) {
+					e1.printStackTrace();
+				}
+				//Game g = new Game();
+				g.setVisible(true);
+				g.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				g.setSize(726, 701);
+				g.setResizable(false);
+				g.setLocationRelativeTo(null);
+			}
 		}
 	}
 	
