@@ -40,7 +40,7 @@ public class Game extends JFrame implements Runnable, ActionListener, Serializab
 	//Общее количество клеток - 504
 	
 	static Sector[][] sector = new Sector[28][18]; //37 21
-	volatile Empery[] emp = new Empery[15];
+	volatile Empery[] emp = new Empery[18];
 	Boolean[] empAlive = new Boolean[emp.length]; //какие империи живы
 	RiotCoor[] riotCoor = new RiotCoor[504];
 	JLabel[] lid = new JLabel[3];
@@ -297,6 +297,7 @@ public class Game extends JFrame implements Runnable, ActionListener, Serializab
 									//Вверх
 									if (ii - 1 >= 0) { 
 										if (rashB == true) {
+											//Если включен расширенный режим
 											if (attack(j, ii, 0) == true) {
 												sector[j][ii-1].army = 0;
 												sector[j][ii-1].money = 0;

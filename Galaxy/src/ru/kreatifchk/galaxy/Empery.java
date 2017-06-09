@@ -28,7 +28,7 @@ public class Empery {
 	
 	String name;
 	
-	Party pt[] = new Party[3];
+	Party pt[] = new Party[3]; //Правящие партии
 	
 	public Empery() {
 		party();
