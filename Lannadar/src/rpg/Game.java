@@ -96,7 +96,7 @@ public class Game extends JFrame implements Runnable {
 	static NPC[] npc = new NPC[8]; //Массив с NPC
 	static Qwest[] qwest = new Qwest[11]; //Все квесты
 	
-	static int[] takeQwests = new int[10]; //Взятые квесты (номера)
+	static int[] takeQwests = new int[10]; //Взятые квесты (номера/id)
 	
 	//Изменить здесь, в Dead.java и LocationFile.java
 	static InputStream f2;
