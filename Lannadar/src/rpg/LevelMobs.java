@@ -1,4 +1,4 @@
-package rpg;
+п»їpackage rpg;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public class LevelMobs extends JPanel {
 	
-	//Здесь происходит отрисовка уровня врага
+	//В«РґРµСЃСЊ РїСЂРѕРёСЃС…РѕРґРёС‚ РѕС‚СЂРёСЃРѕРІРєР° СѓСЂРѕРІРЅВ¤ РІСЂР°РіР°
 	
 	Image base = new ImageIcon(getClass().getResource("res/levelsP/base.png")).getImage();
 	

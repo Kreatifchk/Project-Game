@@ -1,4 +1,4 @@
-package rpg;
+п»їpackage rpg;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -40,7 +40,7 @@ public class Menu extends JFrame {
 	SButton start = new SButton();
 	CButton continued = new CButton();
 	EButton editor = new EButton();
-	JButton history = new JButton("История версий");
+	JButton history = new JButton("РСЃС‚РѕСЂРёСЏ РІРµСЂСЃРёР№");
 	AButton about = new AButton();
 	StButton settings = new StButton();
 	ExButton exit = new ExButton();
@@ -50,7 +50,7 @@ public class Menu extends JFrame {
 	
 	static BasicPlayer player = new BasicPlayer();
 	
-	final static JLabel VERSION = new JLabel("Версия: 0.4.6");
+	final static JLabel VERSION = new JLabel("Р’РµСЂСЃРёСЏ: 0.4.6");
 	static JLabel logo = new LogoLabel();
 	//JLabel beta = new BetaLabel();
 	//JLabel alpha = new AlphaLabel();
@@ -247,7 +247,7 @@ public class Menu extends JFrame {
 					g.setResizable(false);
 					g.setLocationRelativeTo(null);
 				} catch (NoSuchElementException ex) {
-					JOptionPane.showMessageDialog(null, "Не найдены сохранения");
+					JOptionPane.showMessageDialog(null, "РќРµ РЅР°Р№РґРµРЅС‹ СЃРѕС…СЂР°РЅРµРЅРёСЏ");
 				}  catch (BasicPlayerException e1) {
 					e1.printStackTrace();
 				}

@@ -1,4 +1,4 @@
-package rpg;
+п»їpackage rpg;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -8,12 +8,12 @@ import javax.swing.JOptionPane;
 
 public class EditorOpen {
 	
-	static File levelOpen; //Файл с уровнем для открытия
+	static File levelOpen; //вЂР°Р№Р» СЃ СѓСЂРѕРІРЅРµРј РґР»В¤ РѕС‚РєСЂС‹С‚РёВ¤
 	
 	static Scanner levelScanner;
 	
 	public void fillMap() {
-		int inputLevel = Integer.parseInt(JOptionPane.showInputDialog("Введите номер уровня"));
+		int inputLevel = Integer.parseInt(JOptionPane.showInputDialog("В¬РІРµРґРёС‚Рµ РЅРѕРјРµСЂ СѓСЂРѕРІРЅВ¤"));
 		levelOpen = new File("res/levels/" + inputLevel + ".txt");
 		try {
 			levelScanner = new Scanner(levelOpen);

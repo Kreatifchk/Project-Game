@@ -7,7 +7,7 @@ public class Battle implements Runnable{
 	static boolean battle = false;
 	boolean zdr = true;
 	
-	//boolean hpFreeze = true; //Не дает максимальному хп моба изменяться во время боя
+	//boolean hpFreeze = true; //РќРµ РґР°РµС‚ РјР°РєСЃРёРјР°Р»СЊРЅРѕРјСѓ С…Рї РјРѕР±Р° РёР·РјРµРЅСЏС‚СЊСЃСЏ РІРѕ РІСЂРµРјСЏ Р±РѕСЏ
 	
 	static int mobAttack, mobMp, mobLevel, mobExp, mobX, mobY;
 	static String name;
@@ -22,14 +22,14 @@ public class Battle implements Runnable{
 			Animation.sleep(10);
 			if (battle == true) {
 				if (zdr = true) {
-					Menu.g.hpM.setVisible(true); //Создает панель с хп моба
+					Menu.g.hpM.setVisible(true); //РЎРѕР·РґР°РµС‚ РїР°РЅРµР»СЊ СЃ С…Рї РјРѕР±Р°
 					Animation.sleep(300);
 					zdr = false;
 				}
-				mobeAttack(); //Атака монстра
-				playerAttack(); //Атака персонажа
+				mobeAttack(); //РђС‚Р°РєР° РјРѕРЅСЃС‚СЂР°
+				playerAttack(); //РђС‚Р°РєР° РїРµСЂСЃРѕРЅР°Р¶Р°
 				if (HpMobs.xpCurrent <= 0) {
-					//Если у моба осталось меньше 0 хп
+					//Р•СЃР»Рё Сѓ РјРѕР±Р° РѕСЃС‚Р°Р»РѕСЃСЊ РјРµРЅСЊС€Рµ 0 С…Рї
 					battle = false;
 					if (Game.pl.level < Player.maxLevel) {
 						expPlus();
@@ -37,9 +37,9 @@ public class Battle implements Runnable{
 					}
 					
 					Menu.g.removeComponent(Game.monster.get(id));
-					Menu.g.remove(Game.monster.get(id)); //Убирает убитого монстра с карты
-					Game.mapx[mobX][mobY].busy = false; //Освобождает клетку от монстра
-					Menu.g.hpM.setVisible(false); //Убирает панель с хп моба
+					Menu.g.remove(Game.monster.get(id)); //РЈР±РёСЂР°РµС‚ СѓР±РёС‚РѕРіРѕ РјРѕРЅСЃС‚СЂР° СЃ РєР°СЂС‚С‹
+					Game.mapx[mobX][mobY].busy = false; //РћСЃРІРѕР±РѕР¶РґР°РµС‚ РєР»РµС‚РєСѓ РѕС‚ РјРѕРЅСЃС‚СЂР°
+					Menu.g.hpM.setVisible(false); //РЈР±РёСЂР°РµС‚ РїР°РЅРµР»СЊ СЃ С…Рї РјРѕР±Р°
 					
 					HpMobs.xpCurrent = 0;
 					HpMobs.xpMax = 0;
@@ -57,17 +57,17 @@ public class Battle implements Runnable{
 	}
 	
 	private void qwestTest() {
-		//Повышает прогресс в выполнении квеста
+		//РџРѕРІС‹С€Р°РµС‚ РїСЂРѕРіСЂРµСЃСЃ РІ РІС‹РїРѕР»РЅРµРЅРёРё РєРІРµСЃС‚Р°
 		for (int i = 0; i <= Game.takeQwests.length-1; i++) {
 			if (Game.takeQwests[i] != -1 &&
 					Game.qwest[Game.takeQwests[i]].nameMonster.equals(name)) {
-				//Если убиваешь моба который нужен по квесту
+				//Р•СЃР»Рё СѓР±РёРІР°РµС€СЊ РјРѕР±Р° РєРѕС‚РѕСЂС‹Р№ РЅСѓР¶РµРЅ РїРѕ РєРІРµСЃС‚Сѓ
 				if (Game.qwest[Game.takeQwests[i]].progress < Game.qwest[Game.takeQwests[i]].count) {
-					//Если еще не убил достаточно, прибавить число убитых
+					//Р•СЃР»Рё РµС‰Рµ РЅРµ СѓР±РёР» РґРѕСЃС‚Р°С‚РѕС‡РЅРѕ, РїСЂРёР±Р°РІРёС‚СЊ С‡РёСЃР»Рѕ СѓР±РёС‚С‹С…
 					Game.qwest[Game.takeQwests[i]].progress++;
 					if (Game.qwest[Game.takeQwests[i]].progress ==
 							Game.qwest[Game.takeQwests[i]].count) {
-						//И еще раз проверяешь и если это максимум то поменять статус
+						//Р РµС‰Рµ СЂР°Р· РїСЂРѕРІРµСЂСЏРµС€СЊ Рё РµСЃР»Рё СЌС‚Рѕ РјР°РєСЃРёРјСѓРј С‚Рѕ РїРѕРјРµРЅСЏС‚СЊ СЃС‚Р°С‚СѓСЃ
 						Game.qwest[Game.takeQwests[i]].status = 3;
 						sign(Game.qwest[Game.takeQwests[i]].id);
 					}
@@ -90,7 +90,7 @@ public class Battle implements Runnable{
 	}
 	
 	private void playerAttack() {
-		//Определяет силу атаки игрока
+		//РћРїСЂРµРґРµР»СЏРµС‚ СЃРёР»Сѓ Р°С‚Р°РєРё РёРіСЂРѕРєР°
 		Random r = new Random();
 		int sh = r.nextInt(100);
 		int pAttack = Game.pl.playerAttack;
@@ -111,14 +111,14 @@ public class Battle implements Runnable{
 	private void mobeAttack() {
 		Game.hpThis -= mobAttack;
 		if (Game.hpThis < 0) {
-			Game.hpThis = 0; //В случае если после атаки хп меньше нуля, чтоб не показывало отрицательное hp
+			Game.hpThis = 0; //Р’ СЃР»СѓС‡Р°Рµ РµСЃР»Рё РїРѕСЃР»Рµ Р°С‚Р°РєРё С…Рї РјРµРЅСЊС€Рµ РЅСѓР»СЏ, С‡С‚РѕР± РЅРµ РїРѕРєР°Р·С‹РІР°Р»Рѕ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅРѕРµ hp
 		}
 	}
 	
 	private void expPlus() {
-		//Определяет сколько дать опыта за монстра
+		//РћРїСЂРµРґРµР»СЏРµС‚ СЃРєРѕР»СЊРєРѕ РґР°С‚СЊ РѕРїС‹С‚Р° Р·Р° РјРѕРЅСЃС‚СЂР°
 		if (Game.pl.level <= mobLevel) {
-			//Если уровень игрока меньше или равен уровню монстра то максимум опыта
+			//Р•СЃР»Рё СѓСЂРѕРІРµРЅСЊ РёРіСЂРѕРєР° РјРµРЅСЊС€Рµ РёР»Рё СЂР°РІРµРЅ СѓСЂРѕРІРЅСЋ РјРѕРЅСЃС‚СЂР° С‚Рѕ РјР°РєСЃРёРјСѓРј РѕРїС‹С‚Р°
 			Game.pl.exp += mobExp;
 		} else if (Game.pl.level == mobLevel - 1) {
 			Game.pl.exp += Maths.persentageNumber(mobExp, 20);

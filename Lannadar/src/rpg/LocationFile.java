@@ -1,11 +1,11 @@
-package rpg;
+п»їpackage rpg;
 
 import java.io.InputStream;
 import java.util.Scanner;
 
 public class LocationFile {
 	
-	static Scanner s; //Сканер читающий файлы с локациями
+	static Scanner s; //вЂ”РєР°РЅРµСЂ С‡РёС‚Р°СЋС‰РёР№ С„Р°Р№Р»С‹ СЃ Р»РѕРєР°С†РёВ¤РјРё
 	
 	public static void readFile() {
 		while(s.hasNext()) {
@@ -21,7 +21,7 @@ public class LocationFile {
 	public static void openFile(InputStream f) {
 		try {
 			if (f != null) {
-				s = new Scanner(f); //Для респавна после смерти
+				s = new Scanner(f); //Ж’Р»В¤ СЂРµСЃРїР°РІРЅР° РїРѕСЃР»Рµ СЃРјРµСЂС‚Рё
 			} else {
 				//Game.f2 = new File("res/levels/" + Game.currentLocation + ".txt");
 				s = new Scanner(Game.f2);

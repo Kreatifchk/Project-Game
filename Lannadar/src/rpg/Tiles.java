@@ -1,4 +1,4 @@
-package rpg;
+п»їpackage rpg;
 
 import javax.swing.JLabel;
 
@@ -11,13 +11,13 @@ public class Tiles extends JLabel {
 	
 	boolean portal;
 	
-	boolean busy; //занят
+	boolean busy; //Р·Р°РЅСЏС‚
 	
 	boolean anim = false;
 	
-	int number; //номер анимационного ид (для анимации)
+	int number; //РЅРѕРјРµСЂ Р°РЅРёРјР°С†РёРѕРЅРЅРѕРіРѕ РёРґ (РґР»СЏ Р°РЅРёРјР°С†РёРё)
 	
-	int currentFrame = 0; //текущий кадр (для анимации)
+	int currentFrame = 0; //С‚РµРєСѓС‰РёР№ РєР°РґСЂ (РґР»СЏ Р°РЅРёРјР°С†РёРё)
 	
 	public Tiles(int id,boolean solid) {
 		this.id = id;

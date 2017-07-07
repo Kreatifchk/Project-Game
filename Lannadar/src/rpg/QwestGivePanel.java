@@ -20,7 +20,7 @@ import javax.swing.JScrollBar;
 import javax.swing.plaf.metal.MetalScrollBarUI;
 
 /**
- * Класс - Label, с окном для получения/сдачи квестов
+ * РљР»Р°СЃСЃ - Label, СЃ РѕРєРЅРѕРј РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ/СЃРґР°С‡Рё РєРІРµСЃС‚РѕРІ
  */
 @SuppressWarnings("serial")
 public class QwestGivePanel extends JLabel implements ActionListener, AdjustmentListener{
@@ -29,30 +29,30 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 	Image exitI = new ImageIcon(getClass().getResource("res/others/exit.png")).getImage();
 	ImageIcon takeI = new ImageIcon(getClass().getResource("res/takeQwest.png"));
 	ImageIcon endI = new ImageIcon(getClass().getResource("res/endQwest.png"));
-	static Image letter; //Определяет и показывает текущую букву (для циклов и отрисовки)
-	static Image lettersI[] = new Image[52]; //Массив изображений букв
+	static Image letter; //РћРїСЂРµРґРµР»СЏРµС‚ Рё РїРѕРєР°Р·С‹РІР°РµС‚ С‚РµРєСѓС‰СѓСЋ Р±СѓРєРІСѓ (РґР»СЏ С†РёРєР»РѕРІ Рё РѕС‚СЂРёСЃРѕРІРєРё)
+	static Image lettersI[] = new Image[52]; //РњР°СЃСЃРёРІ РёР·РѕР±СЂР°Р¶РµРЅРёР№ Р±СѓРєРІ
 	
-	JButton exit = new exitButton(); //Кнопка для закрытия окна
+	JButton exit = new exitButton(); //РљРЅРѕРїРєР° РґР»СЏ Р·Р°РєСЂС‹С‚РёСЏ РѕРєРЅР°
 	JButton take = new JButton(takeI);
-	JLabel nameN; //Имя NPC
-	JLabel listQwests = new JLabel(); //Первое окно - список квестов
-	JLabel fDescribe = new JLabel(); //Куда будет помещено описание квеста
-	JLabel describe; //Label с описанием квеста
-	JLabel fRequest = new FRequestLabel(); //Куда булет помещено требование квеста
-	JLabel request; //Label с требованием квеста
-	/*Сделана по 2, потому что размер внутреннего Label больше
-	так как скрол бар его передвигает*/
+	JLabel nameN; //РРјСЏ NPC
+	JLabel listQwests = new JLabel(); //РџРµСЂРІРѕРµ РѕРєРЅРѕ - СЃРїРёСЃРѕРє РєРІРµСЃС‚РѕРІ
+	JLabel fDescribe = new JLabel(); //РљСѓРґР° Р±СѓРґРµС‚ РїРѕРјРµС‰РµРЅРѕ РѕРїРёСЃР°РЅРёРµ РєРІРµСЃС‚Р°
+	JLabel describe; //Label СЃ РѕРїРёСЃР°РЅРёРµРј РєРІРµСЃС‚Р°
+	JLabel fRequest = new FRequestLabel(); //РљСѓРґР° Р±СѓР»РµС‚ РїРѕРјРµС‰РµРЅРѕ С‚СЂРµР±РѕРІР°РЅРёРµ РєРІРµСЃС‚Р°
+	JLabel request; //Label СЃ С‚СЂРµР±РѕРІР°РЅРёРµРј РєРІРµСЃС‚Р°
+	/*РЎРґРµР»Р°РЅР° РїРѕ 2, РїРѕС‚РѕРјСѓ С‡С‚Рѕ СЂР°Р·РјРµСЂ РІРЅСѓС‚СЂРµРЅРЅРµРіРѕ Label Р±РѕР»СЊС€Рµ
+	С‚Р°Рє РєР°Рє СЃРєСЂРѕР» Р±Р°СЂ РµРіРѕ РїРµСЂРµРґРІРёРіР°РµС‚*/
 	
-	qwestButton[] qwests; //Массив кнопок - квестов
+	qwestButton[] qwests; //РњР°СЃСЃРёРІ РєРЅРѕРїРѕРє - РєРІРµСЃС‚РѕРІ
 	
 	static String name, textN, textK, reques;
 	int length, id, status, npcId;
-	int x, y; //Координаты кнопок
+	int x, y; //РљРѕРѕСЂРґРёРЅР°С‚С‹ РєРЅРѕРїРѕРє
 	static String nameNPC;
 	
 	
 	boolean bx = false;
-	boolean kon = false; //не дает сразу завершить квест, если он разговорный
+	boolean kon = false; //РЅРµ РґР°РµС‚ СЃСЂР°Р·Сѓ Р·Р°РІРµСЂС€РёС‚СЊ РєРІРµСЃС‚, РµСЃР»Рё РѕРЅ СЂР°Р·РіРѕРІРѕСЂРЅС‹Р№
 	JScrollBar jsb = new JScrollBar();
 	JScrollBar jsb2 = new JScrollBar();
 	
@@ -69,7 +69,7 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 		add(listQwests);
 		
 		nameN = new NameNPC(nameNPC);
-		//Где расположить имя нпс
+		//Р“РґРµ СЂР°СЃРїРѕР»РѕР¶РёС‚СЊ РёРјСЏ РЅРїСЃ
 		int xName = 0, lName = nameNPC.length();
 		if (lName <= 4) {
 			xName = 150;
@@ -88,16 +88,16 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 		
 		init();
 		
-		//Устанавливает размер массива по количеству квестов у NPC
+		//РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ СЂР°Р·РјРµСЂ РјР°СЃСЃРёРІР° РїРѕ РєРѕР»РёС‡РµСЃС‚РІСѓ РєРІРµСЃС‚РѕРІ Сѓ NPC
 		qwests = new qwestButton[Game.npc[id].qwest.length];
 		
-		//Вызывает метод для добавления квестов на панель
+		//Р’С‹Р·С‹РІР°РµС‚ РјРµС‚РѕРґ РґР»СЏ РґРѕР±Р°РІР»РµРЅРёСЏ РєРІРµСЃС‚РѕРІ РЅР° РїР°РЅРµР»СЊ
 		int y = 5;
 		for (int i = 0; i <= Game.npc[id].qwest.length-1; i++) {
-			int number = Game.npc[id].qwest[i]; //id квеста
+			int number = Game.npc[id].qwest[i]; //id РєРІРµСЃС‚Р°
 			if (Game.qwest[number].lastId != -1) {
 				if (Game.qwest[Game.qwest[number].lastId].status == 4) {
-					//Если предыд. квест пройден
+					//Р•СЃР»Рё РїСЂРµРґС‹Рґ. РєРІРµСЃС‚ РїСЂРѕР№РґРµРЅ
 					addButton(Game.qwest[number].name, i, y, number);
 				}
 			} else {
@@ -106,32 +106,32 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 			
 			if (Game.qwest[Game.npc[id].qwest[i]].status == 1
 					|| Game.qwest[Game.npc[id].qwest[i]].status == 3) {
-				//Если квест еще не взят (или окончен) то следующий опустить вниз
+				//Р•СЃР»Рё РєРІРµСЃС‚ РµС‰Рµ РЅРµ РІР·СЏС‚ (РёР»Рё РѕРєРѕРЅС‡РµРЅ) С‚Рѕ СЃР»РµРґСѓСЋС‰РёР№ РѕРїСѓСЃС‚РёС‚СЊ РІРЅРёР·
 				y += 40;
 			}
 		}
 		y = 5;
 	}
 	
-	//Инициализация изображений - букв
+	//РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РёР·РѕР±СЂР°Р¶РµРЅРёР№ - Р±СѓРєРІ
 	protected void init() {
 		for (int i = 1; i <= 33; i++) {
 			lettersI[i] =  new ImageIcon(getClass().getResource("res/letters/" + i + ".png")).getImage();
 		}
 		lettersI[34] = new ImageIcon(getClass().getResource("res/letters/space.png")).getImage();
-		//пробел
+		//РїСЂРѕР±РµР»
 		lettersI[35] = new ImageIcon(getClass().getResource("res/letters/t.png")).getImage();
-		//точка
+		//С‚РѕС‡РєР°
 		lettersI[36] = new ImageIcon(getClass().getResource("res/letters/v.png")).getImage();
-		//восклицательный знак
+		//РІРѕСЃРєР»РёС†Р°С‚РµР»СЊРЅС‹Р№ Р·РЅР°Рє
 		lettersI[37] = new ImageIcon(getClass().getResource("res/letters/z.png")).getImage();
-		//запятая
+		//Р·Р°РїСЏС‚Р°СЏ
 		lettersI[38] = new ImageIcon(getClass().getResource("res/letters/vp.png")).getImage();
-		//Двоеточие
+		//Р”РІРѕРµС‚РѕС‡РёРµ
 		lettersI[39] = new ImageIcon(getClass().getResource("res/letters/dv.png")).getImage();
-		//Слеш
+		//РЎР»РµС€
 		lettersI[40] = new ImageIcon(getClass().getResource("res/letters/sl.png")).getImage();
-		//Тире
+		//РўРёСЂРµ
 		lettersI[41] = new ImageIcon(getClass().getResource("res/letters/tr.png")).getImage();
 		int x = 42;
 		for (int i = 0; i <= 9; i++) {
@@ -140,18 +140,18 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 		}
 	}
 	
-	//Добавляет кнопки - квесты
+	//Р”РѕР±Р°РІР»СЏРµС‚ РєРЅРѕРїРєРё - РєРІРµСЃС‚С‹
 	private void addButton(String name, int count, int y, int number) {
-		//Сделать чтоб если квест взят, но не выполнен, на него нельзя нажать
+		//РЎРґРµР»Р°С‚СЊ С‡С‚РѕР± РµСЃР»Рё РєРІРµСЃС‚ РІР·СЏС‚, РЅРѕ РЅРµ РІС‹РїРѕР»РЅРµРЅ, РЅР° РЅРµРіРѕ РЅРµР»СЊР·СЏ РЅР°Р¶Р°С‚СЊ
 		if (Game.qwest[number].status == 1) {
 			if (Game.qwest[number].idNPC == -1) {
-				/*Если этому NPC надо сдавать квест,
-				 * а он еще не получен, то не показывать
+				/*Р•СЃР»Рё СЌС‚РѕРјСѓ NPC РЅР°РґРѕ СЃРґР°РІР°С‚СЊ РєРІРµСЃС‚,
+				 * Р° РѕРЅ РµС‰Рµ РЅРµ РїРѕР»СѓС‡РµРЅ, С‚Рѕ РЅРµ РїРѕРєР°Р·С‹РІР°С‚СЊ
 				 */
 				QwestGivePanel.name = name;
 				qwests[count] = new qwestButton();
 				qwests[count].setBounds(5, y, 400, 24);
-				listQwests.add(qwests[count]); //Добавляет на сам JLabel (фон)
+				listQwests.add(qwests[count]); //Р”РѕР±Р°РІР»СЏРµС‚ РЅР° СЃР°Рј JLabel (С„РѕРЅ)
 				qwests[count].setOpaque(false);
 				qwests[count].addActionListener(this);
 				
@@ -164,7 +164,7 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 					QwestGivePanel.name = name;
 					qwests[count] = new qwestButton();
 					qwests[count].setBounds(5, y, 400, 24);
-					listQwests.add(qwests[count]); //Добавляет на сам JLabel (фон)
+					listQwests.add(qwests[count]); //Р”РѕР±Р°РІР»СЏРµС‚ РЅР° СЃР°Рј JLabel (С„РѕРЅ)
 					qwests[count].setOpaque(false);
 					qwests[count].addActionListener(this);
 					
@@ -177,11 +177,11 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 		}
 		if (Game.qwest[number].status == 3) {
 			if (Game.qwest[number].idNPC == -1) {
-				//Если квест не разговорный
+				//Р•СЃР»Рё РєРІРµСЃС‚ РЅРµ СЂР°Р·РіРѕРІРѕСЂРЅС‹Р№
 				QwestGivePanel.name = name;
 				qwests[count] = new qwestButton();
 				qwests[count].setBounds(5, y, 400, 24);
-				listQwests.add(qwests[count]); //Добавляет на сам JLabel (фон)
+				listQwests.add(qwests[count]); //Р”РѕР±Р°РІР»СЏРµС‚ РЅР° СЃР°Рј JLabel (С„РѕРЅ)
 				qwests[count].setOpaque(false);
 				qwests[count].addActionListener(this);
 				
@@ -190,12 +190,12 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 				qwests[count].id = Game.qwest[number].id;
 				qwests[count].status = Game.qwest[number].status;
 			} else {
-				//Если квест разговорный
+				//Р•СЃР»Рё РєРІРµСЃС‚ СЂР°Р·РіРѕРІРѕСЂРЅС‹Р№
 				if (Game.qwest[number].idNPC == npcId) {
 					QwestGivePanel.name = name;
 					qwests[count] = new qwestButton();
 					qwests[count].setBounds(5, y, 400, 24);
-					listQwests.add(qwests[count]); //Добавляет на сам JLabel (фон)
+					listQwests.add(qwests[count]); //Р”РѕР±Р°РІР»СЏРµС‚ РЅР° СЃР°Рј JLabel (С„РѕРЅ)
 					qwests[count].setOpaque(false);
 					qwests[count].addActionListener(this);
 					
@@ -208,7 +208,7 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 		}
 	}
 	
-	//Отрисовка фона и линии сверху
+	//РћС‚СЂРёСЃРѕРІРєР° С„РѕРЅР° Рё Р»РёРЅРёРё СЃРІРµСЂС…Сѓ
 	public void paintComponent(Graphics g) {
 		super.paintComponents(g);
 		Graphics2D g2d = (Graphics2D)g;
@@ -217,12 +217,12 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 		g2d.drawLine(11, 44, 429, 44);
 	}
 	
-	//Что происходит при нажатии кнопки - взять
+	//Р§С‚Рѕ РїСЂРѕРёСЃС…РѕРґРёС‚ РїСЂРё РЅР°Р¶Р°С‚РёРё РєРЅРѕРїРєРё - РІР·СЏС‚СЊ
 	private void takeQwests() {
-		//Взять квест
+		//Р’Р·СЏС‚СЊ РєРІРµСЃС‚
 		if (Game.qwest[id].status == 1) {
 			QwestEvent.giveEvent(Game.qwest[id].id);
-			//Если квест разговорный то статус сразу 3
+			//Р•СЃР»Рё РєРІРµСЃС‚ СЂР°Р·РіРѕРІРѕСЂРЅС‹Р№ С‚Рѕ СЃС‚Р°С‚СѓСЃ СЃСЂР°Р·Сѓ 3
 			if (Game.qwest[id].idNPC != -1) {
 				Game.qwest[id].status = 3;
 				kon = true;
@@ -230,7 +230,7 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 				Game.qwest[id].status = 2;
 			}
 			
-			//Находит свободный элемент в массиве взятых игроком квестов
+			//РќР°С…РѕРґРёС‚ СЃРІРѕР±РѕРґРЅС‹Р№ СЌР»РµРјРµРЅС‚ РІ РјР°СЃСЃРёРІРµ РІР·СЏС‚С‹С… РёРіСЂРѕРєРѕРј РєРІРµСЃС‚РѕРІ
 			int pr = 0;
 			for (int i = 0; i <= Game.takeQwests.length - 1; i++) {
 				if (Game.takeQwests[i] == -1) {
@@ -241,7 +241,7 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 			
 			Game.takeQwests[pr] = id;
 		}
-		//Сдать квест
+		//РЎРґР°С‚СЊ РєРІРµСЃС‚
 		else if (Game.qwest[id].status == 3) {
 			QwestEvent.passEvent(Game.qwest[id].id);
 			if (kon != true) {
@@ -261,13 +261,13 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 		updateSign();
 	}
 	
-	//Обновляет значки всех NPC на локации
+	//РћР±РЅРѕРІР»СЏРµС‚ Р·РЅР°С‡РєРё РІСЃРµС… NPC РЅР° Р»РѕРєР°С†РёРё
 	private void updateSign() {
 		int zId = npcId;
 		SignQwest.sign(zId);
-		//Сначала обрабатывает NPC общающегося с игроком, далее всех остальных
+		//РЎРЅР°С‡Р°Р»Р° РѕР±СЂР°Р±Р°С‚С‹РІР°РµС‚ NPC РѕР±С‰Р°СЋС‰РµРіРѕСЃСЏ СЃ РёРіСЂРѕРєРѕРј, РґР°Р»РµРµ РІСЃРµС… РѕСЃС‚Р°Р»СЊРЅС‹С…
 		
-		boolean stop = false; //Служит для остановки цикла когда NPC с текущей локации кончились
+		boolean stop = false; //РЎР»СѓР¶РёС‚ РґР»СЏ РѕСЃС‚Р°РЅРѕРІРєРё С†РёРєР»Р° РєРѕРіРґР° NPC СЃ С‚РµРєСѓС‰РµР№ Р»РѕРєР°С†РёРё РєРѕРЅС‡РёР»РёСЃСЊ
 		for (int i = 0; i <= Game.npc.length - 1; i++) {
 			if (Game.npc[i].location == Game.currentLocation && i != zId) {
 				//Game.signQwest(Game.npc[i].id);
@@ -281,13 +281,13 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 		}
 	}
 	
-	//Слушатель кнопкок - квестов
+	//РЎР»СѓС€Р°С‚РµР»СЊ РєРЅРѕРїРєРѕРє - РєРІРµСЃС‚РѕРІ
 	@Override
 	public void actionPerformed(ActionEvent a) {
 		int l = qwests.length - 1;
 		for (int i = 0; i <= l; i++) {
 			if (a.getSource() == qwests[i]) {
-				//кнопка - квест
+				//РєРЅРѕРїРєР° - РєРІРµСЃС‚
 				listQwests.setVisible(false);
 				
 				id = qwests[i].id;
@@ -318,7 +318,7 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 				//request.setBorder(border);
 				fRequest.add(request);
 				
-				//JScroll бары
+				//JScroll Р±Р°СЂС‹
 				jsb.setBounds(400, 5, 20, 380);
 				jsb.addAdjustmentListener(this);
 				jsb.setMinimum(0);
@@ -335,20 +335,20 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 				fRequest.add(jsb2);
 				revalidate();
 				
-				//Кнопка взять квест
+				//РљРЅРѕРїРєР° РІР·СЏС‚СЊ РєРІРµСЃС‚
 				take.setBounds(160, 503, 120, 30);
 				take.setBorderPainted(false);
 				take.addActionListener(this);
 				take.addMouseListener(new Game.NpcListener());
 				if (status == 3) {
-					take.setText("Сдать");
+					take.setText("РЎРґР°С‚СЊ");
 					take.setIcon(endI);
 				}
 				add(take);
 				break;
 			}
 			if (a.getSource() == take) {
-				//кнопка взять квест
+				//РєРЅРѕРїРєР° РІР·СЏС‚СЊ РєРІРµСЃС‚
 				remove(fDescribe);
 				remove(fRequest);
 				Game.p.remove(Game.qGP);
@@ -360,106 +360,106 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 		}
 	}
 	
-	//Буквы
+	//Р‘СѓРєРІС‹
 	public static Image letters(char l) {
 		String lt = "" + l;
-		if (lt.equals("а")) {
+		if (lt.equals("Р°")) {
 			letter = lettersI[1];
 		}
-		else if (lt.equals("б") || (lt.equals("Б"))) {
+		else if (lt.equals("Р±") || (lt.equals("Р‘"))) {
 			letter = lettersI[2];
 		}
-		else if (lt.equals("в") || (lt.equals("В"))) {
+		else if (lt.equals("РІ") || (lt.equals("Р’"))) {
 			letter = lettersI[3];
 		}
-		else if (lt.equals("г") || (lt.equals("Г"))) {
+		else if (lt.equals("Рі") || (lt.equals("Р“"))) {
 			letter = lettersI[4];
 		}
-		else if (lt.equals("д") || (lt.equals("Д"))) {
+		else if (lt.equals("Рґ") || (lt.equals("Р”"))) {
 			letter = lettersI[5];
 		}
-		else if (lt.equals("е") || (lt.equals("Е"))) {
+		else if (lt.equals("Рµ") || (lt.equals("Р•"))) {
 			letter = lettersI[6];
 		}
-		else if (lt.equals("ё")) {
+		else if (lt.equals("С‘")) {
 			letter = lettersI[7];
 		}
-		else if (lt.equals("ж")) {
+		else if (lt.equals("Р¶")) {
 			letter = lettersI[8];
 		}
-		else if (lt.equals("з") || (lt.equals("З"))) {
+		else if (lt.equals("Р·") || (lt.equals("Р—"))) {
 			letter = lettersI[9];
 		}
-		else if (lt.equals("и") || lt.equals("И")) {
+		else if (lt.equals("Рё") || lt.equals("Р")) {
 			letter = lettersI[10];
 		}
-		else if (lt.equals("й")) {
+		else if (lt.equals("Р№")) {
 			letter = lettersI[11];
 		}
-		else if (lt.equals("к") || lt.equals("К")) {
+		else if (lt.equals("Рє") || lt.equals("Рљ")) {
 			letter = lettersI[12];
 		}
-		else if (lt.equals("л") || lt.equals("Л")) {
+		else if (lt.equals("Р»") || lt.equals("Р›")) {
 			letter = lettersI[13];
 		}
-		else if (lt.equals("м") || lt.equals("М")) {
+		else if (lt.equals("Рј") || lt.equals("Рњ")) {
 			letter = lettersI[14];
 		}
-		else if (lt.equals("н") || (lt.equals("Н"))) {
+		else if (lt.equals("РЅ") || (lt.equals("Рќ"))) {
 			letter = lettersI[15];
 		}
-		else if (lt.equals("о") || lt.equals("О")) {
+		else if (lt.equals("Рѕ") || lt.equals("Рћ")) {
 			letter = lettersI[16];
 		}
-		else if (lt.equals("п") || lt.equals("П")) {
+		else if (lt.equals("Рї") || lt.equals("Рџ")) {
 			letter = lettersI[17];
 		}
-		else if (lt.equals("р") || lt.equals("Р")) {
+		else if (lt.equals("СЂ") || lt.equals("Р ")) {
 			letter = lettersI[18];
 		}
-		else if (lt.equals("с") || lt.equals("С")) {
+		else if (lt.equals("СЃ") || lt.equals("РЎ")) {
 			letter = lettersI[19];
 		}
-		else if (lt.equals("т") || lt.equals("Т")) {
+		else if (lt.equals("С‚") || lt.equals("Рў")) {
 			letter = lettersI[20];
 		}
-		else if (lt.equals("у") || lt.equals("У")) {
+		else if (lt.equals("Сѓ") || lt.equals("РЈ")) {
 			letter = lettersI[21];
 		}
-		else if (lt.equals("ф")) {
+		else if (lt.equals("С„")) {
 			letter = lettersI[22];
 		}
-		else if (lt.equals("х") || (lt.equals("Х"))) {
+		else if (lt.equals("С…") || (lt.equals("РҐ"))) {
 			letter = lettersI[23];
 		}
-		else if (lt.equals("ц")) {
+		else if (lt.equals("С†")) {
 			letter = lettersI[24];
 		}
-		else if (lt.equals("ч") || (lt.equals("Ч"))) {
+		else if (lt.equals("С‡") || (lt.equals("Р§"))) {
 			letter = lettersI[25];
 		}
-		else if (lt.equals("ш")) {
+		else if (lt.equals("С€")) {
 			letter = lettersI[26];
 		}
-		else if (lt.equals("щ")) {
+		else if (lt.equals("С‰")) {
 			letter = lettersI[27];
 		}
-		else if (lt.equals("ъ")) {
+		else if (lt.equals("СЉ")) {
 			letter = lettersI[28];
 		}
-		else if (lt.equals("ы")) {
+		else if (lt.equals("С‹")) {
 			letter = lettersI[29];
 		}
-		else if (lt.equals("ь")) {
+		else if (lt.equals("СЊ")) {
 			letter = lettersI[30];
 		}
-		else if (lt.equals("э") || (lt.equals("Э"))) {
+		else if (lt.equals("СЌ") || (lt.equals("Р­"))) {
 			letter = lettersI[31];
 		}
-		else if (lt.equals("ю")) {
+		else if (lt.equals("СЋ")) {
 			letter = lettersI[32];
 		}
-		else if (lt.equals("я") || lt.equals("Я")) {
+		else if (lt.equals("СЏ") || lt.equals("РЇ")) {
 			letter = lettersI[33];
 		}
 		else if (lt.equals(" ")) {
@@ -519,7 +519,7 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 		return letter;
 	}
 	
-	//Крест в верхнем правом углу
+	//РљСЂРµСЃС‚ РІ РІРµСЂС…РЅРµРј РїСЂР°РІРѕРј СѓРіР»Сѓ
 	private class exitButton extends JButton {
 		public void paintComponent(Graphics g) {
 			super.paintComponents(g);
@@ -530,9 +530,9 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 		}
 	}
 	
-	//Кнопки - квесты Label
+	//РљРЅРѕРїРєРё - РєРІРµСЃС‚С‹ Label
 	private class qwestButton extends JButton {
-		//Название квеста
+		//РќР°Р·РІР°РЅРёРµ РєРІРµСЃС‚Р°
 		String name = QwestGivePanel.name;
 		String textN, textK, request;
 		int id, status;
@@ -545,7 +545,7 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 				char l = name.charAt(i);
 				g2d.drawImage(letters(l), x, y, null);
 				if (l == ' ') {
-					//Меньше размер пробелов
+					//РњРµРЅСЊС€Рµ СЂР°Р·РјРµСЂ РїСЂРѕР±РµР»РѕРІ
 					x -= 10;
 				}
 				x += 24;
@@ -556,7 +556,7 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 	}
 	
 	private class NameNPC extends JLabel {
-		//Имя NPC
+		//РРјСЏ NPC
 		String nameNPC;
 		
 		public NameNPC(String name) {
@@ -575,7 +575,7 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 		}
 	}
 
-	//Label с текстом квеста
+	//Label СЃ С‚РµРєСЃС‚РѕРј РєРІРµСЃС‚Р°
 	private class QwestTextLabel extends JLabel{
 		public void paintComponent(Graphics g) {
 			super.paintComponents(g);
@@ -601,9 +601,9 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 				int y2 = 0;
 				boolean prob = false;
 				if (l == ',') {
-					//Немного опустить запятую
+					//РќРµРјРЅРѕРіРѕ РѕРїСѓСЃС‚РёС‚СЊ Р·Р°РїСЏС‚СѓСЋ
 					y2 = y + 3;
-				} else if (l == 'щ') {
+				} else if (l == 'С‰') {
 					y2 = y + 1;
 				} else if (l == ' ') {
 					prob = true;
@@ -617,10 +617,10 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 					prob = false;
 				}
 				
-				//Добавляет переносы строки
+				//Р”РѕР±Р°РІР»СЏРµС‚ РїРµСЂРµРЅРѕСЃС‹ СЃС‚СЂРѕРєРё
 				int xx = x;
 				if (l == ' ') {
-					int c = i + 1; //устанавливает с какого символа пробегать (слово)
+					int c = i + 1; //СѓСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ СЃ РєР°РєРѕРіРѕ СЃРёРјРІРѕР»Р° РїСЂРѕР±РµРіР°С‚СЊ (СЃР»РѕРІРѕ)
 					char l2 = 0;
 					try {
 						while (l2 != ' ') {
@@ -645,7 +645,7 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 		}
 	}
 	
-	//Label в который встроено описание и требование квеста
+	//Label РІ РєРѕС‚РѕСЂС‹Р№ РІСЃС‚СЂРѕРµРЅРѕ РѕРїРёСЃР°РЅРёРµ Рё С‚СЂРµР±РѕРІР°РЅРёРµ РєРІРµСЃС‚Р°
 	private class FRequestLabel extends JLabel {
 		public void paintComponent(Graphics g) {
 			super.paintComponents(g);
@@ -656,7 +656,7 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 		}
 	}
 	
-	//Label с требованием квеста
+	//Label СЃ С‚СЂРµР±РѕРІР°РЅРёРµРј РєРІРµСЃС‚Р°
 	private class RequestLabel extends JLabel {
 		public void paintComponent(Graphics g) {
 			super.paintComponents(g);
@@ -668,7 +668,7 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 				char l = reques.charAt(i);
 				
 				int y2 = 0;
-				if (l == 'щ') {
+				if (l == 'С‰') {
 					y2 = y + 1;
 				} else {
 					y2 = y;
@@ -677,9 +677,9 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 				g2d.drawImage(letters(l), x, y2, null);
 				
 				int xx = x;
-				//Далее проверяется побуквенно, влезает ли слово в строку, если нет - перенос на новую
+				//Р”Р°Р»РµРµ РїСЂРѕРІРµСЂСЏРµС‚СЃСЏ РїРѕР±СѓРєРІРµРЅРЅРѕ, РІР»РµР·Р°РµС‚ Р»Рё СЃР»РѕРІРѕ РІ СЃС‚СЂРѕРєСѓ, РµСЃР»Рё РЅРµС‚ - РїРµСЂРµРЅРѕСЃ РЅР° РЅРѕРІСѓСЋ
 				if (l == ' ') {
-					int c = i + 1; //устанавливает с какого символа пробегать (слово)
+					int c = i + 1; //СѓСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ СЃ РєР°РєРѕРіРѕ СЃРёРјРІРѕР»Р° РїСЂРѕР±РµРіР°С‚СЊ (СЃР»РѕРІРѕ)
 					char l2 = 0;
 					try {
 						while (l2 != ' ') {
@@ -700,7 +700,7 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 		}
 	}
 
-	//Скрол
+	//РЎРєСЂРѕР»
 	@Override
 	public void adjustmentValueChanged(AdjustmentEvent a) {
 		if (a.getSource() == jsb) {
@@ -711,7 +711,7 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 		}
 	}
 	
-	//Для скролл бара
+	//Р”Р»СЏ СЃРєСЂРѕР»Р» Р±Р°СЂР°
 	private class BarUI extends MetalScrollBarUI {
 		Image jsbI = new ImageIcon(getClass().getResource("res/others/jsb.png")).getImage();
 		Image jsbI2 = new ImageIcon(getClass().getResource("res/others/jsb1.png")).getImage();
@@ -727,7 +727,7 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 	        ((Graphics2D)g).drawImage(jsbI2, transform, null);
 	        g.translate( -thumbBounds.x, -thumbBounds.y );
 	    }
-	    //Верхняя
+	    //Р’РµСЂС…РЅСЏСЏ
 	    @Override
 	    protected JButton createDecreaseButton(int orientation) {
 	    	DecButton but = new DecButton();
@@ -737,7 +737,7 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 	    	but.setMaximumSize(zeroDim);
 	    	return but;
 	    }
-	    //Нижняя
+	    //РќРёР¶РЅСЏСЏ
 	    @Override
 	    protected JButton createIncreaseButton(int orientation) {
 	    	IncButton but = new IncButton();

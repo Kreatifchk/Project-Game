@@ -1,9 +1,9 @@
-package rpg;
+п»їpackage rpg;
 
 import java.util.Random;
 
 /**
- * Класс для шифровки
+ * РљР»Р°СЃСЃ РґР»СЏ С€РёС„СЂРѕРІРєРё
  */
 public class Cipher {
 	
@@ -11,13 +11,13 @@ public class Cipher {
 	static Random r = new Random();
 	
 	/**
-	 * Зашифровывает числовую строку
+	 * Р—Р°С€РёС„СЂРѕРІС‹РІР°РµС‚ С‡РёСЃР»РѕРІСѓСЋ СЃС‚СЂРѕРєСѓ
 	 * @param String s
 	 * @return String rez
 	 */
 	public static String cipher(String s) {
 		String rez = "", prom;
-		//В начале
+		//Р’ РЅР°С‡Р°Р»Рµ
 		for (int i = 0; i <= 2; i++) {
 			rez = rez + randomSymbol();
 		}
@@ -28,7 +28,7 @@ public class Cipher {
 			rez = rez + prom;
 		}
 		
-		//В конце
+		//Р’ РєРѕРЅС†Рµ
 		for (int i = 0; i <= 2; i++) {
 			rez = rez + randomSymbol();
 		}
@@ -36,7 +36,7 @@ public class Cipher {
 		return rez;
 	}
 	
-	//Расшифровывает строку
+	//Р Р°СЃС€РёС„СЂРѕРІС‹РІР°РµС‚ СЃС‚СЂРѕРєСѓ
 	public static String decryptor(String s) {
 		String rez = "", prom = "";
 		int a = s.length();
@@ -116,7 +116,7 @@ public class Cipher {
 		return s;
 	}
 	
-	//Генерирует рандомную букву
+	//Р“РµРЅРµСЂРёСЂСѓРµС‚ СЂР°РЅРґРѕРјРЅСѓСЋ Р±СѓРєРІСѓ
 	private static String randomLetter() {
 		int count = 0, gen;
 		String s = "";

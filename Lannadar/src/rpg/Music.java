@@ -1,4 +1,4 @@
-package rpg;
+﻿package rpg;
 
 import java.io.BufferedInputStream;
 

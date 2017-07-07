@@ -5,7 +5,7 @@ import javax.swing.JLabel;
 
 public class QwestEvent {
 	
-	//Ивенты при получении квеста, id - номер квеста
+	//В»РІРµРЅС‚С‹ РїСЂРё РїРѕР»СѓС‡РµРЅРёРё РєРІРµСЃС‚Р°, id - РЅРѕРјРµСЂ РєРІРµСЃС‚Р°
 	protected static void giveEvent(int id) {
 		if (id == 0) {
 			portalOpen(0);
@@ -14,9 +14,9 @@ public class QwestEvent {
 			portalOpen(0);
 		}
 		if (id == 6) {
-			Game.monster.add(new Monsters(3, 14, 5, "skelet", 70, 0, 9, 3, 1, 12, "Скелет"));
-			Game.monster.add(new Monsters(3, 14, 7, "skelet", 70, 0, 9, 3, 1, 12, "Скелет"));
-			Game.monster.add(new Monsters(3, 14, 9, "skelet", 70, 0, 9, 3, 1, 12, "Скелет"));
+			Game.monster.add(new Monsters(3, 14, 5, "skelet", 70, 0, 9, 3, 1, 12, "вЂ”РєРµР»РµС‚"));
+			Game.monster.add(new Monsters(3, 14, 7, "skelet", 70, 0, 9, 3, 1, 12, "вЂ”РєРµР»РµС‚"));
+			Game.monster.add(new Monsters(3, 14, 9, "skelet", 70, 0, 9, 3, 1, 12, "вЂ”РєРµР»РµС‚"));
 			for (int i = 1; i <= 3; i++) {
 				Game.monster.get(Game.monster.size()-i).setBounds(Game.monster.get(Game.monster.size()-i).x*Game.TILE, Game.monster.get(Game.monster.size()-i).y*Game.TILE+48, Game.TILE, Game.TILE);
 				Game.monster.get(Game.monster.size()-i).setIcon(new ImageIcon(Menu.g.getClass().getResource("res/monsters/" + Game.monster.get(Game.monster.size()-i).icon + ".png")));
@@ -32,7 +32,7 @@ public class QwestEvent {
 		}
 	}
 	
-	//Ивенты при сдаче квеста
+	//В»РІРµРЅС‚С‹ РїСЂРё СЃРґР°С‡Рµ РєРІРµСЃС‚Р°
 	protected static void passEvent(int id) {
 		if (id == 6) {
 			portalOpen(0);

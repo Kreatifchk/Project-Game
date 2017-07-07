@@ -1,4 +1,4 @@
-package rpg;
+п»їpackage rpg;
 
 import java.awt.Color;
 import java.awt.Image;
@@ -34,7 +34,7 @@ public class Editor extends JFrame implements ActionListener {
 	
 	Image icon = new ImageIcon(getClass().getResource("res/icon.png")).getImage();
 	
-	static File portalNumber; //Файл с порталами и уровнями
+	static File portalNumber; //Р¤Р°Р№Р» СЃ РїРѕСЂС‚Р°Р»Р°РјРё Рё СѓСЂРѕРІРЅСЏРјРё
 	static PrintWriter pw, portalW;
 	static Scanner s;
 	EditorListener m = new EditorListener();
@@ -44,24 +44,24 @@ public class Editor extends JFrame implements ActionListener {
 	
 	static int block; //
 	static int xClick, yClick;
-	//Координаты клика
-	static int xFill, yFill; //Номер тайла который будет заменен/установлен
+	//РљРѕРѕСЂРґРёРЅР°С‚С‹ РєР»РёРєР°
+	static int xFill, yFill; //РќРѕРјРµСЂ С‚Р°Р№Р»Р° РєРѕС‚РѕСЂС‹Р№ Р±СѓРґРµС‚ Р·Р°РјРµРЅРµРЅ/СѓСЃС‚Р°РЅРѕРІР»РµРЅ
 	static int idPortal = 0;
-	static int levelNumber; //Номер уровня для портала
-	static int length = 0; //Подсчитывает количество заполненных строк в файле с порталами
-	static int lastToolN; //Определяет последний инструмент для заливки
+	static int levelNumber; //РќРѕРјРµСЂ СѓСЂРѕРІРЅСЏ РґР»СЏ РїРѕСЂС‚Р°Р»Р°
+	static int length = 0; //РџРѕРґСЃС‡РёС‚С‹РІР°РµС‚ РєРѕР»РёС‡РµСЃС‚РІРѕ Р·Р°РїРѕР»РЅРµРЅРЅС‹С… СЃС‚СЂРѕРє РІ С„Р°Р№Р»Рµ СЃ РїРѕСЂС‚Р°Р»Р°РјРё
+	static int lastToolN; //РћРїСЂРµРґРµР»СЏРµС‚ РїРѕСЃР»РµРґРЅРёР№ РёРЅСЃС‚СЂСѓРјРµРЅС‚ РґР»СЏ Р·Р°Р»РёРІРєРё
 	
-	static boolean portalClick; //Определяет: поставил ли игрок портал, прежде чем вызвать окна конфигурации
-	static boolean warning; //Определяет выдавалось ли предупрежддение о порталах
+	static boolean portalClick; //РћРїСЂРµРґРµР»СЏРµС‚: РїРѕСЃС‚Р°РІРёР» Р»Рё РёРіСЂРѕРє РїРѕСЂС‚Р°Р», РїСЂРµР¶РґРµ С‡РµРј РІС‹Р·РІР°С‚СЊ РѕРєРЅР° РєРѕРЅС„РёРіСѓСЂР°С†РёРё
+	static boolean warning; //РћРїСЂРµРґРµР»СЏРµС‚ РІС‹РґР°РІР°Р»РѕСЃСЊ Р»Рё РїСЂРµРґСѓРїСЂРµР¶РґРґРµРЅРёРµ Рѕ РїРѕСЂС‚Р°Р»Р°С…
 	
-	static String numberLevel; //В нее записывается номер уровня при сохранении
+	static String numberLevel; //Р’ РЅРµРµ Р·Р°РїРёСЃС‹РІР°РµС‚СЃСЏ РЅРѕРјРµСЂ СѓСЂРѕРІРЅСЏ РїСЂРё СЃРѕС…СЂР°РЅРµРЅРёРё
 	static String[] portalConf = new String[32];
 	
-	static JLabel[][] map = new JLabel[15][12]; //Массив для отрисовки
-	static int[][] mapFile = new int[15][12]; //Массив для сохранения данных
+	static JLabel[][] map = new JLabel[15][12]; //РњР°СЃСЃРёРІ РґР»СЏ РѕС‚СЂРёСЃРѕРІРєРё
+	static int[][] mapFile = new int[15][12]; //РњР°СЃСЃРёРІ РґР»СЏ СЃРѕС…СЂР°РЅРµРЅРёСЏ РґР°РЅРЅС‹С…
 	
 	static JPanel menu = new JPanel();
-	static JButton back = new JButton("Обратно в меню");
+	static JButton back = new JButton("РћР±СЂР°С‚РЅРѕ РІ РјРµРЅСЋ");
 	
 	JLabel tiles = new JLabel();
 	JLabel tiles2 = new JLabel();
@@ -182,7 +182,7 @@ public class Editor extends JFrame implements ActionListener {
 		
 		int y = 6;
 		
-		//Тайлы
+		//РўР°Р№Р»С‹
 		grass.setBounds(20, y, 48, 48);
 		grass.setIcon(TilesImage.grass);
 		grass.addMouseListener(m);
@@ -247,7 +247,7 @@ public class Editor extends JFrame implements ActionListener {
 		well.setIcon(TilesImage.well);
 		well.addMouseListener(m);
 		
-		//Дороги
+		//Р”РѕСЂРѕРіРё
 		brickPath.setBounds(20, y, 48, 48);
 		brickPath.setIcon(TilesImage.brickPath);
 		brickPath.addMouseListener(m);
@@ -261,7 +261,7 @@ public class Editor extends JFrame implements ActionListener {
 		path.setIcon(TilesImage.path);
 		path.addMouseListener(m);
 		
-		//Постройки
+		//РџРѕСЃС‚СЂРѕР№РєРё
 		home01.setBounds(20, y, 48, 48);
 		home01.setIcon(TilesImage.home01);
 		home01.addMouseListener(m);
@@ -275,7 +275,7 @@ public class Editor extends JFrame implements ActionListener {
 		homeFire.setIcon(TilesImage.homeFire);
 		homeFire.addMouseListener(m);
 		
-		//Инструменты
+		//РРЅСЃС‚СЂСѓРјРµРЅС‚С‹
 		empty.setBounds(20, y, 48, 48);
 		empty.setIcon(delete);
 		empty.addMouseListener(m);
@@ -354,7 +354,7 @@ public class Editor extends JFrame implements ActionListener {
 	}
 
 	private void massiv() {
-		//Стартовое заполнение
+		//РЎС‚Р°СЂС‚РѕРІРѕРµ Р·Р°РїРѕР»РЅРµРЅРёРµ
 		int x = 0;
 		int y = 0;
 		for (int i = 0; i <= 11; i++) {
@@ -467,7 +467,7 @@ public class Editor extends JFrame implements ActionListener {
 			mapFile[xFill][yFill] = 14;
 		}
 		if (block == 17) {
-			//Горящий дом
+			//Р“РѕСЂСЏС‰РёР№ РґРѕРј
 			map[xFill][yFill].setIcon(TilesImage.homeFire);
 			mapFile[xFill][yFill] = 15;
 		}
@@ -567,7 +567,7 @@ public class Editor extends JFrame implements ActionListener {
 			//mapFile[xFill][yFill] = 99;
 			portalClick = true;
 			if (warning == false) {
-				JOptionPane.showMessageDialog(null, "На один уровень можно поставить не более 4 порталов");
+				JOptionPane.showMessageDialog(null, "РќР° РѕРґРёРЅ СѓСЂРѕРІРµРЅСЊ РјРѕР¶РЅРѕ РїРѕСЃС‚Р°РІРёС‚СЊ РЅРµ Р±РѕР»РµРµ 4 РїРѕСЂС‚Р°Р»РѕРІ");
 				warning = true;
 			}
 			readFile();
@@ -575,7 +575,7 @@ public class Editor extends JFrame implements ActionListener {
 				//System.out.println(portalConf[i]);
 			}
 			if (length > 23) {
-				JOptionPane.showMessageDialog(null, "У вас уже есть 4 портала");
+				JOptionPane.showMessageDialog(null, "РЈ РІР°СЃ СѓР¶Рµ РµСЃС‚СЊ 4 РїРѕСЂС‚Р°Р»Р°");
 				map[xFill][yFill].setIcon(whiteOpaque);
 				mapFile[xFill][yFill] = 0;
 			} else {
@@ -589,7 +589,7 @@ public class Editor extends JFrame implements ActionListener {
 	
 	private static void readFile() {
 		int count = 1;
-		String aa = JOptionPane.showInputDialog("Введите номер уровеня к которому прикрепляете портал", "");
+		String aa = JOptionPane.showInputDialog("Р’РІРµРґРёС‚Рµ РЅРѕРјРµСЂ СѓСЂРѕРІРµРЅСЏ Рє РєРѕС‚РѕСЂРѕРјСѓ РїСЂРёРєСЂРµРїР»СЏРµС‚Рµ РїРѕСЂС‚Р°Р»", "");
 		levelNumber = Integer.parseInt(aa);
 		portalNumber = new File("res/portals/" + levelNumber + ".txt");
 		if (!portalNumber.exists()) {
@@ -617,15 +617,15 @@ public class Editor extends JFrame implements ActionListener {
 	}
 
 	private static void portalFill() {
-		//Заполняет файл с конфигурациями порталов
+		//Р—Р°РїРѕР»РЅСЏРµС‚ С„Р°Р№Р» СЃ РєРѕРЅС„РёРіСѓСЂР°С†РёСЏРјРё РїРѕСЂС‚Р°Р»РѕРІ
 		if (portalClick == true) {
 			String idPortalS = "" + idPortal;
 			portalConf[length + 1] = idPortalS;
-			String ab = JOptionPane.showInputDialog("Введите уровень в который ведет портал", "");
+			String ab = JOptionPane.showInputDialog("Р’РІРµРґРёС‚Рµ СѓСЂРѕРІРµРЅСЊ РІ РєРѕС‚РѕСЂС‹Р№ РІРµРґРµС‚ РїРѕСЂС‚Р°Р»", "");
 			portalConf[length + 2] = ab;
-			String ac = JOptionPane.showInputDialog("Введите стартовую координату x", "");
+			String ac = JOptionPane.showInputDialog("Р’РІРµРґРёС‚Рµ СЃС‚Р°СЂС‚РѕРІСѓСЋ РєРѕРѕСЂРґРёРЅР°С‚Сѓ x", "");
 			portalConf[length + 3] = ac;
-			String ad = JOptionPane.showInputDialog("Введите стартовую координату y", "");
+			String ad = JOptionPane.showInputDialog("Р’РІРµРґРёС‚Рµ СЃС‚Р°СЂС‚РѕРІСѓСЋ РєРѕРѕСЂРґРёРЅР°С‚Сѓ y", "");
 			portalConf[length + 4] = ad;
 			String xFillM = "" + xFill;
 			String yFillM = "" + yFill;
@@ -648,7 +648,7 @@ public class Editor extends JFrame implements ActionListener {
 	}
 	
 	public static void saveLevel() {
-		numberLevel = JOptionPane.showInputDialog("Введите номер уровня", "");
+		numberLevel = JOptionPane.showInputDialog("Р’РІРµРґРёС‚Рµ РЅРѕРјРµСЂ СѓСЂРѕРІРЅСЏ", "");
 		int number;
 		number = Integer.parseInt(numberLevel);
 		try {

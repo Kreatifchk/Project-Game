@@ -1,4 +1,4 @@
-package rpg;
+п»їpackage rpg;
 
 import javax.swing.ImageIcon;
 
@@ -10,7 +10,7 @@ public class Massiv {
 		init();
 		int id = 0;
 		int x = 0, y = 48;//, y = 0;
-		//true - твердый, false - не твердый
+		//true - С‚РІРµСЂРґС‹Р№, false - РЅРµ С‚РІРµСЂРґС‹Р№
 		for (int i = 0; i <= 11; i++) {
 			for (int j = 0; j <= 14; j++) {
 				//System.out.print(Game.map[j][i] + " ");

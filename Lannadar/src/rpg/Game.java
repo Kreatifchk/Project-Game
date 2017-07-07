@@ -1,4 +1,4 @@
-package rpg;
+п»їpackage rpg;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -34,7 +34,7 @@ import javax.swing.border.Border;
 
 
 /**
- * Класс с игровым окном
+ * РљР»Р°СЃСЃ СЃ РёРіСЂРѕРІС‹Рј РѕРєРЅРѕРј
  */
 @SuppressWarnings({ "unused", "serial" })
 public class Game extends JFrame implements Runnable {
@@ -45,60 +45,60 @@ public class Game extends JFrame implements Runnable {
 	static ImageIcon inf2 = new ImageIcon(Main.class.getResource("res/inf2.png"));
 	ImageIcon end = new ImageIcon(getClass().getResource("res/end.png"));
 	static ImageIcon qwI, qwSI;
-	static Image[] levelImage = new Image[10]; //Массив с изображениями уровня игрока или монстра
-	static Image[] hpNumberImage = new Image[10]; //Массив с цифрами здоровья
+	static Image[] levelImage = new Image[10]; //РњР°СЃСЃРёРІ СЃ РёР·РѕР±СЂР°Р¶РµРЅРёСЏРјРё СѓСЂРѕРІРЅСЏ РёРіСЂРѕРєР° РёР»Рё РјРѕРЅСЃС‚СЂР°
+	static Image[] hpNumberImage = new Image[10]; //РњР°СЃСЃРёРІ СЃ С†РёС„СЂР°РјРё Р·РґРѕСЂРѕРІСЊСЏ
 	static Image player;
 	static ImageIcon portalI;
 	
-	static paint p; //Панель с персонажем
-	HpPaint hpp; //Панель с хп игрока
-	MpPanel mpP = new MpPanel(); //Панель с маной игрока
-	ExpPanel expP = new ExpPanel(); //Панель с опытом игрока
-	LevelPanel lP = new LevelPanel(); //Панель с уровнем игрока
-	HpMobs hpM = new HpMobs(); //Панель с хп монстров
-	LevelMobs lmP = new LevelMobs(); //Панель с уровнем моба
+	static paint p; //РџР°РЅРµР»СЊ СЃ РїРµСЂСЃРѕРЅР°Р¶РµРј
+	HpPaint hpp; //РџР°РЅРµР»СЊ СЃ С…Рї РёРіСЂРѕРєР°
+	MpPanel mpP = new MpPanel(); //РџР°РЅРµР»СЊ СЃ РјР°РЅРѕР№ РёРіСЂРѕРєР°
+	ExpPanel expP = new ExpPanel(); //РџР°РЅРµР»СЊ СЃ РѕРїС‹С‚РѕРј РёРіСЂРѕРєР°
+	LevelPanel lP = new LevelPanel(); //РџР°РЅРµР»СЊ СЃ СѓСЂРѕРІРЅРµРј РёРіСЂРѕРєР°
+	HpMobs hpM = new HpMobs(); //РџР°РЅРµР»СЊ СЃ С…Рї РјРѕРЅСЃС‚СЂРѕРІ
+	LevelMobs lmP = new LevelMobs(); //РџР°РЅРµР»СЊ СЃ СѓСЂРѕРІРЅРµРј РјРѕР±Р°
 	
 	static Player pl;
-	static Scanner sP; //Сканер читающий файлы с  порталами
+	static Scanner sP; //РЎРєР°РЅРµСЂ С‡РёС‚Р°СЋС‰РёР№ С„Р°Р№Р»С‹ СЃ  РїРѕСЂС‚Р°Р»Р°РјРё
 	FileReader fr;
-	Massiv ms = new Massiv(); //Заполняет тайлы
+	Massiv ms = new Massiv(); //Р—Р°РїРѕР»РЅСЏРµС‚ С‚Р°Р№Р»С‹
 	TimerListener tl = new TimerListener();
 	Timer t = new Timer(40, tl);
 	//static Animation a = new Animation();
 	
 	Thread movePlayer = new Thread(this);
-	Thread recovery = new Thread(new Recovery()); //Восстанавливает хп
+	Thread recovery = new Thread(new Recovery()); //Р’РѕСЃСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ С…Рї
 	Thread animation = new Thread(new Animat());
 	//Thread loadingThread;
 	
-	static boolean move; //Проверяет, нажал ли игрок кнопку движения
-	static boolean hpMB; //Если игрок в бою добавляет панели моба
-	static boolean stop; //Не дает двигаться бесконечно при нажатии на кнопку
-	static boolean informB = false; //Надо ли закрыть окно с информацией
+	static boolean move; //РџСЂРѕРІРµСЂСЏРµС‚, РЅР°Р¶Р°Р» Р»Рё РёРіСЂРѕРє РєРЅРѕРїРєСѓ РґРІРёР¶РµРЅРёСЏ
+	static boolean hpMB; //Р•СЃР»Рё РёРіСЂРѕРє РІ Р±РѕСЋ РґРѕР±Р°РІР»СЏРµС‚ РїР°РЅРµР»Рё РјРѕР±Р°
+	static boolean stop; //РќРµ РґР°РµС‚ РґРІРёРіР°С‚СЊСЃСЏ Р±РµСЃРєРѕРЅРµС‡РЅРѕ РїСЂРё РЅР°Р¶Р°С‚РёРё РЅР° РєРЅРѕРїРєСѓ
+	static boolean informB = false; //РќР°РґРѕ Р»Рё Р·Р°РєСЂС‹С‚СЊ РѕРєРЅРѕ СЃ РёРЅС„РѕСЂРјР°С†РёРµР№
 	
 	static int currentLocation = 1;
 	static int oldLocation = 0;
-	static int direction; //Направление движения
+	static int direction; //РќР°РїСЂР°РІР»РµРЅРёРµ РґРІРёР¶РµРЅРёСЏ
 	static int hpMax = 100, hpThis = 100, hpPoint = hpMax / 100;
 	/*
-	 * hpNumber - 100 процентов, полная полоса, то есть максимальное кол-во процентов
-	 * hpMax - максимально возможное hp
-	 * hpThis - hp в данный момент
-	 * hpPoint - сколько hp на каждый процент полосы
+	 * hpNumber - 100 РїСЂРѕС†РµРЅС‚РѕРІ, РїРѕР»РЅР°СЏ РїРѕР»РѕСЃР°, С‚Рѕ РµСЃС‚СЊ РјР°РєСЃРёРјР°Р»СЊРЅРѕРµ РєРѕР»-РІРѕ РїСЂРѕС†РµРЅС‚РѕРІ
+	 * hpMax - РјР°РєСЃРёРјР°Р»СЊРЅРѕ РІРѕР·РјРѕР¶РЅРѕРµ hp
+	 * hpThis - hp РІ РґР°РЅРЅС‹Р№ РјРѕРјРµРЅС‚
+	 * hpPoint - СЃРєРѕР»СЊРєРѕ hp РЅР° РєР°Р¶РґС‹Р№ РїСЂРѕС†РµРЅС‚ РїРѕР»РѕСЃС‹
 	 */
-	final static int TILE = 48; //Размер тайла
+	final static int TILE = 48; //Р Р°Р·РјРµСЂ С‚Р°Р№Р»Р°
 	
-	static int[][] map = new int[15][12]; //Массив с данными уровня из файла
-	static Tiles[][] mapx = new Tiles[15][12]; //Массив непосредственнно самих тайлов
-	static Portals[] portal = new Portals[10]; //Массив хранящий данные о порталах
-	//static Monsters[] monster = new Monsters[4]; //Массив с мнострами
+	static int[][] map = new int[15][12]; //РњР°СЃСЃРёРІ СЃ РґР°РЅРЅС‹РјРё СѓСЂРѕРІРЅСЏ РёР· С„Р°Р№Р»Р°
+	static Tiles[][] mapx = new Tiles[15][12]; //РњР°СЃСЃРёРІ РЅРµРїРѕСЃСЂРµРґСЃС‚РІРµРЅРЅРЅРѕ СЃР°РјРёС… С‚Р°Р№Р»РѕРІ
+	static Portals[] portal = new Portals[10]; //РњР°СЃСЃРёРІ С…СЂР°РЅСЏС‰РёР№ РґР°РЅРЅС‹Рµ Рѕ РїРѕСЂС‚Р°Р»Р°С…
+	//static Monsters[] monster = new Monsters[4]; //РњР°СЃСЃРёРІ СЃ РјРЅРѕСЃС‚СЂР°РјРё
 	static ArrayList<Monsters> monster = new ArrayList<Monsters>();
-	static NPC[] npc = new NPC[8]; //Массив с NPC
-	static Qwest[] qwest = new Qwest[11]; //Все квесты
+	static NPC[] npc = new NPC[8]; //РњР°СЃСЃРёРІ СЃ NPC
+	static Qwest[] qwest = new Qwest[11]; //Р’СЃРµ РєРІРµСЃС‚С‹
 	
-	static int[] takeQwests = new int[10]; //Взятые квесты (номера)
+	static int[] takeQwests = new int[10]; //Р’Р·СЏС‚С‹Рµ РєРІРµСЃС‚С‹ (РЅРѕРјРµСЂР°)
 	
-	//Изменить здесь, в Dead.java и LocationFile.java
+	//РР·РјРµРЅРёС‚СЊ Р·РґРµСЃСЊ, РІ Dead.java Рё LocationFile.java
 	static InputStream f2;
 	//static File f2 = new File("res/levels/" + currentLocation + ".txt");
 	static File playerCont = new File("res/Player.txt");
@@ -107,10 +107,10 @@ public class Game extends JFrame implements Runnable {
 	
 	JLabel upPanel = new JLabel();
 	JLabel downPanel = new JLabel();
-	static JLabel inform; //Информация в начале игры
-	//static JLabel exclam; //Воскл. знак для квестов
+	static JLabel inform; //РРЅС„РѕСЂРјР°С†РёСЏ РІ РЅР°С‡Р°Р»Рµ РёРіСЂС‹
+	//static JLabel exclam; //Р’РѕСЃРєР». Р·РЅР°Рє РґР»СЏ РєРІРµСЃС‚РѕРІ
 	
-	static PersButton menuB = new PersButton(); //Открывает меню персонажа
+	static PersButton menuB = new PersButton(); //РћС‚РєСЂС‹РІР°РµС‚ РјРµРЅСЋ РїРµСЂСЃРѕРЅР°Р¶Р°
 	static HeroPanel pan = new HeroPanel();
 	static QwestGivePanel qGP;
 	
@@ -120,7 +120,7 @@ public class Game extends JFrame implements Runnable {
 	public Game(boolean m, boolean cont) {
 		super("Lannadar");
 		if (m != true) {
-			//Если пользователь нажал продолжить
+			//Р•СЃР»Рё РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ РЅР°Р¶Р°Р» РїСЂРѕРґРѕР»Р¶РёС‚СЊ
 			if (cont == true) {
 				continued();
 			} else {
@@ -137,7 +137,7 @@ public class Game extends JFrame implements Runnable {
 			
 			init();
 			
-			//Далее идет установка компонентов
+			//Р”Р°Р»РµРµ РёРґРµС‚ СѓСЃС‚Р°РЅРѕРІРєР° РєРѕРјРїРѕРЅРµРЅС‚РѕРІ
 			
 			setLayout(null);
 			
@@ -190,17 +190,17 @@ public class Game extends JFrame implements Runnable {
 			addMonster();
 			addNPC();
 			
-			addTile(); //Добавляет тайлы на карту
+			addTile(); //Р”РѕР±Р°РІР»СЏРµС‚ С‚Р°Р№Р»С‹ РЅР° РєР°СЂС‚Сѓ
 			p.setFocusable(true);
 			addMouseListener(new NpcListener());
 			//Music.start("Refl1.mp3", Settings.volume);
 		}
 	}
 
-	//Инициализация
+	//РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ
 	private void init() {
 		setIconImage(icon);
-		//Стартовые установки
+		//РЎС‚Р°СЂС‚РѕРІС‹Рµ СѓСЃС‚Р°РЅРѕРІРєРё
 		p = new paint();
 		hpp = new HpPaint();
 		p.addKeyListener(new Listener());
@@ -208,18 +208,18 @@ public class Game extends JFrame implements Runnable {
 		f2 = Game.class.getResourceAsStream("res/levels/" + currentLocation + ".txt");
 		
 		LocationFile.openFile(null);
-		LocationFile.readFile(); //Читает файл с локациями
+		LocationFile.readFile(); //Р§РёС‚Р°РµС‚ С„Р°Р№Р» СЃ Р»РѕРєР°С†РёСЏРјРё
 		TilesImage tl = new TilesImage();
 		
-		//Инициализирует изображения букв
+		//РРЅРёС†РёР°Р»РёР·РёСЂСѓРµС‚ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ Р±СѓРєРІ
 		QwestGivePanel qInit = new QwestGivePanel();
 		qInit.init();
 		qInit = null;
 		
 		imageInit();
-		MonsterList mnl = new MonsterList(); //Массив с мнострами
-		NPCList npl = new NPCList(); //Массив с NPC
-		ms.massiv(); //Располагает тайлы на фрейме
+		MonsterList mnl = new MonsterList(); //РњР°СЃСЃРёРІ СЃ РјРЅРѕСЃС‚СЂР°РјРё
+		NPCList npl = new NPCList(); //РњР°СЃСЃРёРІ СЃ NPC
+		ms.massiv(); //Р Р°СЃРїРѕР»Р°РіР°РµС‚ С‚Р°Р№Р»С‹ РЅР° С„СЂРµР№РјРµ
 		Portals.portals();
 		Portals.addPortal();
 		
@@ -231,9 +231,9 @@ public class Game extends JFrame implements Runnable {
 		recovery.start();
 	}
 	
-	//Считывает данные игрока при входе через продолжить
+	//РЎС‡РёС‚С‹РІР°РµС‚ РґР°РЅРЅС‹Рµ РёРіСЂРѕРєР° РїСЂРё РІС…РѕРґРµ С‡РµСЂРµР· РїСЂРѕРґРѕР»Р¶РёС‚СЊ
 	private void continued() {
-		//Считывает данные игрока при входе через продолжить
+		//РЎС‡РёС‚С‹РІР°РµС‚ РґР°РЅРЅС‹Рµ РёРіСЂРѕРєР° РїСЂРё РІС…РѕРґРµ С‡РµСЂРµР· РїСЂРѕРґРѕР»Р¶РёС‚СЊ
 		try (ObjectInputStream ds = new ObjectInputStream
 				(new FileInputStream("res/save/save1.lnd"))) {
 			pl = (Player) ds.readObject();
@@ -249,7 +249,7 @@ public class Game extends JFrame implements Runnable {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, "Не удалось загрузить игру");
+			JOptionPane.showMessageDialog(null, "РќРµ СѓРґР°Р»РѕСЃСЊ Р·Р°РіСЂСѓР·РёС‚СЊ РёРіСЂСѓ");
 		}
 	}
 
@@ -263,7 +263,7 @@ public class Game extends JFrame implements Runnable {
 		portalI = new ImageIcon(getClass().getResource("res/Tiles/portal.png"));;
 	}
 	
-	//Делает массив взятых квестов пустым
+	//Р”РµР»Р°РµС‚ РјР°СЃСЃРёРІ РІР·СЏС‚С‹С… РєРІРµСЃС‚РѕРІ РїСѓСЃС‚С‹Рј
 	private void activeQwests() {
 		for (int i = 0; i <= takeQwests.length - 1; i++) {
 			takeQwests[i] = -1;
@@ -278,7 +278,7 @@ public class Game extends JFrame implements Runnable {
 		}
 	}
 	
-	//Панель с хп игрока
+	//РџР°РЅРµР»СЊ СЃ С…Рї РёРіСЂРѕРєР°
 	private class HpPaint extends JLabel {
 		public void paintComponent(Graphics g) {
 			super.paintComponents(g);
@@ -299,9 +299,9 @@ public class Game extends JFrame implements Runnable {
 		}
 	}
 	
-	// Добавляет на карту монстров
+	// Р”РѕР±Р°РІР»СЏРµС‚ РЅР° РєР°СЂС‚Сѓ РјРѕРЅСЃС‚СЂРѕРІ
 	public void addMonster() {
-		boolean exit = false; //Если монстры с текущей лок. кончились, закончить цикл
+		boolean exit = false; //Р•СЃР»Рё РјРѕРЅСЃС‚СЂС‹ СЃ С‚РµРєСѓС‰РµР№ Р»РѕРє. РєРѕРЅС‡РёР»РёСЃСЊ, Р·Р°РєРѕРЅС‡РёС‚СЊ С†РёРєР»
 		for (int i = 0; i <= monster.size()-1; i++) {
 			if (monster.get(i).location == currentLocation) {
 				monster.get(i).setBounds(monster.get(i).x*Game.TILE, monster.get(i).y*Game.TILE+48, Game.TILE, Game.TILE);
@@ -318,7 +318,7 @@ public class Game extends JFrame implements Runnable {
 	}
 	
 	public void deleteMonster() {
-		boolean exit = false; //Если монстры с текущей лок. кончились, закончить цикл
+		boolean exit = false; //Р•СЃР»Рё РјРѕРЅСЃС‚СЂС‹ СЃ С‚РµРєСѓС‰РµР№ Р»РѕРє. РєРѕРЅС‡РёР»РёСЃСЊ, Р·Р°РєРѕРЅС‡РёС‚СЊ С†РёРєР»
 		for (int i = 0; i <= monster.size()-1; i++) {
 			if (monster.get(i).location == oldLocation) {;
 				remove(monster.get(i));
@@ -331,9 +331,9 @@ public class Game extends JFrame implements Runnable {
 		}
 	}
 	
-	// Добавляет на карту NPC
+	// Р”РѕР±Р°РІР»СЏРµС‚ РЅР° РєР°СЂС‚Сѓ NPC
 	protected void addNPC() {
-		boolean exit = false; //Если npc с текущей лок. кончились, закончить цикл
+		boolean exit = false; //Р•СЃР»Рё npc СЃ С‚РµРєСѓС‰РµР№ Р»РѕРє. РєРѕРЅС‡РёР»РёСЃСЊ, Р·Р°РєРѕРЅС‡РёС‚СЊ С†РёРєР»
 		for (int i = 0; i <= npc.length-1; i++) {
 			if (npc[i].location == currentLocation) {
 				npc[i].setBounds(npc[i].x*Game.TILE, npc[i].y*Game.TILE+48, Game.TILE, Game.TILE);
@@ -358,7 +358,7 @@ public class Game extends JFrame implements Runnable {
 	}
 	
 	protected void deleteNPC() {
-		boolean exit = false; //Если монстры с текущей лок. кончились, закончить цикл
+		boolean exit = false; //Р•СЃР»Рё РјРѕРЅСЃС‚СЂС‹ СЃ С‚РµРєСѓС‰РµР№ Р»РѕРє. РєРѕРЅС‡РёР»РёСЃСЊ, Р·Р°РєРѕРЅС‡РёС‚СЊ С†РёРєР»
 		for (int i = 0; i <= npc.length-1; i++) {
 			if (npc[i].location == oldLocation) {;
 				remove(npc[i]);
@@ -371,7 +371,7 @@ public class Game extends JFrame implements Runnable {
 		}
 	}
 	
-	//Если игрок вошел в портал
+	//Р•СЃР»Рё РёРіСЂРѕРє РІРѕС€РµР» РІ РїРѕСЂС‚Р°Р»
 	private void verifyPortal() {
 		int nextLevel = 0, nextX = 0, nextY = 0;
 		try {
@@ -402,14 +402,14 @@ public class Game extends JFrame implements Runnable {
 		}
 	}
 	
-	//Загрузка другой локации
+	//Р—Р°РіСЂСѓР·РєР° РґСЂСѓРіРѕР№ Р»РѕРєР°С†РёРё
 	protected void loadLocation(int location) {
 		deleteTile();
 		
 		f2 = Game.class.getResourceAsStream("res/levels/" + location + ".txt");
 		//f2 = new File("res/levels/" + nextLocation + ".txt");
-		//LocationFile.openFile(null); //для file
-		LocationFile.openFile(f2); //для input stream
+		//LocationFile.openFile(null); //РґР»СЏ file
+		LocationFile.openFile(f2); //РґР»СЏ input stream
 		LocationFile.readFile();
 		ms.massiv();
 		
@@ -428,9 +428,9 @@ public class Game extends JFrame implements Runnable {
 		addTile();
 	}
 	
-	//Переход на другую локацию
+	//РџРµСЂРµС…РѕРґ РЅР° РґСЂСѓРіСѓСЋ Р»РѕРєР°С†РёСЋ
 	public void crossing(int nextLocation, int nextX, int nextY) {
-		oldLocation = currentLocation; //Запоминаем локацию с которой ушли
+		oldLocation = currentLocation; //Р—Р°РїРѕРјРёРЅР°РµРј Р»РѕРєР°С†РёСЋ СЃ РєРѕС‚РѕСЂРѕР№ СѓС€Р»Рё
 		currentLocation = nextLocation;
 		loadLocation(nextLocation);
 
@@ -440,7 +440,7 @@ public class Game extends JFrame implements Runnable {
 		pl.y = pl.mY * 48 + 49;
 	}
 	
-	//Метод добавляющий тайлы на фрейм
+	//РњРµС‚РѕРґ РґРѕР±Р°РІР»СЏСЋС‰РёР№ С‚Р°Р№Р»С‹ РЅР° С„СЂРµР№Рј
 	protected void addTile() {
 		for (int i = 0; i <= 11; i++) {
 			for (int j = 0; j <= 14; j++) {
@@ -449,7 +449,7 @@ public class Game extends JFrame implements Runnable {
 		}
 	}
 	
-	//Метод удаляющий все тайлы с фрейма
+	//РњРµС‚РѕРґ СѓРґР°Р»СЏСЋС‰РёР№ РІСЃРµ С‚Р°Р№Р»С‹ СЃ С„СЂРµР№РјР°
 	protected void deleteTile() {
 		for (int i = 0; i <= 11; i++) {
 			for (int j = 0; j <= 14; j++) {
@@ -458,7 +458,7 @@ public class Game extends JFrame implements Runnable {
 		}
 	}
 	
-	//Слушатель нажатий клавиатуры
+	//РЎР»СѓС€Р°С‚РµР»СЊ РЅР°Р¶Р°С‚РёР№ РєР»Р°РІРёР°С‚СѓСЂС‹
 	public static class Listener extends KeyAdapter {
 		public void keyPressed(KeyEvent e) {
 			int key = e.getExtendedKeyCode();
@@ -478,7 +478,7 @@ public class Game extends JFrame implements Runnable {
 				Music.stop();
 			}
 			if (key == KeyEvent.VK_F5) {
-				//Сохранение
+				//РЎРѕС…СЂР°РЅРµРЅРёРµ
 				try (ObjectOutputStream sr = new ObjectOutputStream
 						(new FileOutputStream("res/save/save1.lnd"))) {
 					pl.currentLocation = currentLocation;
@@ -491,10 +491,10 @@ public class Game extends JFrame implements Runnable {
 						sr.writeObject(takeQwests[i]);
 					}
 					
-					JOptionPane.showMessageDialog(null, "Игра сохранена");
+					JOptionPane.showMessageDialog(null, "РРіСЂР° СЃРѕС…СЂР°РЅРµРЅР°");
 				} catch (Exception x) {
 					x.printStackTrace();
-					JOptionPane.showMessageDialog(null, "Не удалось сохранить");
+					JOptionPane.showMessageDialog(null, "РќРµ СѓРґР°Р»РѕСЃСЊ СЃРѕС…СЂР°РЅРёС‚СЊ");
 				}
 			}
 		}
@@ -520,7 +520,7 @@ public class Game extends JFrame implements Runnable {
 		}
 	}
 	
-	//Осуществляет движение и анимацию
+	//РћСЃСѓС‰РµСЃС‚РІР»СЏРµС‚ РґРІРёР¶РµРЅРёРµ Рё Р°РЅРёРјР°С†РёСЋ
 	@Override
 	public void run() {
 		while (true) {
@@ -585,13 +585,13 @@ public class Game extends JFrame implements Runnable {
 			}
 			try {
 				if (a.getComponent() == qGP.exit) {
-					//Кнопка exit в окне с получение квеста
+					//РљРЅРѕРїРєР° exit РІ РѕРєРЅРµ СЃ РїРѕР»СѓС‡РµРЅРёРµ РєРІРµСЃС‚Р°
 					p.remove(qGP);
 					p.requestFocus();
 					qGP = null;
 				}
 				/*if (a.getComponent() == qGP.take) {
-					//Кнопка взять квест у NPC
+					//РљРЅРѕРїРєР° РІР·СЏС‚СЊ РєРІРµСЃС‚ Сѓ NPC
 					//Animation.sleep(10);
 					p.remove(qGP);
 					p.requestFocus();
@@ -617,15 +617,15 @@ public class Game extends JFrame implements Runnable {
 						int npcX = npc[i].x, npcY = npc[i].y;
 						if ((pl.mX == npcX & pl.mY+1 == npcY) || (pl.mX == npcX & pl.mY-1 == npcY)
 							|| (pl.mX+1 == npcX & pl.mY == npcY) || (pl.mX-1 == npcX & pl.mY == npcY)) {
-							//Если персонаж рядом с NPC
+							//Р•СЃР»Рё РїРµСЂСЃРѕРЅР°Р¶ СЂСЏРґРѕРј СЃ NPC
 							int id = npc[i].id;
 							QwestGivePanel.nameNPC = npc[i].name;
-							qGP = new QwestGivePanel(id); //Панель со списоком квестов
+							qGP = new QwestGivePanel(id); //РџР°РЅРµР»СЊ СЃРѕ СЃРїРёСЃРѕРєРѕРј РєРІРµСЃС‚РѕРІ
 							qGP.setBounds(140, 70, 440, 540); //530
 							p.add(qGP);
 							break;
 						} else {
-							JOptionPane.showMessageDialog(null, "Что бы взять задание подойдите вплотную");
+							JOptionPane.showMessageDialog(null, "Р§С‚Рѕ Р±С‹ РІР·СЏС‚СЊ Р·Р°РґР°РЅРёРµ РїРѕРґРѕР№РґРёС‚Рµ РІРїР»РѕС‚РЅСѓСЋ");
 						}
 					}
 				}
@@ -641,11 +641,11 @@ public class Game extends JFrame implements Runnable {
 	private class Animat implements Runnable {
 		@Override
 		public void run() {
-			int sl = 0; //Подсчитывает сколько сек. прошло
+			int sl = 0; //РџРѕРґСЃС‡РёС‚С‹РІР°РµС‚ СЃРєРѕР»СЊРєРѕ СЃРµРє. РїСЂРѕС€Р»Рѕ
 			while(true) {
-				//0.2 сек
+				//0.2 СЃРµРє
 				if (sl%200 == 0) {
-					//Анимация тайлов
+					//РђРЅРёРјР°С†РёСЏ С‚Р°Р№Р»РѕРІ
 					for (int i = 0; i <= 11; i++) {
 						for (int j = 0; j <= 14; j++) {
 							if (mapx[j][i].anim == true) {
@@ -662,7 +662,7 @@ public class Game extends JFrame implements Runnable {
 					}
 				}
 				
-				//0.5 сек.
+				//0.5 СЃРµРє.
 				if (sl%500 == 0) {
 					if (move != true) {
 						
@@ -678,12 +678,12 @@ public class Game extends JFrame implements Runnable {
 		}
 	}
 
-	/** Добавляет на панель персонажа */
+	/** Р”РѕР±Р°РІР»СЏРµС‚ РЅР° РїР°РЅРµР»СЊ РїРµСЂСЃРѕРЅР°Р¶Р° */
 	protected void addComponent(JComponent comp) {
 		p.add(comp);
 	}
 	
-	/** Убирает с панели персонажа */
+	/** РЈР±РёСЂР°РµС‚ СЃ РїР°РЅРµР»Рё РїРµСЂСЃРѕРЅР°Р¶Р° */
 	protected void removeComponent(JComponent comp) {
 		p.remove(comp);
 	}

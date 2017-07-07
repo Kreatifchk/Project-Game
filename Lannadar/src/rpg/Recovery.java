@@ -1,4 +1,4 @@
-package rpg;
+﻿package rpg;
 
 public class Recovery implements Runnable {
 

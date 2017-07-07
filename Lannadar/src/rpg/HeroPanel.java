@@ -1,4 +1,4 @@
-package rpg;
+п»їpackage rpg;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -24,7 +24,7 @@ import javax.swing.plaf.metal.MetalScrollBarUI;
 
 /**
  * 
- * Класс панель содержащая инвертарь, квесты, навыки и информацию о персонаже.
+ * РљР»Р°СЃСЃ РїР°РЅРµР»СЊ СЃРѕРґРµСЂР¶Р°С‰Р°СЏ РёРЅРІРµСЂС‚Р°СЂСЊ, РєРІРµСЃС‚С‹, РЅР°РІС‹РєРё Рё РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РїРµСЂСЃРѕРЅР°Р¶Рµ.
  *
  */
 @SuppressWarnings("serial")
@@ -42,20 +42,20 @@ public class HeroPanel extends JPanel implements ActionListener, AdjustmentListe
 	JButton bag = new TabButton("bag");
 	JButton skills = new TabButton("skills");
 	
-	QwestButton[] qwestsM; //Кнопки квесты
+	QwestButton[] qwestsM; //РљРЅРѕРїРєРё РєРІРµСЃС‚С‹
 	
 	JLabel x;
 	JLabel infoP = new infoPanel();
-	JLabel qwestsP = new QwestsPanel(); //Общий контейнер для всего с квестами
-	JLabel textQwest = new JLabel(); //Контейнер в который будет вложен контейнер с текстом
-	TextQwest textQwestDop; //Вложенный контейнер с текст квеста
+	JLabel qwestsP = new QwestsPanel(); //РћР±С‰РёР№ РєРѕРЅС‚РµР№РЅРµСЂ РґР»СЏ РІСЃРµРіРѕ СЃ РєРІРµСЃС‚Р°РјРё
+	JLabel textQwest = new JLabel(); //РљРѕРЅС‚РµР№РЅРµСЂ РІ РєРѕС‚РѕСЂС‹Р№ Р±СѓРґРµС‚ РІР»РѕР¶РµРЅ РєРѕРЅС‚РµР№РЅРµСЂ СЃ С‚РµРєСЃС‚РѕРј
+	TextQwest textQwestDop; //Р’Р»РѕР¶РµРЅРЅС‹Р№ РєРѕРЅС‚РµР№РЅРµСЂ СЃ С‚РµРєСЃС‚ РєРІРµСЃС‚Р°
 	JLabel reqBase = new JLabel();
 	RequestQwest textRequest;
 	
 	JScrollBar jsb = new JScrollBar();
 	JScrollBar jsb2 = new JScrollBar();
 	
-	int nQwest; //Количество взятых квестов
+	int nQwest; //РљРѕР»РёС‡РµСЃС‚РІРѕ РІР·СЏС‚С‹С… РєРІРµСЃС‚РѕРІ
 	//String nameQ;
 	
 	public HeroPanel() {
@@ -81,7 +81,7 @@ public class HeroPanel extends JPanel implements ActionListener, AdjustmentListe
 		
 		infoP.setBounds(42, 119, 636, 455);
 		add(infoP);
-		qwestsP.setBounds(35, 90, 645, 490); //макс x - 726
+		qwestsP.setBounds(35, 90, 645, 490); //РјР°РєСЃ x - 726
 		exit.addMouseListener(new Game.NpcListener());
 		
 		x = infoP;
@@ -93,11 +93,11 @@ public class HeroPanel extends JPanel implements ActionListener, AdjustmentListe
 		g2d.drawImage(bc, 35, 80, null);
 	}
 
-	//Распологает кнопки - квесты
+	//Р Р°СЃРїРѕР»РѕРіР°РµС‚ РєРЅРѕРїРєРё - РєРІРµСЃС‚С‹
 	private void massiv() {
 		int st = 0;
 		qwestsM = new QwestButton[10];
-		//Определяет с какого элемента надо заполнять массив
+		//РћРїСЂРµРґРµР»СЏРµС‚ СЃ РєР°РєРѕРіРѕ СЌР»РµРјРµРЅС‚Р° РЅР°РґРѕ Р·Р°РїРѕР»РЅСЏС‚СЊ РјР°СЃСЃРёРІ
 		/*for (int i = 0; i <= qwestsM.length - 1; i++) {
 			if (qwestsM[i] == null) {
 				st = i;
@@ -183,11 +183,11 @@ public class HeroPanel extends JPanel implements ActionListener, AdjustmentListe
 			x = infoP;
 		}
 		
-		//Если нажали на кнопку - квест
+		//Р•СЃР»Рё РЅР°Р¶Р°Р»Рё РЅР° РєРЅРѕРїРєСѓ - РєРІРµСЃС‚
 		for (int i = 0; i <= qwestsM.length - 1; i++) {
 			if (a.getSource() == qwestsM[i]) {
 				if (textQwestDop != null & textRequest != null) {
-					textQwest.remove(textQwestDop); //Убирает предыдущий квест с экрана
+					textQwest.remove(textQwestDop); //РЈР±РёСЂР°РµС‚ РїСЂРµРґС‹РґСѓС‰РёР№ РєРІРµСЃС‚ СЃ СЌРєСЂР°РЅР°
 					reqBase.remove(textRequest);
 				}
 				textQwestDop = new TextQwest(qwestsM[i].text);
@@ -218,7 +218,7 @@ public class HeroPanel extends JPanel implements ActionListener, AdjustmentListe
 			add(infoP);
 			x = infoP;
 			
-			//Стереть кнопки квесты
+			//РЎС‚РµСЂРµС‚СЊ РєРЅРѕРїРєРё РєРІРµСЃС‚С‹
 			for (int i = 0; i <= qwestsM.length - 1; i++) {
 				if (qwestsM[i] != null) {
 					qwestsP.remove(qwestsM[i]);
@@ -228,7 +228,7 @@ public class HeroPanel extends JPanel implements ActionListener, AdjustmentListe
 	}
 	
 	
-	//Кнопка exit
+	//РљРЅРѕРїРєР° exit
 	private class exitButton extends JButton {
 		public void paintComponent(Graphics g) {
 			super.paintComponents(g);
@@ -239,7 +239,7 @@ public class HeroPanel extends JPanel implements ActionListener, AdjustmentListe
 		}
 	}
 	
-	//Кнопки вкладок
+	//РљРЅРѕРїРєРё РІРєР»Р°РґРѕРє
 	private class TabButton extends JButton {
 		Image nameTab, button;
 		private TabButton(String name) {
@@ -279,7 +279,7 @@ public class HeroPanel extends JPanel implements ActionListener, AdjustmentListe
 		}
 	}
 	
-	//Выводит текст - описание задания
+	//Р’С‹РІРѕРґРёС‚ С‚РµРєСЃС‚ - РѕРїРёСЃР°РЅРёРµ Р·Р°РґР°РЅРёСЏ
 	private class TextQwest extends JLabel {
 		String text;
 		public TextQwest(String text) {
@@ -299,9 +299,9 @@ public class HeroPanel extends JPanel implements ActionListener, AdjustmentListe
 				int y2 = 0;
 				boolean prob = false;
 				if (l == ',') {
-					//Немного опустить запятую
+					//РќРµРјРЅРѕРіРѕ РѕРїСѓСЃС‚РёС‚СЊ Р·Р°РїСЏС‚СѓСЋ
 					y2 = y + 3;
-				} else if (l == 'щ') {
+				} else if (l == 'С‰') {
 					y2 = y + 5;
 				} else if (l == ' ') {
 					prob = true;
@@ -311,20 +311,20 @@ public class HeroPanel extends JPanel implements ActionListener, AdjustmentListe
 				g2d.drawImage(QwestGivePanel.letters(l), x, y2, null);
 				
 				if (l == '.') {
-					//Меньше расстояние после точки
+					//РњРµРЅСЊС€Рµ СЂР°СЃСЃС‚РѕСЏРЅРёРµ РїРѕСЃР»Рµ С‚РѕС‡РєРё
 					x -= 12;
 				}
 				
 				if (prob == true) {
-					//Меньше размер пробелов
+					//РњРµРЅСЊС€Рµ СЂР°Р·РјРµСЂ РїСЂРѕР±РµР»РѕРІ
 					x -= 10;
 					prob = false;
 				}
 				
-				//Добавляет переносы строки
+				//Р”РѕР±Р°РІР»СЏРµС‚ РїРµСЂРµРЅРѕСЃС‹ СЃС‚СЂРѕРєРё
 				int xx = x;
 				if (l == ' ') {
-					int c = i + 1; //устанавливает с какого символа пробегать (слово)
+					int c = i + 1; //СѓСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ СЃ РєР°РєРѕРіРѕ СЃРёРјРІРѕР»Р° РїСЂРѕР±РµРіР°С‚СЊ (СЃР»РѕРІРѕ)
 					char l2 = 0;
 					try {
 						while (l2 != ' ') {
@@ -344,7 +344,7 @@ public class HeroPanel extends JPanel implements ActionListener, AdjustmentListe
 		}
 	}
 	
-	//Выводит текст - требование задания
+	//Р’С‹РІРѕРґРёС‚ С‚РµРєСЃС‚ - С‚СЂРµР±РѕРІР°РЅРёРµ Р·Р°РґР°РЅРёСЏ
 	private class RequestQwest extends JLabel {
 		String request;
 		int progress, max;
@@ -363,9 +363,9 @@ public class HeroPanel extends JPanel implements ActionListener, AdjustmentListe
 				int y2 = 0;
 				boolean prob = false;
 				if (l == ',') {
-					//Немного опустить запятую
+					//РќРµРјРЅРѕРіРѕ РѕРїСѓСЃС‚РёС‚СЊ Р·Р°РїСЏС‚СѓСЋ
 					y2 = y + 3;
-				} else if (l == 'щ') {
+				} else if (l == 'С‰') {
 					y2 = y + 5;
 				} else if (l == ' ') {
 					prob = true;
@@ -374,18 +374,18 @@ public class HeroPanel extends JPanel implements ActionListener, AdjustmentListe
 				}
 				g2d.drawImage(QwestGivePanel.letters(l), x, y2, null);
 				if (l == '.') {
-					//Меньше расстояние после точки
+					//РњРµРЅСЊС€Рµ СЂР°СЃСЃС‚РѕСЏРЅРёРµ РїРѕСЃР»Рµ С‚РѕС‡РєРё
 					x -= 12;
 				}
 				if (prob == true) {
-					//Меньше размер пробелов
+					//РњРµРЅСЊС€Рµ СЂР°Р·РјРµСЂ РїСЂРѕР±РµР»РѕРІ
 					x -= 10;
 					prob = false;
 				}
-				//Добавляет переносы строки
+				//Р”РѕР±Р°РІР»СЏРµС‚ РїРµСЂРµРЅРѕСЃС‹ СЃС‚СЂРѕРєРё
 				int xx = x;
 				if (l == ' ') {
-					int c = i + 1; //устанавливает с какого символа пробегать (слово)
+					int c = i + 1; //СѓСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ СЃ РєР°РєРѕРіРѕ СЃРёРјРІРѕР»Р° РїСЂРѕР±РµРіР°С‚СЊ (СЃР»РѕРІРѕ)
 					char l2 = 0;
 					try {
 						while (l2 != ' ') {
@@ -406,7 +406,7 @@ public class HeroPanel extends JPanel implements ActionListener, AdjustmentListe
 			x = 5;
 			y += 41;
 			String prog = progress + "/" + max;
-			String dop = "Выполнено: " + prog;
+			String dop = "Р’С‹РїРѕР»РЅРµРЅРѕ: " + prog;
 			char sb = 0;
 			for (int i = 0; i <= dop.length() - 1; i++) {
 				sb = dop.charAt(i);
@@ -416,7 +416,7 @@ public class HeroPanel extends JPanel implements ActionListener, AdjustmentListe
 		}
 	}
 	
-	//Для скролл бара
+	//Р”Р»СЏ СЃРєСЂРѕР»Р» Р±Р°СЂР°
 	private class BarUI extends MetalScrollBarUI {
 		Image jsbI = new ImageIcon(getClass().getResource("res/others/jsb.png")).getImage();
 		Image jsbI2 = new ImageIcon(getClass().getResource("res/others/jsb1.png")).getImage();
@@ -432,7 +432,7 @@ public class HeroPanel extends JPanel implements ActionListener, AdjustmentListe
 	        ((Graphics2D)g).drawImage(jsbI2, transform, null);
 	        g.translate( -thumbBounds.x, -thumbBounds.y );
 	    }
-	    //Верхняя
+	    //Р’РµСЂС…РЅСЏСЏ
 	    @Override
 	    protected JButton createDecreaseButton(int orientation) {
 	    	DecButton but = new DecButton();
@@ -442,7 +442,7 @@ public class HeroPanel extends JPanel implements ActionListener, AdjustmentListe
 	    	but.setMaximumSize(zeroDim);
 	    	return but;
 	    }
-	    //Нижняя
+	    //РќРёР¶РЅСЏСЏ
 	    @Override
 	    protected JButton createIncreaseButton(int orientation) {
 	    	IncButton but = new IncButton();
@@ -480,7 +480,7 @@ public class HeroPanel extends JPanel implements ActionListener, AdjustmentListe
 		}
 	}
 	
-	//Скрол движение
+	//РЎРєСЂРѕР» РґРІРёР¶РµРЅРёРµ
 	@Override
 	public void adjustmentValueChanged(AdjustmentEvent a) {
 		if (a.getSource() == jsb) {

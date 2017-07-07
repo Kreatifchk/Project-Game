@@ -1,20 +1,20 @@
-package rpg;
+п»їpackage rpg;
 
 import javax.swing.ImageIcon;
 
 public class TilesImage {
 	
-	//Улица
+	//РЈР»РёС†Р°
 	static ImageIcon grass, grassFire, three, water, mount,
 	brickWallP, brickWall, three2, water1, grassDark, threeDark, threeDark2, well;
 	
-	//Дороги
+	//Р”РѕСЂРѕРіРё
 	static ImageIcon path, brickPath, brickPathG, bridge;
 	
-	//Здания
+	//Р—РґР°РЅРёСЏ
 	static ImageIcon home01, home02, home03, homeFire;
 	
-	//Внутри дома
+	//Р’РЅСѓС‚СЂРё РґРѕРјР°
 	static ImageIcon homeWall, flooring, homeWallRigth, homeWallLeft, flooringRigth,
 	flooringLeft, voidI, window;
 	

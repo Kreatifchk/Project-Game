@@ -1,4 +1,4 @@
-package rpg;
+п»їpackage rpg;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -140,7 +140,7 @@ public class EditorListener implements MouseListener, MouseMotionListener {
 	
 	//MouseMotionListener
 	
-	//Вызывается когда мышь была нажата и передвинута
+	//Р’С‹Р·С‹РІР°РµС‚СЃСЏ РєРѕРіРґР° РјС‹С€СЊ Р±С‹Р»Р° РЅР°Р¶Р°С‚Р° Рё РїРµСЂРµРґРІРёРЅСѓС‚Р°
 	@Override
 	public void mouseDragged(MouseEvent a) {
 		int x = 0, y = 0;
@@ -160,7 +160,7 @@ public class EditorListener implements MouseListener, MouseMotionListener {
 		Editor.mapFile[x][y] = Editor.lastToolN;
 	}
 	
-	//Вызывается когда мышь не была нажата и передвинута
+	//Р’С‹Р·С‹РІР°РµС‚СЃСЏ РєРѕРіРґР° РјС‹С€СЊ РЅРµ Р±С‹Р»Р° РЅР°Р¶Р°С‚Р° Рё РїРµСЂРµРґРІРёРЅСѓС‚Р°
 	@Override
 	public void mouseMoved(MouseEvent a) {
 	}

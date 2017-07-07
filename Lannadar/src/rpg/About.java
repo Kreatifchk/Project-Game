@@ -21,10 +21,10 @@ public class About extends JFrame {
 	Image icon = new ImageIcon(getClass().getResource("res/icon.png")).getImage();
 	
 	MenuPanel background = new MenuPanel();
-	JLabel author = new JLabel("Создатель: Kreatifchk");
-	JLabel infMusic = new JLabel("Использована музыка с audionautix.com");
+	JLabel author = new JLabel("РЎРѕР·РґР°С‚РµР»СЊ: Kreatifchk");
+	JLabel infMusic = new JLabel("РСЃРїРѕР»СЊР·РѕРІР°РЅР° РјСѓР·С‹РєР° СЃ audionautix.com");
 	
-	JButton back = new JButton("Назад в меню");
+	JButton back = new JButton("РќР°Р·Р°Рґ РІ РјРµРЅСЋ");
 	
 	public About() {
 		super("Lannadar");

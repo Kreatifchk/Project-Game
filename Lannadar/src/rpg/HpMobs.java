@@ -1,4 +1,4 @@
-package rpg;
+п»їpackage rpg;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -10,15 +10,15 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public class HpMobs extends JPanel {
 	
-	//Класс для отрисовки xp моба
+	//В Р»Р°СЃСЃ РґР»В¤ РѕС‚СЂРёСЃРѕРІРєРё xp РјРѕР±Р°
 	
 	Image hpI = new ImageIcon(getClass().getResource("res/hp.png")).getImage();
 	
 	static int xpMax, xpCurrent, xpPercent;
 	/*
-	 * xpMax - максимальное xp моба
-	 * xpCurrent - текущее xp моба в бою
-	 * xpPercent текущее xp в процентах, для отрисовки полоски
+	 * xpMax - РјР°РєСЃРёРјР°Р»СЊРЅРѕРµ xp РјРѕР±Р°
+	 * xpCurrent - С‚РµРєСѓС‰РµРµ xp РјРѕР±Р° РІ Р±РѕСЋ
+	 * xpPercent С‚РµРєСѓС‰РµРµ xp РІ РїСЂРѕС†РµРЅС‚Р°С…, РґР»В¤ РѕС‚СЂРёСЃРѕРІРєРё РїРѕР»РѕСЃРєРё
 	 */
 	
 	public void paintComponent(Graphics g) {
@@ -26,7 +26,7 @@ public class HpMobs extends JPanel {
 		Graphics2D g2d = (Graphics2D)g;
 		int x = 2;
 		
-		//Отрисовка полоски
+		//СњС‚СЂРёСЃРѕРІРєР° РїРѕР»РѕСЃРєРё
 		double nb = (double) xpMax / 100;
 		xpPercent = (int) (xpCurrent / nb);
 		
@@ -35,7 +35,7 @@ public class HpMobs extends JPanel {
 			x++;
 		}
 		
-		//Отрисовка цифр
+		//СњС‚СЂРёСЃРѕРІРєР° С†РёС„СЂ
 		try {
 			String a = "" + xpCurrent;
 			int xx = 25;

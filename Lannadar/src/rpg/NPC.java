@@ -1,4 +1,4 @@
-package rpg;
+п»їpackage rpg;
 
 import javax.swing.JLabel;
 
@@ -28,9 +28,9 @@ public class NPC extends JLabel {
 		this.icon = icon;
 		this.name = name;
 		
-		this.qwest = new int[qwest.length]; //Устанавливает размер массива
+		this.qwest = new int[qwest.length]; //РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ СЂР°Р·РјРµСЂ РјР°СЃСЃРёРІР°
 		for (int i = 0; i <= qwest.length - 1; i++) {
-			this.qwest[i] = qwest[i]; //Получает массив с id квестов выдаваемых этим NPC
+			this.qwest[i] = qwest[i]; //РџРѕР»СѓС‡Р°РµС‚ РјР°СЃСЃРёРІ СЃ id РєРІРµСЃС‚РѕРІ РІС‹РґР°РІР°РµРјС‹С… СЌС‚РёРј NPC
 		}
 	}
 	

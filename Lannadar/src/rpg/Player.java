@@ -1,4 +1,4 @@
-package rpg;
+п»їpackage rpg;
 
 import java.awt.Image;
 import java.io.File;
@@ -138,7 +138,7 @@ public class Player implements Serializable {
 		}
 	}
 	
-	//Необходимое кло-во exp для перехода на новый уровень
+	//РќРµРѕР±С…РѕРґРёРјРѕРµ РєР»Рѕ-РІРѕ exp РґР»СЏ РїРµСЂРµС…РѕРґР° РЅР° РЅРѕРІС‹Р№ СѓСЂРѕРІРµРЅСЊ
 	private void expTable() {
 		expTable[0] = 40;
 		expTable[1] = 100;

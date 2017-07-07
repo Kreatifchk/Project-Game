@@ -1,9 +1,9 @@
-package rpg;
+п»їpackage rpg;
 
 public class Maths {
 	
 	public static int persentageNumber(int number, int persentage) {
-		//Вычисляет процент от числа
+		//Р’С‹С‡РёСЃР»СЏРµС‚ РїСЂРѕС†РµРЅС‚ РѕС‚ С‡РёСЃР»Р°
 		double a = (double) number;
 		a = a / 100;
 		a = a * persentage;
@@ -12,7 +12,7 @@ public class Maths {
 	}
 	
 	public static int whatPersentage(int number1, int number2) {
-		//Какой процент составляет одно число от другого
+		//РљР°РєРѕР№ РїСЂРѕС†РµРЅС‚ СЃРѕСЃС‚Р°РІР»СЏРµС‚ РѕРґРЅРѕ С‡РёСЃР»Рѕ РѕС‚ РґСЂСѓРіРѕРіРѕ
 		double a, b;
 		a = (double) number2 / 100;
 		b = number1 / a;

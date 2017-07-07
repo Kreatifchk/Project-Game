@@ -1,4 +1,4 @@
-package rpg;
+п»їpackage rpg;
 
 import javax.swing.JLabel;
 
@@ -7,19 +7,19 @@ public class Monsters extends JLabel {
 	
 	int xp, mp, attack, level, difficulty, exp, location;
 	/*
-	 * xp - кол-во xp
-	 * mp - кол-во mp
-	 * attack - сила атаки
-	 * level - уровень
-	 * difficulty - сложность
-	 * exp - опыт получаемый за его убийство
-	 * location - на какой локации
+	 * xp - РєРѕР»-РІРѕ xp
+	 * mp - РєРѕР»-РІРѕ mp
+	 * attack - СЃРёР»Р° Р°С‚Р°РєРё
+	 * level - СѓСЂРѕРІРµРЅСЊ
+	 * difficulty - СЃР»РѕР¶РЅРѕСЃС‚СЊ
+	 * exp - РѕРїС‹С‚ РїРѕР»СѓС‡Р°РµРјС‹Р№ Р·Р° РµРіРѕ СѓР±РёР№СЃС‚РІРѕ
+	 * location - РЅР° РєР°РєРѕР№ Р»РѕРєР°С†РёРё
 	 */
 	
 	String icon, name;
 	/*
-	 * icon - название изображения
-	 * name - название монстра (для квестов)
+	 * icon - РЅР°Р·РІР°РЅРёРµ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
+	 * name - РЅР°Р·РІР°РЅРёРµ РјРѕРЅСЃС‚СЂР° (РґР»СЏ РєРІРµСЃС‚РѕРІ)
 	 */
 	
 	int x, y;

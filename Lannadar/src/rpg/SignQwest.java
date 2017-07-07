@@ -1,43 +1,43 @@
-package rpg;
+п»їpackage rpg;
 
 import javax.swing.JLabel;
 
 public class SignQwest {
 	
-	static boolean d = false; //true - если есть невзятые квесты
-	static boolean zav = false; //true - если есть квесты которые можно сдать
+	static boolean d = false; //true - РµСЃР»Рё РµСЃС‚СЊ РЅРµРІР·СЏС‚С‹Рµ РєРІРµСЃС‚С‹
+	static boolean zav = false; //true - РµСЃР»Рё РµСЃС‚СЊ РєРІРµСЃС‚С‹ РєРѕС‚РѕСЂС‹Рµ РјРѕР¶РЅРѕ СЃРґР°С‚СЊ
 	
 	static int pl = 0;
 	
-	static JLabel exclam; //Воскл. знак для квестов
+	static JLabel exclam; //Р’РѕСЃРєР». Р·РЅР°Рє РґР»СЏ РєРІРµСЃС‚РѕРІ
 	
 	public static void sign(int i) {
-		//Аргументы: i - id NPC
+		//РђСЂРіСѓРјРµРЅС‚С‹: i - id NPC
 			
 		if (Game.mapx[Game.npc[i].x][Game.npc[i].y-1].getComponentCount() > 0) {
-			Game.mapx[Game.npc[i].x][Game.npc[i].y-1].remove(exclam); //Удалить уже имеющиеся значки
+			Game.mapx[Game.npc[i].x][Game.npc[i].y-1].remove(exclam); //РЈРґР°Р»РёС‚СЊ СѓР¶Рµ РёРјРµСЋС‰РёРµСЃСЏ Р·РЅР°С‡РєРё
 		}
 		
-		//Если NPC может выдавать квесты
+		//Р•СЃР»Рё NPC РјРѕР¶РµС‚ РІС‹РґР°РІР°С‚СЊ РєРІРµСЃС‚С‹
 		if (Game.npc[i].qwest != null) {
-			int lng = Game.npc[i].qwest.length - 1; //Количество выдаваемых квестов
+			int lng = Game.npc[i].qwest.length - 1; //РљРѕР»РёС‡РµСЃС‚РІРѕ РІС‹РґР°РІР°РµРјС‹С… РєРІРµСЃС‚РѕРІ
 			
-			//Пробегает по всем квестам NPC
+			//РџСЂРѕР±РµРіР°РµС‚ РїРѕ РІСЃРµРј РєРІРµСЃС‚Р°Рј NPC
 			cycle(lng, i);
 			
-			//Отрисовывает знак
+			//РћС‚СЂРёСЃРѕРІС‹РІР°РµС‚ Р·РЅР°Рє
 			draw(i);
 		}
 	}
 	
 	private static void cycle(int lng, int i) {
 		for (int j = 0; j <= lng; j++) {
-			//Если квест сдавать то знак вопроса
+			//Р•СЃР»Рё РєРІРµСЃС‚ СЃРґР°РІР°С‚СЊ С‚Рѕ Р·РЅР°Рє РІРѕРїСЂРѕСЃР°
 			if (end(i, j) == true) {
 				break;
 			}
 				
-			//Если квест получать
+			//Р•СЃР»Рё РєРІРµСЃС‚ РїРѕР»СѓС‡Р°С‚СЊ
 			if (begin(i, j) == true) {
 				break;
 			}
@@ -45,18 +45,18 @@ public class SignQwest {
 	}
 	
 	private static boolean end(int i, int j) {
-		boolean br = false; //Вместо Break
+		boolean br = false; //Р’РјРµСЃС‚Рѕ Break
 		
 		if (Game.qwest[Game.npc[i].qwest[j]].status == 3) {
 			if (Game.qwest[Game.npc[i].qwest[j]].idNPC != -1) {
-				//Если квест разговорный
+				//Р•СЃР»Рё РєРІРµСЃС‚ СЂР°Р·РіРѕРІРѕСЂРЅС‹Р№
 				if (Game.qwest[Game.npc[i].qwest[j]].idNPC == Game.npc[i].id) {
-					//Если NPC тот кому сдавать квест
+					//Р•СЃР»Рё NPC С‚РѕС‚ РєРѕРјСѓ СЃРґР°РІР°С‚СЊ РєРІРµСЃС‚
 					zav = true;
 					br = true;
 				}
 			} else {
-				//Если квест не разговорный
+				//Р•СЃР»Рё РєРІРµСЃС‚ РЅРµ СЂР°Р·РіРѕРІРѕСЂРЅС‹Р№
 				zav = true;
 				br = true;
 			}
@@ -71,20 +71,20 @@ public class SignQwest {
 		boolean br = false;
 		
 		if (Game.qwest[Game.npc[i].qwest[j]].status == 1) {
-			//Если найден невзятый квест			
+			//Р•СЃР»Рё РЅР°Р№РґРµРЅ РЅРµРІР·СЏС‚С‹Р№ РєРІРµСЃС‚			
 			if (Game.qwest[Game.npc[i].qwest[j]].lastId != -1) {
-				//Если для открытия квеста надой пройти другой
+				//Р•СЃР»Рё РґР»СЏ РѕС‚РєСЂС‹С‚РёСЏ РєРІРµСЃС‚Р° РЅР°РґРѕР№ РїСЂРѕР№С‚Рё РґСЂСѓРіРѕР№
 				int lastId = Game.qwest[Game.npc[i].qwest[j]].lastId;
 				if (Game.qwest[lastId].status == 4) {
 					if (Game.qwest[Game.npc[i].qwest[j]].idNPC != -1) {
-						//Если квест разговорный
+						//Р•СЃР»Рё РєРІРµСЃС‚ СЂР°Р·РіРѕРІРѕСЂРЅС‹Р№
 						if (Game.qwest[Game.npc[i].qwest[j]].idNPC != Game.npc[i].id) {
-							//Если NPC не тот который завершает квест
+							//Р•СЃР»Рё NPC РЅРµ С‚РѕС‚ РєРѕС‚РѕСЂС‹Р№ Р·Р°РІРµСЂС€Р°РµС‚ РєРІРµСЃС‚
 							d = true;
 							br = true;
 						}
 					} else {
-						//Если квест не разговорный
+						//Р•СЃР»Рё РєРІРµСЃС‚ РЅРµ СЂР°Р·РіРѕРІРѕСЂРЅС‹Р№
 						d = true;
 						br = true;
 					}
@@ -92,16 +92,16 @@ public class SignQwest {
 					d = false;
 				}
 			} else {
-				//Если доступен сразу
+				//Р•СЃР»Рё РґРѕСЃС‚СѓРїРµРЅ СЃСЂР°Р·Сѓ
 				if (Game.qwest[Game.npc[i].qwest[j]].idNPC != -1) {
-					//Если квест разговорный
+					//Р•СЃР»Рё РєРІРµСЃС‚ СЂР°Р·РіРѕРІРѕСЂРЅС‹Р№
 					if (Game.qwest[Game.npc[i].qwest[j]].idNPC != Game.npc[i].id) {
-						//Если NPC не тот который завершает квест
+						//Р•СЃР»Рё NPC РЅРµ С‚РѕС‚ РєРѕС‚РѕСЂС‹Р№ Р·Р°РІРµСЂС€Р°РµС‚ РєРІРµСЃС‚
 						d = true;
 						br = true;
 					}
 				} else {
-					//Если квест не разговорный
+					//Р•СЃР»Рё РєРІРµСЃС‚ РЅРµ СЂР°Р·РіРѕРІРѕСЂРЅС‹Р№
 					d = true;
 					br = true;
 				}
@@ -114,27 +114,27 @@ public class SignQwest {
 	}
 	
 	private static void draw(int i) {
-		//Если не взятых квестов больше нету, то удалить значок
+		//Р•СЃР»Рё РЅРµ РІР·СЏС‚С‹С… РєРІРµСЃС‚РѕРІ Р±РѕР»СЊС€Рµ РЅРµС‚Сѓ, С‚Рѕ СѓРґР°Р»РёС‚СЊ Р·РЅР°С‡РѕРє
 		if (d == false) {
 			try {
 				Game.mapx[Game.npc[i].x][Game.npc[i].y-1].remove(exclam);
 			} catch (NullPointerException e) {
 			}
 		}
-		//Если не взятые квесты есть, и нет квестов которые сдавать
+		//Р•СЃР»Рё РЅРµ РІР·СЏС‚С‹Рµ РєРІРµСЃС‚С‹ РµСЃС‚СЊ, Рё РЅРµС‚ РєРІРµСЃС‚РѕРІ РєРѕС‚РѕСЂС‹Рµ СЃРґР°РІР°С‚СЊ
 		if (d == true) {
 			exclam = new JLabel();
 			exclam.setBounds(10, 0, Game.TILE, Game.TILE);
 			exclam.setIcon(Game.qwI);
 			Game.mapx[Game.npc[i].x][Game.npc[i].y-1].add(exclam);
-			//Воскл. знак
+			//Р’РѕСЃРєР». Р·РЅР°Рє
 		}
 		if (zav == true) {
 			exclam = new JLabel();
 			exclam.setBounds(6, 0, Game.TILE, Game.TILE);
 			exclam.setIcon(Game.qwSI);
 			Game.mapx[Game.npc[i].x][Game.npc[i].y-1].add(exclam);
-			//Знак вопроса
+			//Р—РЅР°Рє РІРѕРїСЂРѕСЃР°
 		}
 	}
 	

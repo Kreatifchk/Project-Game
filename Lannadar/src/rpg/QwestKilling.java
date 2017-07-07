@@ -1,13 +1,13 @@
-package rpg;
+п»їpackage rpg;
 
 import java.io.Serializable;
 
 @SuppressWarnings("serial")
 public class QwestKilling extends Qwest implements Serializable {
 	
-	//String nameMonster; //Какого монстра необходимо убивать
-	//int number; //Сколько необходоимо убить
-	//Остальные в классе Qwest
+	//String nameMonster; //РљР°РєРѕРіРѕ РјРѕРЅСЃС‚СЂР° РЅРµРѕР±С…РѕРґРёРјРѕ СѓР±РёРІР°С‚СЊ
+	//int number; //РЎРєРѕР»СЊРєРѕ РЅРµРѕР±С…РѕРґРѕРёРјРѕ СѓР±РёС‚СЊ
+	//РћСЃС‚Р°Р»СЊРЅС‹Рµ РІ РєР»Р°СЃСЃРµ Qwest
 	
 	public QwestKilling(String nameMonster, int number, int id, String name, 
 			String textN, String textK, String request, int status, int exp) {

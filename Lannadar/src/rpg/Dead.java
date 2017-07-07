@@ -1,4 +1,4 @@
-package rpg;
+п»їpackage rpg;
 
 import java.io.InputStream;
 
@@ -15,13 +15,13 @@ public class Dead {
 	
 	int oldLocation;
 	
-	//respawnLoc - локация на которой умер
+	//respawnLoc - Р»РѕРєР°С†РёСЏ РЅР° РєРѕС‚РѕСЂРѕР№ СѓРјРµСЂ
 	public void dead(int respawnLoc) {
 		if (Game.hpThis <= 0) {
 			Battle.battle = false;
 			Music.stop();
 			if (respawnLoc == 2) {
-				JOptionPane.showMessageDialog(null, "Вы умерли");
+				JOptionPane.showMessageDialog(null, "Р’С‹ СѓРјРµСЂР»Рё");
 				Game.pl.mX = 1;
 				Game.pl.mY = 6;
 				Game.pl.x = Game.pl.mX * 48;
@@ -29,7 +29,7 @@ public class Dead {
 				Game.hpThis = Game.hpMax;
 				Menu.g.hpM.setVisible(false);
 			} else {
-				JOptionPane.showMessageDialog(null, "Вы умерли");
+				JOptionPane.showMessageDialog(null, "Р’С‹ СѓРјРµСЂР»Рё");
 				
 				oldLocation = Game.currentLocation;
 				

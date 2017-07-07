@@ -1,10 +1,10 @@
-package rpg;
+п»їpackage rpg;
 
 public class LevelUp {
 	
 	public static void levelUp() {
 		if (Game.pl.exp >= Game.pl.maxExp) {
-			int dopExp = Game.pl.exp - Game.pl.maxExp; //Лишнее exp
+			int dopExp = Game.pl.exp - Game.pl.maxExp; //Р›РёС€РЅРµРµ exp
 			Game.pl.level++;
 			Game.pl.exp = 0 + dopExp;
 			Game.pl.maxExp = Player.expTable[Game.pl.level-1];
@@ -12,7 +12,7 @@ public class LevelUp {
 		}
 	}
 	
-	//Повышает характеристики героя
+	//РџРѕРІС‹С€Р°РµС‚ С…Р°СЂР°РєС‚РµСЂРёСЃС‚РёРєРё РіРµСЂРѕСЏ
 	private static void paramUp() {
 		if (Game.pl.level == 2 || Game.pl.level == 3) {
 			Game.hpMax += 5;

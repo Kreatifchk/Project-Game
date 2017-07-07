@@ -1,4 +1,4 @@
-package rpg;
+п»їpackage rpg;
 
 public class Move {
 	
@@ -7,19 +7,19 @@ public class Move {
 	public static void move(int direction, boolean move) {
 		try {
 			if (direction == 1 && move == true) {
-				//Вниз
+				//Р’РЅРёР·
 				if (Game.mapx[Game.pl.mX][Game.pl.mY+1].solid == false) {
 					if (Game.mapx[Game.pl.mX][Game.pl.mY+1].busy == false) {
 						Game.direction = 1;
 						Game.move = true;
 						//Game.player = Player.playerDown;
 					} else {
-						mob(Game.pl.mX, Game.pl.mY+1); //Если игрок столкнулся с мобом
+						mob(Game.pl.mX, Game.pl.mY+1); //Р•СЃР»Рё РёРіСЂРѕРє СЃС‚РѕР»РєРЅСѓР»СЃСЏ СЃ РјРѕР±РѕРј
 					}
 				} 
 			}
 			if (direction == 2 && move == true) {
-				//Вверх
+				//Р’РІРµСЂС…
 				if (Game.mapx[Game.pl.mX][Game.pl.mY-1].solid == false) {
 					if (Game.mapx[Game.pl.mX][Game.pl.mY-1].busy == false) {
 						Game.direction = 2;
@@ -31,7 +31,7 @@ public class Move {
 				}
 			}
 			if (direction == 3 && move == true) {
-				//Влево
+				//Р’Р»РµРІРѕ
 				if (Game.mapx[Game.pl.mX-1][Game.pl.mY].solid == false) {
 					if (Game.mapx[Game.pl.mX-1][Game.pl.mY].busy == false) {
 						Game.direction = 3;
@@ -43,7 +43,7 @@ public class Move {
 				}
 			}
 			if (direction == 4 && move == true) {
-				//Вправо
+				//Р’РїСЂР°РІРѕ
 				if (Game.mapx[Game.pl.mX+1][Game.pl.mY].solid == false) {
 					if (Game.mapx[Game.pl.mX+1][Game.pl.mY].busy == false) {
 						Game.direction = 4;

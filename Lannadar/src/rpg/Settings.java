@@ -1,4 +1,4 @@
-package rpg;
+п»їpackage rpg;
 
 import java.awt.Font;
 import java.awt.Image;
@@ -21,9 +21,9 @@ public class Settings extends JFrame implements ChangeListener, ActionListener{
 	Image icon = new ImageIcon(getClass().getResource("res/icon.png")).getImage();
 	
 	static int startValue = 12;
-	JLabel t = new JLabel("Громкость музыки");
+	JLabel t = new JLabel("Р“СЂРѕРјРєРѕСЃС‚СЊ РјСѓР·С‹РєРё");
 	JSlider value = new JSlider(0, 100, startValue);
-	JButton back = new JButton("В меню");
+	JButton back = new JButton("Р’ РјРµРЅСЋ");
 	static double volume = 0.12;
 	
 	public Settings() {
