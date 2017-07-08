@@ -12,6 +12,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 
 import javax.swing.ImageIcon;
@@ -23,9 +25,14 @@ import javax.swing.plaf.metal.MetalScrollBarUI;
 
 //В панели персонажа вкладка с заданиями
 @SuppressWarnings("serial")
-public class HeroPanelQwests implements ActionListener, AdjustmentListener {
+public class HeroPanelQwests extends MouseAdapter implements ActionListener, AdjustmentListener {
 	
 	QwestsPanel qp;
+	
+	//Изображение панелей на которыз будут названия квестов
+	Image frameQwestD = new ImageIcon(getClass().getResource("res/others/frameQwest.png")).getImage();
+	Image frameQwestA = new ImageIcon(getClass().getResource("res/others/frameQwestA.png")).getImage();
+	int frm = -1; //Номер квеста на который нажимают (для подсветки)
 	
 	public HeroPanelQwests() {
 		qp = new QwestsPanel();
@@ -41,12 +48,11 @@ public class HeroPanelQwests implements ActionListener, AdjustmentListener {
 			reqBase.remove(jsb2);
 			
 			massiv();
-			
 			textQwest.setBounds(293, 33, 350, 350);
 			add(textQwest);
 			reqBase.setBounds(293, 388, 350, 95);
 			add(reqBase);
-			
+
 			jsb.setBounds(330, 0, 20, 350);
 			jsb.setUI(new BarUI());
 			jsb.setMinimum(0);
@@ -80,7 +86,10 @@ public class HeroPanelQwests implements ActionListener, AdjustmentListener {
 		}
 		
 		int st = 0; //Номер строки - квеста на панели
-		int x = 15, y = 10;
+		int x = 10, y = 10;
+		/*for (int i = 0; i < Game.takeQwests.length; i++) {
+			Game.takeQwests[i] = 0;
+		}*/
 		for (int i = 0; i < Game.takeQwests.length; i++) {
 			if (Game.takeQwests[i] != -1) {
 				qwestsM[st] = new QwestButton(Game.qwest[Game.takeQwests[i]].name);
@@ -88,12 +97,12 @@ public class HeroPanelQwests implements ActionListener, AdjustmentListener {
 				qwestsM[st].request = Game.qwest[Game.takeQwests[i]].request;
 				qwestsM[st].progress = Game.qwest[Game.takeQwests[i]].progress;
 				qwestsM[st].max = Game.qwest[Game.takeQwests[i]].count;
-				qwestsM[st].setBounds(x, y, 269, 30);
-				qwestsM[st].setOpaque(false);
+				qwestsM[st].numb = i;
+				qwestsM[st].setBounds(x, y, 270, 30);
 				qwestsM[st].addActionListener(this);
 				qp.add(qwestsM[st]);
 				st++;
-				y += 50;
+				y += 45;
 			}
 		}
 	}
@@ -109,7 +118,7 @@ public class HeroPanelQwests implements ActionListener, AdjustmentListener {
 	//Нажатие на кнопку - квест
 	public void actionPerformed(ActionEvent a) {
 		//Если нажали на кнопку - квест
-		for (int i = 0; i <= qwestsM.length - 1; i++) {
+		for (int i = 0; i < qwestsM.length; i++) {
 			if (a.getSource() == qwestsM[i]) {
 				if (textQwestDop != null & textRequest != null) {
 					textQwest.remove(textQwestDop); //Убирает предыдущий квест с экрана
@@ -270,22 +279,44 @@ public class HeroPanelQwests implements ActionListener, AdjustmentListener {
 		}
 	}
 	
+	@Override
+	public void mousePressed(MouseEvent e) {
+		for (int i = 0; i < qwestsM.length; i++) {
+			if (e.getSource() == qwestsM[i]) {
+				frm = i;
+			}
+		}
+	}
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		for (int i = 0; i < qwestsM.length; i++) {
+			if (e.getSource() == qwestsM[i]) {
+				frm = -1;
+			}
+		}
+	}
+	
 	//Кнопка квест
 	public class QwestButton extends JButton {
 		String name, text, request;
 		int progress, max;
+		int numb;
 		public QwestButton(String name) {
 			this.name = name;
+			setOpaque(false);
+			setBorder(null);
+			addMouseListener(HeroPanelQwests.this);
 		}
 		public void paintComponent(Graphics g) {
-			super.paintComponents(g);
 			Graphics2D g2d = (Graphics2D)g;
-			g2d.setFont(new Font("Times new Roman", Font.BOLD, 20));
+			if (numb == frm) {
+				g2d.drawImage(frameQwestA, 0, 0, null);
+			} else {
+				g2d.drawImage(frameQwestD, 0, 0, null);
+			}
+			g2d.setFont(new Font("Arial", Font.BOLD, 20));//Times new Roman
 			g2d.setColor(Color.BLACK);
 			g2d.drawString(name, 5, 20);
-		}
-		public void paintBorder(Graphics g) {
-			
 		}
 	}
 	

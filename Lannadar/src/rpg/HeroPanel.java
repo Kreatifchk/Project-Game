@@ -116,8 +116,7 @@ public class HeroPanel extends JPanel implements ActionListener {
 			remove(x);
 			qwestsP = new HeroPanelQwests().qp;
 			x = qwestsP;
-			
-			add(qwestsP);
+			add(x);
 		}
 		
 		if (a.getSource() == hero) {
@@ -132,6 +131,7 @@ public class HeroPanel extends JPanel implements ActionListener {
 		
 		if (a.getSource() == exit) {
 			remove(x);
+			qwestsP = null;
 			/*textQwest.remove(jsb);
 			textQwest.remove(jsb2);
 			if (textRequest != null & textQwestDop != null) {
@@ -140,11 +140,11 @@ public class HeroPanel extends JPanel implements ActionListener {
 			}*/
 			
 			//Стереть кнопки квесты
-			for (int i = 0; i <= qwestsM.length - 1; i++) {
+			/*for (int i = 0; i <= qwestsM.length - 1; i++) {
 				if (qwestsM[i] != null) {
 					qwestsP.remove(qwestsM[i]);
 				}
-			}
+			}*/
 		}
 	}
 	
