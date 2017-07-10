@@ -128,11 +128,12 @@ public class Game extends JFrame implements Runnable {
 				activeQwests();
 				QwestList qwl = new QwestList();
 				
-				inform = new JLabel();
+				/*inform = new JLabel();
 				inform.setBounds(-5, 48, inf.getIconWidth(), inf.getIconHeight());
 				inform.setIcon(inf);
 				add(inform);
-				inform.addMouseListener(new NpcListener());
+				inform.addMouseListener(new NpcListener());*/
+				//Информация в начале игры
 			}
 			
 			init();

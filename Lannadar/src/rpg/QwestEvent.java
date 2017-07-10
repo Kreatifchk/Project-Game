@@ -5,7 +5,7 @@ import javax.swing.JLabel;
 
 public class QwestEvent {
 	
-	//»венты при получении квеста, id - номер квеста
+	//Ивенты при получении квеста, id - номер квеста
 	protected static void giveEvent(int id) {
 		if (id == 0) {
 			portalOpen(0);
@@ -32,7 +32,7 @@ public class QwestEvent {
 		}
 	}
 	
-	//»венты при сдаче квеста
+	//Ивенты при сдаче квеста
 	protected static void passEvent(int id) {
 		if (id == 6) {
 			portalOpen(0);
