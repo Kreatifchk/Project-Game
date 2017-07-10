@@ -34,6 +34,9 @@ public class HeroPanelQwests extends MouseAdapter implements ActionListener, Adj
 	Image frameQwestA = new ImageIcon(getClass().getResource("res/others/frameQwestA.png")).getImage();
 	int frm = -1; //Номер квеста на который нажимают (для подсветки)
 	
+	String name;
+	boolean pt; //Отрисовывать ли название квеста
+	
 	public HeroPanelQwests() {
 		qp = new QwestsPanel();
 	}
@@ -48,18 +51,18 @@ public class HeroPanelQwests extends MouseAdapter implements ActionListener, Adj
 			reqBase.remove(jsb2);
 			
 			massiv();
-			textQwest.setBounds(293, 33, 350, 350);
+			textQwest.setBounds(288, 33, 348, 330); //293, 33, 350, 350
 			add(textQwest);
-			reqBase.setBounds(293, 388, 350, 95);
+			reqBase.setBounds(288, 368, 348, 86);
 			add(reqBase);
 
-			jsb.setBounds(330, 0, 20, 350);
+			jsb.setBounds(328, 0, 20, 330); //330, 0, 20, 350
 			jsb.setUI(new BarUI());
 			jsb.setMinimum(0);
 			jsb.setMaximum(610);
 			jsb.addAdjustmentListener(HeroPanelQwests.this);
 			
-			jsb2.setBounds(330, 0, 20, 95);
+			jsb2.setBounds(328, 0, 20, 86);
 			jsb2.setUI(new BarUI());
 			jsb2.setMinimum(0);
 			jsb2.setMaximum(315);
@@ -69,10 +72,15 @@ public class HeroPanelQwests extends MouseAdapter implements ActionListener, Adj
 			super.paintComponents(g);
 			Graphics2D g2d = (Graphics2D)g;
 			((Graphics2D) g).setStroke(new BasicStroke(5));
-			g2d.drawLine(290, 4, 290, 480); //Вертикальная линия, перегородка
+			g2d.drawLine(285, 4, 285, 480); //Вертикальная линия, перегородка
 			g2d.drawLine(0, 3, 641, 3); //Горизонтальная линия, отделяющая от кнопок
 			g2d.setColor(Color.BLACK);
-			g2d.drawLine(295, 385, 640, 385);
+			g2d.drawLine(290, 27, 640, 27); //Перегородка названия и текста
+			g2d.drawLine(290, 365, 640, 365); //Перегородка текста от требования
+			if (pt == true) {
+				g2d.setFont(new Font("Arial", Font.BOLD, 17));
+				g2d.drawString(name, 350, 22);
+			}
 		}
 	}
 	
@@ -98,6 +106,7 @@ public class HeroPanelQwests extends MouseAdapter implements ActionListener, Adj
 				qwestsM[st].progress = Game.qwest[Game.takeQwests[i]].progress;
 				qwestsM[st].max = Game.qwest[Game.takeQwests[i]].count;
 				qwestsM[st].numb = i;
+				name = Game.qwest[Game.takeQwests[i]].name; //Название квеста
 				qwestsM[st].setBounds(x, y, 270, 30);
 				qwestsM[st].addActionListener(this);
 				qp.add(qwestsM[st]);
@@ -124,6 +133,8 @@ public class HeroPanelQwests extends MouseAdapter implements ActionListener, Adj
 					textQwest.remove(textQwestDop); //Убирает предыдущий квест с экрана
 					reqBase.remove(textRequest);
 				}
+				pt = true;
+				
 				textQwestDop = new TextQwest(qwestsM[i].text);
 				textQwestDop.setBounds(0, 0, 330, 1050);
 				textQwest.add(textQwestDop);
