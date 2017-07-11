@@ -101,7 +101,7 @@ public class Game extends JFrame implements Runnable {
 	//Изменить здесь, в Dead.java и LocationFile.java
 	static InputStream f2;
 	//static File f2 = new File("res/levels/" + currentLocation + ".txt");
-	static File playerCont = new File("res/Player.txt");
+	//static File playerCont = new File("res/Player.txt"); Не используется
 	static File portalFile;
 	//InputStream portalFile;
 	
