@@ -25,16 +25,18 @@ import javazoom.jlgui.basicplayer.BasicPlayerException;
 @SuppressWarnings("serial")
 public class Menu extends JFrame {
 	
-	Image bc = new ImageIcon(getClass().getResource("res/bc.png")).getImage();
-	Image icon = new ImageIcon(getClass().getResource("res/icon.png")).getImage();
-	Image startI = new ImageIcon(getClass().getResource("res/menu/start.png")).getImage();
-	Image start2I = new ImageIcon(getClass().getResource("res/menu/start2.png")).getImage();
-	Image continuedI = new ImageIcon(getClass().getResource("res/menu/continued.png")).getImage();
-	Image editorI = new ImageIcon(getClass().getResource("res/menu/editor.png")).getImage();
-	Image aboutI = new ImageIcon(getClass().getResource("res/menu/about.png")).getImage();
-	Image settingsI = new ImageIcon(getClass().getResource("res/menu/settings.png")).getImage();
-	Image exitI = new ImageIcon(getClass().getResource("res/menu/exit.png")).getImage();
-	static Image logoI, betaI, alphaI;
+	Image bc = Initialize.bc;
+	Image icon = Initialize.icon;
+	Image startI = Initialize.startI;
+	Image start2I = Initialize.start2I;
+	Image continuedI = Initialize.continuedI;
+	Image editorI = Initialize.editorI;
+	Image aboutI = Initialize.aboutI;
+	Image settingsI = Initialize.settingsI;
+	Image exitI = Initialize.exitI;
+	ImageIcon alphaI = Initialize.alpha;
+	ImageIcon betaI = Initialize.beta;
+	static Image logoI = Initialize.logo;
 	
 	SButton start = new SButton();
 	CButton continued = new CButton();
@@ -108,7 +110,7 @@ public class Menu extends JFrame {
 		//logo.setBorder(border);
 		//beta.setBounds(410, 65, 150, 90);
 		alpha.setBounds(410, 65, 150, 90);
-		alpha.setIcon(new ImageIcon(getClass().getResource("res/Alpha.png")));
+		alpha.setIcon(alphaI);
 		
 		VERSION.setBounds(415, 490, 200, 30);
 		VERSION.setFont(font);
@@ -209,7 +211,7 @@ public class Menu extends JFrame {
 				//Game g = new Game();
 				g.setVisible(true);
 				g.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				g.setSize(726, 701);
+				g.setSize(726, 704); //726, 701
 				g.setResizable(false);
 				g.setLocationRelativeTo(null);
 			}
@@ -231,7 +233,7 @@ public class Menu extends JFrame {
 				//Game g = new Game();
 				g.setVisible(true);
 				g.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				g.setSize(726, 701);
+				g.setSize(726, 701);//726, 701
 				g.setResizable(false);
 				g.setLocationRelativeTo(null);
 			}
@@ -242,7 +244,7 @@ public class Menu extends JFrame {
 					dispose();
 					g.setVisible(true);
 					g.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-					g.setSize(726, 701);
+					g.setSize(726, 704);//726, 701
 					g.setResizable(false);
 					g.setLocationRelativeTo(null);
 				} catch (NoSuchElementException ex) {
@@ -310,7 +312,7 @@ public class Menu extends JFrame {
 	
 	private static class LogoLabel extends JLabel{
 		public void paintComponent(Graphics g) {
-			logoI = new ImageIcon(getClass().getResource("res/logo.png")).getImage();
+			//logoI = new ImageIcon(getClass().getResource("res/logo.png")).getImage();
 			super.paintComponents(g);
 			Graphics2D g2d = (Graphics2D)g;
 			g2d.drawImage(logoI, 0, 0, null);

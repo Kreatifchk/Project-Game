@@ -26,7 +26,7 @@ public class Player implements Serializable {
 	
 	int level = 1;
 
-	static int maxLevel = 10;
+	static int maxLevel = 20;
 
 	int exp = 0;
 
@@ -46,39 +46,39 @@ public class Player implements Serializable {
 		expTable();
 		maxExp = expTable[level-1];
 		
-		playerR[0] = new ImageIcon(getClass().getResource("res/Player/r0.png")).getImage();
-		playerR[1] = new ImageIcon(getClass().getResource("res/Player/r1.png")).getImage();
-		playerR[2] = new ImageIcon(getClass().getResource("res/Player/r2.png")).getImage();
+		playerR[0] = new ImageIcon(getClass().getResource("res/Image/Player/r0.png")).getImage();
+		playerR[1] = new ImageIcon(getClass().getResource("res/Image/Player/r1.png")).getImage();
+		playerR[2] = new ImageIcon(getClass().getResource("res/Image/Player/r2.png")).getImage();
 		
-		playerD[0] = new ImageIcon(getClass().getResource("res/Player/d0.png")).getImage();
-		playerD[1] = new ImageIcon(getClass().getResource("res/Player/d1.png")).getImage();
-		playerD[2] = new ImageIcon(getClass().getResource("res/Player/d2.png")).getImage();
+		playerD[0] = new ImageIcon(getClass().getResource("res/Image/Player/d0.png")).getImage();
+		playerD[1] = new ImageIcon(getClass().getResource("res/Image/Player/d1.png")).getImage();
+		playerD[2] = new ImageIcon(getClass().getResource("res/Image/Player/d2.png")).getImage();
 		
-		playerL[0] = new ImageIcon(getClass().getResource("res/Player/l0.png")).getImage();
-		playerL[1] = new ImageIcon(getClass().getResource("res/Player/l1.png")).getImage();
-		playerL[2] = new ImageIcon(getClass().getResource("res/Player/l2.png")).getImage();
+		playerL[0] = new ImageIcon(getClass().getResource("res/Image/Player/l0.png")).getImage();
+		playerL[1] = new ImageIcon(getClass().getResource("res/Image/Player/l1.png")).getImage();
+		playerL[2] = new ImageIcon(getClass().getResource("res/Image/Player/l2.png")).getImage();
 		
-		playerU[0] = new ImageIcon(getClass().getResource("res/Player/u0.png")).getImage();
-		playerU[1] = new ImageIcon(getClass().getResource("res/Player/u1.png")).getImage();
-		playerU[2] = new ImageIcon(getClass().getResource("res/Player/u2.png")).getImage();
+		playerU[0] = new ImageIcon(getClass().getResource("res/Image/Player/u0.png")).getImage();
+		playerU[1] = new ImageIcon(getClass().getResource("res/Image/Player/u1.png")).getImage();
+		playerU[2] = new ImageIcon(getClass().getResource("res/Image/Player/u2.png")).getImage();
 	}
 	
 	protected void init() {
-		playerR[0] = new ImageIcon(getClass().getResource("res/Player/r0.png")).getImage();
-		playerR[1] = new ImageIcon(getClass().getResource("res/Player/r1.png")).getImage();
-		playerR[2] = new ImageIcon(getClass().getResource("res/Player/r2.png")).getImage();
+		playerR[0] = new ImageIcon(getClass().getResource("res/Image/Player/r0.png")).getImage();
+		playerR[1] = new ImageIcon(getClass().getResource("res/Image/Player/r1.png")).getImage();
+		playerR[2] = new ImageIcon(getClass().getResource("res/Image/Player/r2.png")).getImage();
 		
-		playerD[0] = new ImageIcon(getClass().getResource("res/Player/d0.png")).getImage();
-		playerD[1] = new ImageIcon(getClass().getResource("res/Player/d1.png")).getImage();
-		playerD[2] = new ImageIcon(getClass().getResource("res/Player/d2.png")).getImage();
+		playerD[0] = new ImageIcon(getClass().getResource("res/Image/Player/d0.png")).getImage();
+		playerD[1] = new ImageIcon(getClass().getResource("res/Image/Player/d1.png")).getImage();
+		playerD[2] = new ImageIcon(getClass().getResource("res/Image/Player/d2.png")).getImage();
 		
-		playerL[0] = new ImageIcon(getClass().getResource("res/Player/l0.png")).getImage();
-		playerL[1] = new ImageIcon(getClass().getResource("res/Player/l1.png")).getImage();
-		playerL[2] = new ImageIcon(getClass().getResource("res/Player/l2.png")).getImage();
+		playerL[0] = new ImageIcon(getClass().getResource("res/Image/Player/l0.png")).getImage();
+		playerL[1] = new ImageIcon(getClass().getResource("res/Image/Player/l1.png")).getImage();
+		playerL[2] = new ImageIcon(getClass().getResource("res/Image/Player/l2.png")).getImage();
 		
-		playerU[0] = new ImageIcon(getClass().getResource("res/Player/u0.png")).getImage();
-		playerU[1] = new ImageIcon(getClass().getResource("res/Player/u1.png")).getImage();
-		playerU[2] = new ImageIcon(getClass().getResource("res/Player/u2.png")).getImage();
+		playerU[0] = new ImageIcon(getClass().getResource("res/Image/Player/u0.png")).getImage();
+		playerU[1] = new ImageIcon(getClass().getResource("res/Image/Player/u1.png")).getImage();
+		playerU[2] = new ImageIcon(getClass().getResource("res/Image/Player/u2.png")).getImage();
 		expTable();
 		maxExp = expTable[level-1];
 	}
@@ -138,7 +138,7 @@ public class Player implements Serializable {
 		}
 	}
 	
-	//Необходимое кло-во exp для перехода на новый уровень
+	//Необходимое кол-во exp для перехода на новый уровень
 	private void expTable() {
 		expTable[0] = 40;
 		expTable[1] = 100;

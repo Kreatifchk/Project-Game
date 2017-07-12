@@ -1,8 +1,11 @@
 ﻿package rpg;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.font.FontRenderContext;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -12,24 +15,25 @@ public class LevelMobs extends JPanel {
 	
 	//«десь происходит отрисовка уровн¤ врага
 	
-	Image base = new ImageIcon(getClass().getResource("res/levelsP/base.png")).getImage();
+	Image base = new ImageIcon(getClass().getResource("res/Image/Panels/base.png")).getImage();
 	
 	static int level;
+	
+	Font smw = Initialize.smw.deriveFont(24F);
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponents(g);
 		Graphics2D g2d = (Graphics2D)g;
 		if (Battle.battle == true) {
-			int levelObject = level;
-			if (level < 10) {
-				g2d.drawImage(base, 0, 0, null);
-				g2d.drawImage(Game.levelImage[levelObject], 10, 5, null);
-			} else if (level < 100) {
-				int a = level / 10 , b = level % 10;
-				g2d.drawImage(base, 0, 0, null);
-				g2d.drawImage(Game.levelImage[a], 5, 5, null);
-				g2d.drawImage(Game.levelImage[b], 16, 5, null);
+			int pixW = (int) smw.getStringBounds("" + level, new FontRenderContext(null, true, true)).getWidth();
+			g2d.setFont(smw);
+			g2d.setColor(Color.black);
+			g2d.drawImage(base, 0, 0, null);
+			if (Game.pl.level > 9) {
+				smw = smw.deriveFont(22F);
 			}
+			g2d.drawString("" + level, 
+					(int) Math.ceil((double)(30 - pixW) / 2), 23);
 		}
 	}
 	

@@ -4,7 +4,6 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -17,9 +16,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -42,21 +38,11 @@ public class HeroPanelQwests extends MouseAdapter implements ActionListener, Adj
 	String name;
 	boolean pt; //Отрисовывать ли название квеста
 	
-	Font uph = null, uphMini = null;
+	Font uph = Initialize.uph, uphMini = null;
 	
 	public HeroPanelQwests() {
 		qp = new QwestsPanel();
-		try {
-			InputStream s = getClass().getResourceAsStream("res/Font/UpheavalPro.ttf");
-			uph = Font.createFont(Font.TRUETYPE_FONT, s).deriveFont(22F);
-			uphMini = uph.deriveFont(20F);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (FontFormatException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		uphMini = uph.deriveFont(20F);
 	}
 	
 	//Общий контейнер для всего с квестами

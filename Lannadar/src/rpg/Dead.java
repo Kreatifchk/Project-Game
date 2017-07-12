@@ -11,7 +11,7 @@ public class Dead {
 	
 	Massiv ms = new Massiv();
 	
-	Game gm = new Game(true, false);
+	Game gm = new Game();//true, false
 	
 	int oldLocation;
 	

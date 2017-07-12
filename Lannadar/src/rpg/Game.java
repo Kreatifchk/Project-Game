@@ -1,6 +1,7 @@
 ﻿package rpg;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -10,6 +11,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.font.FontRenderContext;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -40,13 +42,11 @@ import javax.swing.border.Border;
 public class Game extends JFrame implements Runnable {
 	
 	Image hpI = new ImageIcon(getClass().getResource("res/hp.png")).getImage();
-	Image icon = new ImageIcon(getClass().getResource("res/icon.png")).getImage();
+	Image icon = new ImageIcon(getClass().getResource("res/Image/icon.png")).getImage();
 	ImageIcon inf = new ImageIcon(getClass().getResource("res/inf.png"));
 	static ImageIcon inf2 = new ImageIcon(Main.class.getResource("res/inf2.png"));
 	ImageIcon end = new ImageIcon(getClass().getResource("res/end.png"));
 	static ImageIcon qwI, qwSI;
-	static Image[] levelImage = new Image[10]; //Массив с изображениями уровня игрока или монстра
-	static Image[] hpNumberImage = new Image[10]; //Массив с цифрами здоровья
 	static Image player;
 	static ImageIcon portalI;
 	
@@ -59,12 +59,9 @@ public class Game extends JFrame implements Runnable {
 	LevelMobs lmP = new LevelMobs(); //Панель с уровнем моба
 	
 	static Player pl;
-	static Scanner sP; //Сканер читающий файлы с  порталами
-	FileReader fr;
 	Massiv ms = new Massiv(); //Заполняет тайлы
 	TimerListener tl = new TimerListener();
 	Timer t = new Timer(40, tl);
-	//static Animation a = new Animation();
 	
 	Thread movePlayer = new Thread(this);
 	Thread recovery = new Thread(new Recovery()); //Восстанавливает хп
@@ -76,7 +73,7 @@ public class Game extends JFrame implements Runnable {
 	static boolean stop; //Не дает двигаться бесконечно при нажатии на кнопку
 	static boolean informB = false; //Надо ли закрыть окно с информацией
 	
-	static int currentLocation = 1;
+	static int currentLocation = 1; 
 	static int oldLocation = 0;
 	static int direction; //Направление движения
 	static int hpMax = 100, hpThis = 100, hpPoint = hpMax / 100;
@@ -91,7 +88,6 @@ public class Game extends JFrame implements Runnable {
 	static int[][] map = new int[15][12]; //Массив с данными уровня из файла
 	static Tiles[][] mapx = new Tiles[15][12]; //Массив непосредственнно самих тайлов
 	static Portals[] portal = new Portals[10]; //Массив хранящий данные о порталах
-	//static Monsters[] monster = new Monsters[4]; //Массив с мнострами
 	static ArrayList<Monsters> monster = new ArrayList<Monsters>();
 	static NPC[] npc = new NPC[8]; //Массив с NPC
 	static Qwest[] qwest = new Qwest[11]; //Все квесты
@@ -108,10 +104,9 @@ public class Game extends JFrame implements Runnable {
 	JLabel upPanel = new JLabel();
 	JLabel downPanel = new JLabel();
 	static JLabel inform; //Информация в начале игры
-	//static JLabel exclam; //Воскл. знак для квестов
 	
-	static PersButton menuB = new PersButton(); //Открывает меню персонажа
-	static HeroPanel pan = new HeroPanel();
+	static PersButton menuB = new PersButton(); //Кнопка, открывает меню персонажа
+	static HeroPanel pan = new HeroPanel();//Непосредственно меню персонажа
 	static QwestGivePanel qGP;
 	
 	public Game() {
@@ -120,8 +115,8 @@ public class Game extends JFrame implements Runnable {
 	public Game(boolean m, boolean cont) {
 		super("Lannadar");
 		if (m != true) {
-			//Если пользователь нажал продолжить
 			if (cont == true) {
+				//Если пользователь нажал продолжить
 				continued();
 			} else {
 				pl = new Player();
@@ -145,12 +140,12 @@ public class Game extends JFrame implements Runnable {
 			Border border = BorderFactory.createLineBorder(Color.BLACK, 2);
 			Border borderGray = BorderFactory.createLineBorder(Color.GRAY, 2);
 			Color BROWN = new Color(185, 122, 87);
-			upPanel.setBounds(0, 0, 721, 48);
+			upPanel.setBounds(0, 0, 721, 51);
 			upPanel.setBorder(border);
 			upPanel.setOpaque(true);
 			upPanel.setBackground(BROWN);
 			
-			downPanel.setBounds(0, 624, 721, 48);
+			downPanel.setBounds(0, 627, 721, 48);
 			downPanel.setBorder(border);
 			downPanel.setOpaque(true);
 			downPanel.setBackground(BROWN);
@@ -162,20 +157,20 @@ public class Game extends JFrame implements Runnable {
 			//mpP.setBounds(120, 9, 104, 30);
 			//expP.setBounds(230, 9, 104, 30);
 			//lP.setBounds(340, 9, 30, 30);
-			hpp.setBounds(10, 2, 104, 22);
-			hpp.setBorder(borderGray);
-			mpP.setBounds(10, 24, 104, 22);
-			mpP.setBorder(borderGray);
-			expP.setBounds(120, 24, 104, 22);
-			expP.setBorder(borderGray);
+			hpp.setBounds(10, 2, 104, 16);//22
+			hpp.setBorder(border);
+			mpP.setBounds(10, 18, 104, 16);//10, 24, 104, 22
+			mpP.setBorder(border);
+			expP.setBounds(10, 34, 104, 15);//120, 24, 104, 22
+			expP.setBorder(border);
 			lP.setBounds(228, 9, 30, 30);
 			
-			hpM.setBounds(570, 9, 104, 30);
-			hpM.setBorder(borderGray);
+			hpM.setBounds(570, 18, 104, 16);
+			hpM.setBorder(border);
 			hpM.setVisible(hpMB);
 			lmP.setBounds(680, 9, 30, 30);
 			
-			p.setBounds(0, 0, 726, 701);
+			p.setBounds(0, 0, 726, 704);
 			
 			add(upPanel);
 			add(downPanel);
@@ -210,7 +205,6 @@ public class Game extends JFrame implements Runnable {
 		
 		LocationFile.openFile(null);
 		LocationFile.readFile(); //Читает файл с локациями
-		TilesImage tl = new TilesImage();
 		
 		//Инициализирует изображения букв
 		QwestGivePanel qInit = new QwestGivePanel();
@@ -256,12 +250,10 @@ public class Game extends JFrame implements Runnable {
 
 	private void imageInit() {
 		for (int i = 0; i <= 9; i++) {
-			levelImage[i] = new ImageIcon(getClass().getResource("res/levelsP/" + i + ".png")).getImage();
-			hpNumberImage[i] = new ImageIcon(getClass().getResource("res/numbers/" + i + ".png")).getImage();
 			qwI = new ImageIcon(getClass().getResource("res/qw.png"));
 			qwSI = new ImageIcon(getClass().getResource("res/qs.png"));
 		}
-		portalI = new ImageIcon(getClass().getResource("res/Tiles/portal.png"));;
+		portalI = new ImageIcon(getClass().getResource("res/Image/Tiles/portal.png"));;
 	}
 	
 	//Делает массив взятых квестов пустым
@@ -290,13 +282,11 @@ public class Game extends JFrame implements Runnable {
 				g2d.drawImage(hpI, x, 1, null);
 				x++;
 			}
-			String a = "" + hpThis;
-			int x2 = 25;
-			for (int i = 0; i <= a.length()-1; i++) {
-				int in = Integer.parseInt("" + a.charAt(i));
-				g2d.drawImage(hpNumberImage[in], x2, 3, null);
-				x2 += 15;
-			}
+			Font smw = Initialize.smw.deriveFont(19F);
+			g2d.setFont(smw);
+			g2d.setColor(Color.black);
+			int pixW = (int) smw.getStringBounds("" + hpThis, new FontRenderContext(null, true, true)).getWidth();
+			g2d.drawString(hpThis + "", (getWidth() - pixW) / 2, 15);
 		}
 	}
 	
@@ -306,7 +296,7 @@ public class Game extends JFrame implements Runnable {
 		for (int i = 0; i <= monster.size()-1; i++) {
 			if (monster.get(i).location == currentLocation) {
 				monster.get(i).setBounds(monster.get(i).x*Game.TILE, monster.get(i).y*Game.TILE+48, Game.TILE, Game.TILE);
-				monster.get(i).setIcon(new ImageIcon(getClass().getResource("res/monsters/" + monster.get(i).icon + ".png")));
+				monster.get(i).setIcon(new ImageIcon(getClass().getResource("res/Image/monsters/" + monster.get(i).icon + ".png")));
 				mapx[monster.get(i).x][monster.get(i).y].busy = true;
 				add(monster.get(i));
 			} else {
@@ -335,10 +325,10 @@ public class Game extends JFrame implements Runnable {
 	// Добавляет на карту NPC
 	protected void addNPC() {
 		boolean exit = false; //Если npc с текущей лок. кончились, закончить цикл
-		for (int i = 0; i <= npc.length-1; i++) {
+		for (int i = 0; i < npc.length; i++) {
 			if (npc[i].location == currentLocation) {
 				npc[i].setBounds(npc[i].x*Game.TILE, npc[i].y*Game.TILE+48, Game.TILE, Game.TILE);
-				npc[i].setIcon(new ImageIcon(getClass().getResource("res/NPC/" + npc[i].icon + ".png")));
+				npc[i].setIcon(new ImageIcon(getClass().getResource("res/Image/NPC/" + npc[i].icon + ".png")));
 				mapx[npc[i].x][npc[i].y].busy = true;
 				add(npc[i]);
 				//signQwest(i);

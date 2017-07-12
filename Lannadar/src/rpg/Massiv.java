@@ -9,7 +9,7 @@ public class Massiv {
 	public void massiv() {
 		init();
 		int id = 0;
-		int x = 0, y = 48;//, y = 0;
+		int x = 0, y = 51;//, y = 0;
 		//true - твердый, false - не твердый
 		for (int i = 0; i <= 11; i++) {
 			for (int j = 0; j <= 14; j++) {
@@ -176,19 +176,20 @@ public class Massiv {
 	}
 	
 	private void init() {
+		String path = "res/Image/Tiles/";
 		animIcon[0] = new ImageIcon[4];
-		animIcon[0][0] = new ImageIcon(getClass().getResource("res/Tiles/TilesBuilding/FireHome/1.png"));
-		animIcon[0][1] = new ImageIcon(getClass().getResource("res/Tiles/TilesBuilding/FireHome/2.png"));
-		animIcon[0][2] = new ImageIcon(getClass().getResource("res/Tiles/TilesBuilding/FireHome/3.png"));
-		animIcon[0][3] = new ImageIcon(getClass().getResource("res/Tiles/TilesBuilding/FireHome/4.png"));
+		animIcon[0][0] = new ImageIcon(getClass().getResource(path + "TilesBuilding/FireHome/1.png"));
+		animIcon[0][1] = new ImageIcon(getClass().getResource(path + "TilesBuilding/FireHome/2.png"));
+		animIcon[0][2] = new ImageIcon(getClass().getResource(path + "TilesBuilding/FireHome/3.png"));
+		animIcon[0][3] = new ImageIcon(getClass().getResource(path + "TilesBuilding/FireHome/4.png"));
 		
 		animIcon[1] = new ImageIcon[6];
-		animIcon[1][0] = new ImageIcon(getClass().getResource("res/Tiles/Animate/GrassFire/1.png"));
-		animIcon[1][1] = new ImageIcon(getClass().getResource("res/Tiles/Animate/GrassFire/2.png"));
-		animIcon[1][2] = new ImageIcon(getClass().getResource("res/Tiles/Animate/GrassFire/3.png"));
-		animIcon[1][3] = new ImageIcon(getClass().getResource("res/Tiles/Animate/GrassFire/4.png"));
-		animIcon[1][4] = new ImageIcon(getClass().getResource("res/Tiles/Animate/GrassFire/5.png"));
-		animIcon[1][5] = new ImageIcon(getClass().getResource("res/Tiles/Animate/GrassFire/6.png"));
+		animIcon[1][0] = new ImageIcon(getClass().getResource(path + "Animate/GrassFire/1.png"));
+		animIcon[1][1] = new ImageIcon(getClass().getResource(path + "Animate/GrassFire/2.png"));
+		animIcon[1][2] = new ImageIcon(getClass().getResource(path + "Animate/GrassFire/3.png"));
+		animIcon[1][3] = new ImageIcon(getClass().getResource(path + "Animate/GrassFire/4.png"));
+		animIcon[1][4] = new ImageIcon(getClass().getResource(path + "Animate/GrassFire/5.png"));
+		animIcon[1][5] = new ImageIcon(getClass().getResource(path + "Animate/GrassFire/6.png"));
 	}
 	
 }

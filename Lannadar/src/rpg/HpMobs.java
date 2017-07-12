@@ -1,8 +1,11 @@
 ﻿package rpg;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.font.FontRenderContext;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -21,12 +24,14 @@ public class HpMobs extends JPanel {
 	 * xpPercent текущее xp в процентах, дл¤ отрисовки полоски
 	 */
 	
+	Font smw = Initialize.smw.deriveFont(19F);
+	
 	public void paintComponent(Graphics g) {
 		super.paintComponents(g);
 		Graphics2D g2d = (Graphics2D)g;
 		int x = 2;
 		
-		//ќтрисовка полоски
+		//Отрисовка полоски
 		double nb = (double) xpMax / 100;
 		xpPercent = (int) (xpCurrent / nb);
 		
@@ -35,19 +40,13 @@ public class HpMobs extends JPanel {
 			x++;
 		}
 		
-		//ќтрисовка цифр
+		//Отрисовка цифр
 		try {
-			String a = "" + xpCurrent;
-			int xx = 25;
-			int n = 0;
-			for (int i = 0; i <= a.length()-1; i++) {
-				if (a.charAt(i) != '-') {
-					n = Integer.parseInt("" + a.charAt(i));
-				}
-				if (Battle.battle == true) {
-					g2d.drawImage(Game.hpNumberImage[n], xx, 6, null);
-				}
-				xx += 15;
+			if (Battle.battle == true) {
+				g2d.setFont(smw);
+				g2d.setColor(Color.black);
+				int pixW = (int) smw.getStringBounds("" + xpCurrent, new FontRenderContext(null, true, true)).getWidth();
+				g2d.drawString(xpCurrent + "", (getWidth() - pixW) / 2, 15);
 			}
 		} catch (NullPointerException e) {
 			

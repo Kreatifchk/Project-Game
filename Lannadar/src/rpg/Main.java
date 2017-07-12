@@ -11,6 +11,8 @@ public class Main {
 			history = true;
 		}
 		
+		new Initialize(); //Инициализация всего
+		
 		Menu m = new Menu();
 		m.setVisible(true);
 		m.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
