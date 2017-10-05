@@ -40,13 +40,13 @@ public class Game extends JFrame implements Runnable, ActionListener, Serializab
 	//Общее количество клеток - 504
 	
 	static Sector[][] sector = new Sector[28][18]; //37 21
-	volatile Empery[] emp = new Empery[18];
+	volatile Empery[] emp = new Empery[18];//18
 	Boolean[] empAlive = new Boolean[emp.length]; //какие империи живы
 	RiotCoor[] riotCoor = new RiotCoor[504];
 	JLabel[] lid = new JLabel[3];
 	
 	int empCount = emp.length - 1; //Количество империй
-	int speed = 250;
+	int speed = 450;
 	static int x = sector.length - 1, y = sector[0].length-1; //Количество клеток 26 20
 	
 	int idEmp;
@@ -378,6 +378,7 @@ public class Game extends JFrame implements Runnable, ActionListener, Serializab
 				count();
 				liders();
 				if (objB == true) {
+					//Если разрешено сливает гос-ва
 					joining();
 				}
 			}
