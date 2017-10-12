@@ -4,6 +4,8 @@ import java.util.Random;
 
 public class War {
 	
+	//git
+	
 	/** id империи рассматриваемой в текущий момент */
 	int id;
 	

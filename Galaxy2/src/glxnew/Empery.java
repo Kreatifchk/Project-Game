@@ -6,6 +6,8 @@ import java.util.Random;
 
 public class Empery {
 	
+	//git
+	
 	Color cl;
 	
 	static Random r = new Random();

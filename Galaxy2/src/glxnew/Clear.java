@@ -2,6 +2,8 @@ package glxnew;
 
 public class Clear {
 	
+	//git
+	
 	public Clear(int id) {
 		//Подсчет кол-ва территорий
 		Game.emp.get(id).count = 0;

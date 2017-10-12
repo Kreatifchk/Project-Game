@@ -2,6 +2,8 @@ package glxnew;
 
 public class Internal {
 	
+	//git
+	
 	/** id империи рассматриваемой в текущий момент */
 	int id;
 	

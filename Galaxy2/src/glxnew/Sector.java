@@ -5,6 +5,8 @@ import javax.swing.JLabel;
 @SuppressWarnings("serial")
 public class Sector extends JLabel {
 	
+	//git
+	
 	boolean busy; //Занята ли, для первичного размещения
 	/** Находится ли у границы */
 	boolean border; //Находится ли у границы

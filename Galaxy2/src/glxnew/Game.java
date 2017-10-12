@@ -18,6 +18,8 @@ import javax.swing.Timer;
 @SuppressWarnings("serial")
 public class Game extends JFrame implements ActionListener, Runnable, MouseListener {
 	
+	//git
+	
 	static JLayeredPane jlp = new JLayeredPane();
 	
 	static boolean paused;
