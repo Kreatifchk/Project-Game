@@ -120,7 +120,7 @@ public class Game extends JFrame implements ActionListener, Runnable, MouseListe
 					new Clear(i); //Очистка империй, потерявших все клетки
 				}
 			}
-			Sleep.sleep(50);//180
+			Sleep.sleep(180);//180
 		}
 	}
 	

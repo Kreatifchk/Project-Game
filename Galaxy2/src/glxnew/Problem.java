@@ -12,6 +12,8 @@ public class Problem {
 	//Сделать зависимость роста коррупции не только от рандома, но и от правящей партии
 	//Сделать динамичные партии (доверие людей к ним может меняться и.т.д)
 	//Сделать чтоб коррупция влияла на деньги
+	//Сделать содержание армии (в случае нехватки денег на нее уменьшать армию)
+	//возможно опционально
 	
 	public Problem(int id) {
 		emp = Game.emp.get(id);
@@ -22,6 +24,8 @@ public class Problem {
 			//У восставших империй не хватает денег и армии для защиты
 		disapproval(); //Рост недовольства (пока только от коррупции)
 		//}
+		desertion(); //Уменьшение войск в клетках для гигантских империй (пока
+		//нету параметра - содержание армии
 	}
 	
 	private void counting() {
@@ -39,7 +43,7 @@ public class Problem {
 		//Сделать затраты денег на борьбу с коррупцией (значительно повысит эффективность)
 		//Использование этого от техн. уровня и специализации
 		//В малых империя (< 10 клеток) коррупция не растет
-		if (emp.count >= 10 & emp.corruption < 500) {
+		if (emp.count >= 10 & emp.corruption < 800) {
 			emp.incCorr = emp.count/10;
 			int x = emp.incCorr;
 			emp.incCorr = r.nextInt(x/2 + x) + x/2;
@@ -80,7 +84,7 @@ public class Problem {
 	private void split() {
 		Game.xs = true;
 		//Сила бунта зависит от рандома (кол-во отобранных клеток)
-		//Кол-во клеток не больше 1/7 общего кол-ва клеток
+		//Кол-во клеток не больше 1/6 общего кол-ва клеток
 		int c = 1; //Минимальное кол-во клеток которое взбунтуется
 		if (emp.count < 10) {
 			c = 2;
@@ -90,10 +94,10 @@ public class Problem {
 			c = 9;
 		}
 		int count; //Кол-во клеток которые отойдут в другую империю
-		if (emp.count < 7) {
+		if (emp.count < 6) {
 			count = 2;
 		} else {
-			count = r.nextInt(emp.count/7) +  c;
+			count = r.nextInt(emp.count/6) +  c;
 		}
 		boolean stop = false; //Не даст создать столицу несколько раз
 		
@@ -174,6 +178,17 @@ public class Problem {
 		if (sc >= 2) {
 			Game.pole[x][y].owner = newId;
 			Game.pole[x][y].setBackground(Game.emp.get(newId).cl);
+		}
+	}
+	
+	private void desertion() {
+		if (emp.count > 500) {
+			for (int i = 0; i < Game.pole.length; i++) {
+				for (int j = 0; j < Game.pole[0].length; j++) {
+					int des = r.nextInt(1000) + 400;
+					Game.pole[i][j].army -= des;
+				}
+			}
 		}
 	}
 	
