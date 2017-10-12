@@ -182,6 +182,7 @@ public class Problem {
 	}
 	
 	private void desertion() {
+		//Только для империй с 500 и больше территориями
 		if (emp.count > 500) {
 			for (int i = 0; i < Game.pole.length; i++) {
 				for (int j = 0; j < Game.pole[0].length; j++) {
