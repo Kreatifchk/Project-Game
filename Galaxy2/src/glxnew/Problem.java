@@ -21,11 +21,7 @@ public class Problem {
 		emp = Game.emp.get(id);
 		counting(); //Подсчет кол-ва территорий
 		corruption();
-		//if (Game.xs != true) {
-			//Временно отключены восстания кроме первого
-			//У восставших империй не хватает денег и армии для защиты
 		disapproval(); //Рост недовольства (пока только от коррупции)
-		//}
 		desertion(); //Уменьшение войск в клетках для гигантских империй (пока
 		//нету параметра - содержание армии
 	}
@@ -84,7 +80,6 @@ public class Problem {
 	}
 	
 	private void split() {
-		Game.xs = true;
 		//Сила бунта зависит от рандома (кол-во отобранных клеток)
 		//Кол-во клеток не больше 1/6 общего кол-ва клеток
 		int c = 1; //Минимальное кол-во клеток которое взбунтуется
@@ -110,6 +105,10 @@ public class Problem {
 			//Рандомно определяет первую клетку
 			if (stop != true) {
 				while (true) {
+					//Избавление от бага
+					if (emp.count <= 0) {
+						break;
+					}
 					x = r.nextInt(Game.pole.length);
 					y = r.nextInt(Game.pole[0].length);
 					if (Game.pole[x][y].owner == emp.id) {

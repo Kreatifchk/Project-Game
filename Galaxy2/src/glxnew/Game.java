@@ -24,13 +24,12 @@ public class Game extends JFrame implements ActionListener, Runnable, MouseListe
 	
 	static boolean paused;
 	
-	static boolean xs;
-	
 	//513 полей всего
 	
 	/*Сделать разные специализации стран: коррупционная (деньги идут в столицу),
 	 * военная (деньги идут в спорные регионы) и.т.д
 	 */
+	//Сделать клетки с особыми ресурсами
 	
 	//int xI, yI;
 	
@@ -42,6 +41,7 @@ public class Game extends JFrame implements ActionListener, Runnable, MouseListe
 	static ArrayList<Empery> emp = new ArrayList<Empery>();
 	
 	JButton pauseB;
+	JButton thread;
 	
 	Timer t = new Timer(20, this);
 	static Random r = new Random();
@@ -61,7 +61,12 @@ public class Game extends JFrame implements ActionListener, Runnable, MouseListe
 		pauseB = new JButton();
 		pauseB.setBounds(60, 570, 40, 40);
 		pauseB.addMouseListener(this);
+		
+		thread = new JButton();
+		thread.setBounds(120, 570, 40, 40);
+		thread.addMouseListener(this);
 		jlp.add(pauseB, new Integer(0));
+		jlp.add(thread, new Integer(0));
 		
 		preGen();
 		gen(); //Генерация первых империй
@@ -103,6 +108,7 @@ public class Game extends JFrame implements ActionListener, Runnable, MouseListe
 					emp.get(i).money = 1000;
 					emp.get(i).id = i;
 					emp.get(i).count++;
+					emp.get(i).parties();
 					break;
 				}
 			}
@@ -113,10 +119,10 @@ public class Game extends JFrame implements ActionListener, Runnable, MouseListe
 		//Главный цикл игры
 		Sleep.sleep(500);
 		while(true) {
-			//System.out.println("size: " + emp.size());
 			for (int i = 0; i < emp.size(); i++) {
 				if (paused != true) {
 					new Internal(i); //Внутренние дела (технологии, распределение бюджета)
+					new Parties(i); //Партии и внутренняя политика
 					new Problem(i); //Коррупция, восстания и прочие проблемы
 					new War(i); //Война
 					new Clear(i); //Очистка империй, потерявших все клетки

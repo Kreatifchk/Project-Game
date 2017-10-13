@@ -43,8 +43,6 @@ import heroPanel.HeroPanel;
 @SuppressWarnings({ "unused", "serial" })
 public class Game extends JFrame implements Runnable {
 	
-	//git
-	
 	Image hpI = new ImageIcon(getClass().getResource("res/hp.png")).getImage();
 	Image icon = new ImageIcon(getClass().getResource("res/Image/icon.png")).getImage();
 	ImageIcon inf = new ImageIcon(getClass().getResource("res/inf.png"));

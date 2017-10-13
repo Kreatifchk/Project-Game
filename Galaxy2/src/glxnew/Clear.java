@@ -15,7 +15,6 @@ public class Clear {
 			}
 		}
 		//Удаление империй
-		//System.out.println("count: " + Game.emp.get(id).count);
 		if (Game.emp.get(id).count <= 0) {
 			//Клетка более не столица (вообще надо это делать уже при ее захвате)
 			//int xCap = Game.emp.get(id).capital.x;
