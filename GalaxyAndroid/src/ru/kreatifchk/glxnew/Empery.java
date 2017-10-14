@@ -20,10 +20,10 @@ public class Empery {
 		this.id = id;
 		
 		cl = Color.argb(255, r.nextInt(255), r.nextInt(255), r.nextInt(255));
-		//int x = r.nextInt(Main.pole.length);
-		//int y = r.nextInt(Main.pole[0].length);
-		int x = 4, y = 5;
-		Main.pole[x][y].owner = id;
+		int x = r.nextInt(Main.pole.length);
+		int y = r.nextInt(Main.pole[0].length);
+		//int x = 4, y = 5;
+		Main.pole[x][y].setOwner(id);
 		Main.pole[x][y].col = cl;
 	}
 	
