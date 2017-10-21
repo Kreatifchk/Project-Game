@@ -11,30 +11,26 @@ public class Point extends ImageView implements OnClickListener {
 	int red, green, blue;
 	
 	Paint p;
-	
-	Color cl;
+	//Color cl;
 	int col;
 	
-	private int owner = -1;
+	boolean newP; //Только щахваченная клетка не может атаковать 
+	boolean border; //Находится ли на границе
+	boolean capital; //Столица ли
+	
+	int owner = -1; //Владелец
+	int money;
 	
 	public Point(Context cont) {
 		super(cont);
 		
 		p = new Paint();
 		
-		cl = new Color();
-		col = cl.argb(255, 255, 255, 255);
+		//cl = new Color();
+		col = Color.argb(255, 255, 255, 255);
 		setBackgroundColor(col);
 		
 		setOnClickListener(this);
-	}
-	
-	protected void setOwner(int owner) {
-		this.owner = owner;
-	}
-	
-	protected int getOwner() {
-		return owner;
 	}
 
 	@Override
@@ -51,7 +47,7 @@ public class Point extends ImageView implements OnClickListener {
 	
 	@Override
 	public void onClick(View p) {
-		Toast.makeText(Main.cont, col + " " + owner, 1).show();
+		Toast.makeText(Main.cont, "ID: " + owner + " $: " + money + " $$: " + Game.emp.get(owner).money, 1).show();
 	}
 	
 }

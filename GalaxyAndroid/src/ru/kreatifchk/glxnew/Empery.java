@@ -1,16 +1,25 @@
 package ru.kreatifchk.glxnew;
 
 import android.graphics.*;
-import android.widget.*;
+import android.util.*;
 import java.util.*;
-import ru.kreatifchk.glxnew.*;
 
 public class Empery {
 	
 	int id;
+	int oldId; //Для удаления
+	//Цвет
 	int cl;
 	
-	int stars = 1; //Количество звезд
+	int count = 1; //Количество звезд
+	int money; //Деньги
+	int corruption; //Значение коррупции
+	int incCorr; //Значение увеличения коррупции
+	int disapproval; //Недовольство граждан
+	
+	boolean immort; //Временное бессмертие
+	
+	static Pix capital = new Pix();
 	
 	Random r;
 	
@@ -20,11 +29,13 @@ public class Empery {
 		this.id = id;
 		
 		cl = Color.argb(255, r.nextInt(255), r.nextInt(255), r.nextInt(255));
-		int x = r.nextInt(Main.pole.length);
-		int y = r.nextInt(Main.pole[0].length);
-		//int x = 4, y = 5;
-		Main.pole[x][y].setOwner(id);
-		Main.pole[x][y].col = cl;
+		int x = r.nextInt(Game.pole.length);
+		int y = r.nextInt(Game.pole[0].length);
+		Game.pole[x][y].owner = id;
+		Game.pole[x][y].col = cl;
+		capital.x = x;
+		capital.y = y;
+		Game.pole[x][y].capital = true;
 	}
 	
 }

@@ -1,10 +1,16 @@
 package ru.kreatifchk.glxnew;
 
-import android.graphics.*;
 import android.util.*;
 import java.util.*;
 
 public class Game implements Runnable {
+	
+	static ArrayList<Empery> emp = new ArrayList<Empery>();
+	static Point[][] pole;
+	
+	static boolean pause;
+	
+	static int speed = 150;
 	
 	Random r = new Random();
 	
@@ -12,16 +18,20 @@ public class Game implements Runnable {
 	public void run() {
 		Sleep.sleep(500);
 		while (true) {
-			for (int i = 0; i < Main.emp.size(); i++) {
-				new War(i);
-				clear(); //Очистка мертвых империй
+			if (pause != true) {
+				for (int i = 0; i < Game.emp.size(); i++) {
+					new Internal(i);
+					try {
+					new Problem(i);
+					} catch (Exception e) {
+						Log.e("Galaxy", e.toString());
+					}
+					new War(i);
+					new Clear(i); //Очистка мертвых империй
+				}
 			}
-			Sleep.sleep(150);
+			Sleep.sleep(speed);
 		}
-	}
-	
-	private void clear() {
-		
 	}
 	
 }
