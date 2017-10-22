@@ -94,6 +94,7 @@ public class Game extends JFrame implements ActionListener, Runnable, MouseListe
 	
 	private void gen() {
 		int countEmp = r.nextInt(7) + 5;
+		//int countEmp = 1;
 		for (int i = 0; i < countEmp; i++) {
 			emp.add(new Empery(emp.size(), createColor()));
 			while (true) {
@@ -127,7 +128,7 @@ public class Game extends JFrame implements ActionListener, Runnable, MouseListe
 					new Clear(i); //Очистка империй, потерявших все клетки
 				}
 			}
-			Sleep.sleep(180);//180
+			Sleep.sleep(380);//180
 		}
 	}
 	

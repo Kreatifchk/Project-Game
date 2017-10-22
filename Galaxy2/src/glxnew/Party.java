@@ -10,6 +10,8 @@ public class Party {
 	
 	/** Влияние в народе */
 	int influence;
+	/** Влияние в пролшом ходе */
+	int influenceP;
 	//Партия с наибольшим влиянем - лидер страны
 	
 	public Party(String name) {

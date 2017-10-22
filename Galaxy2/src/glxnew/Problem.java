@@ -121,6 +121,7 @@ public class Problem {
 						Game.pole[x][y].capital = true;
 						Game.pole[x][y].immort = true; //выдача бессмертия на 1 ход
 						//чтоб дать им шанс
+						empNew.parties();
 						stop = true;
 						break;
 					}

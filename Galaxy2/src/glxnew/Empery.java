@@ -23,6 +23,7 @@ public class Empery {
 	
 	/** Количество территорий */
 	int count;
+	int countP; //Сколько было в прошлом ходу
 	
 	Point capital; //Столица (для режима захват столицы)
 	
@@ -31,7 +32,10 @@ public class Empery {
 	/** Недовольство людей */
 	int disapproval;
 	
+	/** Партии */
 	ArrayList<Party> parties = new ArrayList<Party>();
+	/** Номер правящей партии */
+	int partyP;
 	
 	public Empery() {
 	}
@@ -51,12 +55,23 @@ public class Empery {
 		}
 		//Далее - распределние влияния (случайное)
 		//Определяется влияние первой сгенерированной партии
-		int vl = r.nextInt(69) + 1; //Не может быть быльше 70
+		int vl = r.nextInt(69) + 1; //Не может быть больше 70
 		parties.get(0).influence = vl;
 		int ost = 100 - vl;
 		vl = r.nextInt(ost) + 1;
 		parties.get(1).influence = vl;
 		parties.get(2).influence = ost - vl;
+		//Определение правящей партии
+		if (parties.get(0).influence > parties.get(1).influence
+				& parties.get(0).influence > parties.get(2).influence) {
+			partyP = 0;
+		} else if (parties.get(1).influence > parties.get(0).influence
+				& parties.get(1).influence > parties.get(2).influence) {
+			partyP = 1;
+		} else if (parties.get(2).influence > parties.get(0).influence
+				& parties.get(2).influence > parties.get(1).influence) {
+			partyP = 2;
+		}
 		
 		/*for (int i = 0; i < parties.size(); i++) {
 			System.out.println(parties.get(i).name + " " + parties.get(i).influence);
