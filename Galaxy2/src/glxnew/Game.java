@@ -18,8 +18,6 @@ import javax.swing.Timer;
 @SuppressWarnings("serial")
 public class Game extends JFrame implements ActionListener, Runnable, MouseListener {
 	
-	//git
-	
 	static JLayeredPane jlp = new JLayeredPane();
 	
 	static boolean paused;
@@ -65,8 +63,9 @@ public class Game extends JFrame implements ActionListener, Runnable, MouseListe
 		thread = new JButton();
 		thread.setBounds(120, 570, 40, 40);
 		thread.addMouseListener(this);
-		jlp.add(pauseB, new Integer(0));
+		jlp.add(pauseB, new Integer(0));//Чем больше число, тем выше
 		jlp.add(thread, new Integer(0));
+
 		
 		preGen();
 		gen(); //Генерация первых империй
@@ -140,11 +139,21 @@ public class Game extends JFrame implements ActionListener, Runnable, MouseListe
 		repaint();
 	}
 
+	Information inform;
+	boolean inf; //Есть ли окно информации
 	@Override
 	public void mouseClicked(MouseEvent a) {
 		for (int i = 0; i < pole.length; i++) {
 			for (int j = 0; j < pole[0].length; j++) {
 				if (a.getSource() == pole[i][j]) {
+					if (inf == false) {
+						inform = new Information(i, j);
+						jlp.add(inform, new Integer(2));
+						inf = true;
+					} else {
+						jlp.remove(inform);
+						inf = false;
+					}
 					System.out.println("Деньги клетки: " + pole[i][j].money);
 					System.out.println("Деньги империи: " + emp.get(pole[i][j].owner).money);
 					System.out.println("Армия клетки: " + pole[i][j].army);

@@ -58,10 +58,10 @@ public class Empery {
 		parties.get(1).influence = vl;
 		parties.get(2).influence = ost - vl;
 		
-		for (int i = 0; i < parties.size(); i++) {
+		/*for (int i = 0; i < parties.size(); i++) {
 			System.out.println(parties.get(i).name + " " + parties.get(i).influence);
 		}
-		System.out.println();
+		System.out.println();*/
 	}
 	
 	//Генерирует партию (одну) (для общего использования)

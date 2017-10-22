@@ -2,9 +2,8 @@ package glxnew;
 
 public class Main {
 	
-	//git
-	
 	static Menu mn;
+	//public static Object g;
 	
 	public static void main(String[] args) {
 		mn = new Menu();
