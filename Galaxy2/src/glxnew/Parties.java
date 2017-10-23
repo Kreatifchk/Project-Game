@@ -4,6 +4,8 @@ public class Parties {
 	
 	Empery emp;
 	
+	//По каким-то неведомым причинам влияние все еще может упасть до 0
+	
 	public Parties(int empId) {
 		emp = Game.emp.get(empId);
 		points(); //Изм. влияние партии в зависимости от увел. или уменьшения терр.
@@ -27,6 +29,9 @@ public class Parties {
 						emp.parties.get(emp.partyP).influence = 98;
 					}
 				}
+			} else if (emp.countP == emp.count) {
+				//Если осталось столько же
+				//Ничего не менять
 			} else {
 				//Если уменьшилось
 				if (emp.parties.get(emp.partyP).influence > 1) {
@@ -84,15 +89,22 @@ public class Parties {
 	
 	//Вспомогательный метод
 	private void balancing(int diff, boolean inc) {
-		if (inc = true) {
+		if (inc == true) {
 			//Уменьшаем влияние двух других партий
+			label1:
 			while (diff > 0) {
-				System.out.println("rpt" + emp.id + " " + diff);
 				for (int i = 0; i < emp.parties.size(); i++) {
 					if (i != emp.partyP & diff > 0 &
 							emp.parties.get(i).influence > 1) {
 						emp.parties.get(i).influence--;
 						diff--;
+					} else if (emp.parties.get(emp.partyP).influence == 98) {
+						for (int j = 0; j < emp.parties.size(); j++) {
+							if (emp.parties.get(j).influence > 1 & j != emp.partyP) {
+								emp.parties.get(j).influence = 1;
+							}
+						}
+						break label1;
 					}
 				}
 			}

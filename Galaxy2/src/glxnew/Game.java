@@ -124,11 +124,12 @@ public class Game extends JFrame implements ActionListener, Runnable, MouseListe
 					new Internal(i); //Внутренние дела (технологии, распределение бюджета)
 					new Parties(i); //Партии и внутренняя политика
 					new Problem(i); //Коррупция, восстания и прочие проблемы
+					new External(i); //Внешние дела (союзы, торговля и прочее)
 					new War(i); //Война
 					new Clear(i); //Очистка империй, потерявших все клетки
 				}
 			}
-			Sleep.sleep(380);//180
+			Sleep.sleep(180);//180
 		}
 	}
 	
@@ -155,12 +156,6 @@ public class Game extends JFrame implements ActionListener, Runnable, MouseListe
 						jlp.remove(inform);
 						inf = false;
 					}
-					System.out.println("Деньги клетки: " + pole[i][j].money);
-					System.out.println("Деньги империи: " + emp.get(pole[i][j].owner).money);
-					System.out.println("Армия клетки: " + pole[i][j].army);
-					System.out.println("Коррупция: " + emp.get(pole[i][j].owner).corruption);
-					System.out.println("id: " + emp.get(pole[i][j].owner).id);
-					System.out.println("im: " + emp.get(pole[i][j].owner).immort);
 				}
 			}
 		}

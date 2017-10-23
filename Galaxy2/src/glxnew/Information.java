@@ -38,14 +38,15 @@ public class Information extends JLabel {
 		g2d.drawString("Empery: " + emp.id, 130, 20);
 		g2d.drawString("Деньги поля: " + Game.pole[x][y].money, 15, 60);
 		g2d.drawString("Армия: " + Game.pole[x][y].army, 15, 100);
+		g2d.drawString("Коррупция: " + emp.corruption, 15, 140);
 		g2d.setStroke(new BasicStroke(7));
-		g2d.drawLine(10, 120, 370, 120);
-		g2d.drawString("Партии", 130, 140);
+		g2d.drawLine(10, 160, 370, 160);//120
+		g2d.drawString("Партии", 130, 185);
 		g2d.setStroke(new BasicStroke(3));
-		g2d.drawLine(15, 175, 320, 175);
-		g2d.drawString("Партия", 50, 170);
-		g2d.drawString("Влияние (%)", 200, 170);
-		int y = 195;
+		g2d.drawLine(15, 210, 320, 210);//175
+		g2d.drawString("Партия", 50, 205);
+		g2d.drawString("Влияние (%)", 200, 205);
+		int y = 230;
 		for (int i = 0; i < emp.parties.size(); i++) {
 			if (emp.parties.get(i).nameD == 2) {
 				//Если слов в названии больше двух то -> делать перенос
