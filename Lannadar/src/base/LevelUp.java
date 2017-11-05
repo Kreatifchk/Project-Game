@@ -15,8 +15,8 @@ public class LevelUp {
 	//Повышает характеристики героя
 	private static void paramUp() {
 		if (Game.pl.level == 2 || Game.pl.level == 3) {
-			Game.pl.durability += 3;
-			Game.hpMax = Game.pl.durability * 2;
+			Game.pl.endurance += 3;
+			Game.hpMax = Game.pl.endurance * 2;
 			Game.hpPoint = Game.hpMax / 100;
 			
 			Game.pl.force += 1;

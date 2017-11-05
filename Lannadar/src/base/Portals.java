@@ -65,16 +65,16 @@ public class Portals {
 	
 	protected static void addPortal() {
 		try {
-			for (int i = 0; i <= Game.portal.length - 1; i++) {
+			for (int i = 0; i < Game.portal.length; i++) {
 				if (Game.portal[i] != null && Game.portal[i].dostyp == true) {
 					port = new JLabel();
 					port.setIcon(Game.portalI);
 					port.setBounds(0, 0, 48, 48);
+					System.out.println("ff");
 					Game.mapx[Game.portal[i].portalX][Game.portal[i].portalY].add(port);
 				}
 			}
 		} catch (Exception e) {
-			
 		}
 	}
 	

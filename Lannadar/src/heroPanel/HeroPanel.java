@@ -12,7 +12,6 @@ import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 
 import base.Game;
@@ -23,7 +22,7 @@ import base.Game;
  *
  */
 @SuppressWarnings("serial")
-public class HeroPanel extends JPanel implements ActionListener {
+public class HeroPanel extends JLabel implements ActionListener {
 	
 	static boolean qw;
 	

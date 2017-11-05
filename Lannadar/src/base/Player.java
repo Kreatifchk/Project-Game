@@ -15,7 +15,8 @@ public class Player implements Serializable {
 	public static Image playerL[] = new Image[3];
 	public static Image playerU[] = new Image[3];
 	
-	public int force = 2, durability = 50, intellect, armor = 0, regeneration;
+	// сила, выносливость, интеллект, броня, регенрация
+	public int force = 2, endurance = 50, intellect, armor = 0, regeneration;
 		
 	int mX = 2, mY = 7;
 	
@@ -23,7 +24,7 @@ public class Player implements Serializable {
 	
 	int playerAttack = force * 3 + 2;
 	
-	int level = 1;
+	public int level = 1;
 
 	static int maxLevel = 20;
 

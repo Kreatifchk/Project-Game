@@ -12,24 +12,19 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.font.FontRenderContext;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import javax.swing.border.Border;
@@ -42,6 +37,8 @@ import heroPanel.HeroPanel;
  */
 @SuppressWarnings({ "unused", "serial" })
 public class Game extends JFrame implements Runnable {
+	
+	static JLayeredPane mainPane = new JLayeredPane();
 	
 	Image hpI = new ImageIcon(getClass().getResource("res/hp.png")).getImage();
 	Image icon = new ImageIcon(getClass().getResource("res/Image/icon.png")).getImage();
@@ -121,7 +118,7 @@ public class Game extends JFrame implements Runnable {
 			} else {
 				pl = new Player();
 				
-				hpMax = pl.durability*2;
+				hpMax = pl.endurance*2;
 				hpThis = hpMax;
 				hpPoint = hpMax / 100;
 				
@@ -177,8 +174,8 @@ public class Game extends JFrame implements Runnable {
 			
 			p.setBounds(0, 0, 726, 704);
 			
-			add(upPanel);
-			add(downPanel);
+			mainPane.add(upPanel, new Integer(0));
+			mainPane.add(downPanel, new Integer(0));
 			upPanel.add(hpp);
 			upPanel.add(mpP);
 			upPanel.add(expP);
@@ -186,7 +183,7 @@ public class Game extends JFrame implements Runnable {
 			upPanel.add(hpM);
 			upPanel.add(lmP);
 			downPanel.add(menuB);
-			add(p);
+			mainPane.add(p, new Integer(1));
 			p.setLayout(null);
 			addMonster();
 			addNPC();
@@ -200,6 +197,9 @@ public class Game extends JFrame implements Runnable {
 
 	//Инициализация
 	private void init() {
+		mainPane.setBounds(0, 0, 726, 704);
+		add(mainPane);
+		
 		setIconImage(icon);
 		//Стартовые установки
 		p = new paint();
@@ -304,7 +304,7 @@ public class Game extends JFrame implements Runnable {
 				monster.get(i).setBounds(monster.get(i).x*Game.TILE, monster.get(i).y*Game.TILE+48, Game.TILE, Game.TILE);
 				monster.get(i).setIcon(new ImageIcon(getClass().getResource("res/Image/monsters/" + monster.get(i).icon + ".png")));
 				mapx[monster.get(i).x][monster.get(i).y].busy = true;
-				add(monster.get(i));
+				mainPane.add(monster.get(i), new Integer(3));
 			} else {
 				if (exit == true) {
 					exit = false;
@@ -318,7 +318,7 @@ public class Game extends JFrame implements Runnable {
 		boolean exit = false; //Если монстры с текущей лок. кончились, закончить цикл
 		for (int i = 0; i <= monster.size()-1; i++) {
 			if (monster.get(i).location == oldLocation) {;
-				remove(monster.get(i));
+				mainPane.remove(monster.get(i));
 			} else {
 				if (exit == true) {
 					exit = false;
@@ -336,7 +336,7 @@ public class Game extends JFrame implements Runnable {
 				npc[i].setBounds(npc[i].x*Game.TILE, npc[i].y*Game.TILE+48, Game.TILE, Game.TILE);
 				npc[i].setIcon(new ImageIcon(getClass().getResource("res/Image/NPC/" + npc[i].icon + ".png")));
 				mapx[npc[i].x][npc[i].y].busy = true;
-				add(npc[i]);
+				mainPane.add(npc[i], new Integer(2));
 				//signQwest(i);
 				SignQwest.sign(i);
 				
@@ -358,7 +358,7 @@ public class Game extends JFrame implements Runnable {
 		boolean exit = false; //Если монстры с текущей лок. кончились, закончить цикл
 		for (int i = 0; i <= npc.length-1; i++) {
 			if (npc[i].location == oldLocation) {;
-				remove(npc[i]);
+				mainPane.remove(npc[i]);
 			} else {
 				if (exit == true) {
 					exit = false;
@@ -389,7 +389,7 @@ public class Game extends JFrame implements Runnable {
 								JLabel endInf = new JLabel();
 								endInf.setBounds(-5, 48, end.getIconWidth(), end.getIconHeight());
 								endInf.setIcon(end);
-								add(endInf);
+								mainPane.add(endInf, new Integer(400));
 							}
 						}
 					}
@@ -441,7 +441,7 @@ public class Game extends JFrame implements Runnable {
 	protected void addTile() {
 		for (int i = 0; i <= 11; i++) {
 			for (int j = 0; j <= 14; j++) {
-				add(mapx[j][i]);
+				mainPane.add(mapx[j][i], new Integer(0));
 			}
 		}
 	}
@@ -450,7 +450,7 @@ public class Game extends JFrame implements Runnable {
 	protected void deleteTile() {
 		for (int i = 0; i <= 11; i++) {
 			for (int j = 0; j <= 14; j++) {
-				remove(mapx[j][i]);
+				mainPane.remove(mapx[j][i]);
 			}
 		}
 	}
@@ -573,17 +573,17 @@ public class Game extends JFrame implements Runnable {
 				}
 			}
 			if (a.getComponent() == menuB) {
-				pan.setBounds(0, 0, 726, 701);
-				p.add(pan);
+				pan.setBounds(0, 0, 726, 701);//726, 701
+				mainPane.add(pan, new Integer(20));
 			}
 			if (a.getComponent() == pan.exit) {
-				p.remove(pan);
+				mainPane.remove(pan);
 				p.requestFocus();
 			}
 			try {
 				if (a.getComponent() == qGP.exit) {
 					//Кнопка exit в окне с получение квеста
-					p.remove(qGP);
+					mainPane.remove(qGP);
 					p.requestFocus();
 					qGP = null;
 				}
@@ -619,7 +619,7 @@ public class Game extends JFrame implements Runnable {
 							QwestGivePanel.nameNPC = npc[i].name;
 							qGP = new QwestGivePanel(id); //Панель со списоком квестов
 							qGP.setBounds(140, 70, 440, 540); //530
-							p.add(qGP);
+							mainPane.add(qGP, new Integer(10));
 							break;
 						} else {
 							JOptionPane.showMessageDialog(null, "Что бы взять задание подойдите вплотную");

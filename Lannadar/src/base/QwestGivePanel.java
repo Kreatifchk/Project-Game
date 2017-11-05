@@ -341,7 +341,7 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 				take.addActionListener(this);
 				take.addMouseListener(new Game.NpcListener());
 				if (status == 3) {
-					take.setText("Сдать");
+					//take.setText("Сдать");
 					take.setIcon(endI);
 				}
 				add(take);
@@ -351,7 +351,7 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 				//кнопка взять квест
 				remove(fDescribe);
 				remove(fRequest);
-				Game.p.remove(Game.qGP);
+				Game.mainPane.remove(Game.qGP);
 				Game.p.requestFocus();
 				Game.qGP = null;
 				takeQwests();
