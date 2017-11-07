@@ -30,6 +30,7 @@ import javax.swing.Timer;
 import javax.swing.border.Border;
 
 import heroPanel.HeroPanel;
+import inventory.InventList;
 
 
 /**
@@ -317,7 +318,7 @@ public class Game extends JFrame implements Runnable {
 	public void deleteMonster() {
 		boolean exit = false; //Если монстры с текущей лок. кончились, закончить цикл
 		for (int i = 0; i <= monster.size()-1; i++) {
-			if (monster.get(i).location == oldLocation) {;
+			if (monster.get(i).location == oldLocation) {
 				mainPane.remove(monster.get(i));
 			} else {
 				if (exit == true) {

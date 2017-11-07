@@ -9,6 +9,8 @@ import java.io.InputStream;
 
 import javax.swing.ImageIcon;
 
+import inventory.InventList;
+
 public class Initialize {
 	
 	public static Font uph, smw;
@@ -19,12 +21,14 @@ public class Initialize {
 	public Initialize() {
 		initImage();
 		initFont();
+		initFunc();
 	}
 	
 	private void initImage() {
 		new TilesImage();
 		new Player().init();
 		menuImage();
+		new inventory.InitImage();
 	}
 	
 	String file = "res/Image/";
@@ -56,6 +60,10 @@ public class Initialize {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private void initFunc() {
+		new InventList();
 	}
 	
 }

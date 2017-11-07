@@ -1,9 +1,7 @@
 ﻿package base;
 
 import java.awt.Image;
-import java.io.File;
 import java.io.Serializable;
-import java.util.Scanner;
 
 import javax.swing.ImageIcon;
 
@@ -16,7 +14,7 @@ public class Player implements Serializable {
 	public static Image playerU[] = new Image[3];
 	
 	// сила, выносливость, интеллект, броня, регенрация
-	public int force = 2, endurance = 50, intellect, armor = 0, regeneration;
+	public static int force = 2, endurance = 50, intellect, armor = 0, regeneration;
 		
 	int mX = 2, mY = 7;
 	
@@ -32,40 +30,28 @@ public class Player implements Serializable {
 
 	int maxExp;
 	
-	static int speedRecovery = 5;
-	
 	int currentLocation;
 	
-	Scanner scn;
-	File expF;
+	//File expF;
 	//InputStream expF;
 	
 	static int[] expTable = new int[maxLevel];
 	
-	public Player() {
+	public static BagPoint[] bagPlayer = new BagPoint[108];
+	
+	public void init() {
 		expTable();
 		maxExp = expTable[level-1];
 		
-		regeneration = speedRecovery;
+		for (int i = 0; i < 108; i++) {
+			if (i < 10) {
+				bagPlayer[i] = new BagPoint(-1, true, 0);
+			} else {
+				bagPlayer[i] = new BagPoint(-1, false, 0);
+			}
+		}
+		bagPlayer[0].idInv = 0;
 		
-		playerR[0] = new ImageIcon(getClass().getResource("res/Image/Player/r0.png")).getImage();
-		playerR[1] = new ImageIcon(getClass().getResource("res/Image/Player/r1.png")).getImage();
-		playerR[2] = new ImageIcon(getClass().getResource("res/Image/Player/r2.png")).getImage();
-		
-		playerD[0] = new ImageIcon(getClass().getResource("res/Image/Player/d0.png")).getImage();
-		playerD[1] = new ImageIcon(getClass().getResource("res/Image/Player/d1.png")).getImage();
-		playerD[2] = new ImageIcon(getClass().getResource("res/Image/Player/d2.png")).getImage();
-		
-		playerL[0] = new ImageIcon(getClass().getResource("res/Image/Player/l0.png")).getImage();
-		playerL[1] = new ImageIcon(getClass().getResource("res/Image/Player/l1.png")).getImage();
-		playerL[2] = new ImageIcon(getClass().getResource("res/Image/Player/l2.png")).getImage();
-		
-		playerU[0] = new ImageIcon(getClass().getResource("res/Image/Player/u0.png")).getImage();
-		playerU[1] = new ImageIcon(getClass().getResource("res/Image/Player/u1.png")).getImage();
-		playerU[2] = new ImageIcon(getClass().getResource("res/Image/Player/u2.png")).getImage();
-	}
-	
-	public void init() {
 		playerR[0] = new ImageIcon(getClass().getResource("res/Image/Player/r0.png")).getImage();
 		playerR[1] = new ImageIcon(getClass().getResource("res/Image/Player/r1.png")).getImage();
 		playerR[2] = new ImageIcon(getClass().getResource("res/Image/Player/r2.png")).getImage();

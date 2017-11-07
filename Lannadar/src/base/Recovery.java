@@ -8,7 +8,7 @@ public class Recovery implements Runnable {
 			Animation.sleep(5);
 			if (Game.hpThis < Game.hpMax) {
 				if (Battle.battle != true) {
-					Game.hpThis += Player.speedRecovery;
+					Game.hpThis += Player.regeneration;
 					if (Game.hpThis > Game.hpMax) {
 						Game.hpThis = Game.hpMax;
 					}

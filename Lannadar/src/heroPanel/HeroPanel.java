@@ -42,6 +42,7 @@ public class HeroPanel extends JLabel implements ActionListener {
 	
 	JLabel infoP; //Панель с информацией о персонаже
 	JLabel qwestsP; //Панель с квестами
+	JLabel bagP; //Панель с инвертарем
 	
 	JLabel textQwest = new JLabel(); //Контейнер в который будет вложен контейнер с текстом
 	JLabel reqBase = new JLabel();
@@ -72,6 +73,7 @@ public class HeroPanel extends JLabel implements ActionListener {
 		qwests.addActionListener(this);
 		bag.setBounds(282, 87, 120, 31);
 		bag.setOpaque(false);
+		bag.addActionListener(this);
 		skills.setBounds(402, 87, 120, 31);
 		skills.setOpaque(false);
 		add(exit);
@@ -83,6 +85,9 @@ public class HeroPanel extends JLabel implements ActionListener {
 		infoP = new HeroPanelInfo();
 		infoP.setBounds(42, 123, 636, 451);
 		add(infoP);
+		
+		bagP = new HeroPanelBag();
+		bagP.setBounds(42, 123, 636, 451);
 		
 		x = infoP;
 		exit.addMouseListener(new Game.NpcListener());
@@ -123,6 +128,17 @@ public class HeroPanel extends JLabel implements ActionListener {
 			qwestsP = new HeroPanelQwests().qp;
 			x = qwestsP;
 			add(x);
+		}
+		
+		if (a.getSource() == bag) {
+			remove(x);
+			textQwest.remove(jsb);
+			textQwest.remove(jsb2);
+			
+			x = bagP;
+			add(x);
+			
+			qwestsP = null;
 		}
 		
 		if (a.getSource() == hero) {

@@ -36,8 +36,8 @@ public class Battle implements Runnable{
 						LevelUp.levelUp();
 					}
 					
-					Menu.g.removeComponent(Game.monster.get(id));
-					Menu.g.remove(Game.monster.get(id)); //Убирает убитого монстра с карты
+					//Menu.g.removeComponent(Game.monster.get(id));
+					Game.mainPane.remove(Game.monster.get(id)); //Убирает убитого монстра с карты
 					Game.mapx[mobX][mobY].busy = false; //Освобождает клетку от монстра
 					Menu.g.hpM.setVisible(false); //Убирает панель с хп моба
 					
