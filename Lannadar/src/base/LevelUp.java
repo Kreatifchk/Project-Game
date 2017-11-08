@@ -16,8 +16,7 @@ public class LevelUp {
 	private static void paramUp() {
 		if (Game.pl.level == 2 || Game.pl.level == 3) {
 			Game.pl.endurance += 3;
-			Game.hpMax = Game.pl.endurance * 2;
-			Game.hpPoint = Game.hpMax / 100;
+			Game.pl.hpMax = Game.pl.endurance * 2;
 			
 			Game.pl.force += 1;
 			Game.pl.playerAttack = Game.pl.force * 3 + 2;

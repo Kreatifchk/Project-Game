@@ -3,6 +3,8 @@ package base;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+import menu.Menu;
+
 public class QwestEvent {
 	
 	//Ивенты при получении квеста, id - номер квеста
@@ -19,7 +21,7 @@ public class QwestEvent {
 			Game.monster.add(new Monsters(3, 14, 9, "skelet", 70, 0, 9, 3, 1, 12, "—келет"));
 			for (int i = 1; i <= 3; i++) {
 				Game.monster.get(Game.monster.size()-i).setBounds(Game.monster.get(Game.monster.size()-i).x*Game.TILE, Game.monster.get(Game.monster.size()-i).y*Game.TILE+48, Game.TILE, Game.TILE);
-				Game.monster.get(Game.monster.size()-i).setIcon(new ImageIcon(Menu.g.getClass().getResource("res/monsters/" + Game.monster.get(Game.monster.size()-i).icon + ".png")));
+				Game.monster.get(Game.monster.size()-i).setIcon(new ImageIcon(Menu.g.getClass().getResource("res/Image/monsters/" + Game.monster.get(Game.monster.size()-i).icon + ".png")));
 				Menu.g.addComponent(Game.monster.get(Game.monster.size()-i));
 				Game.mapx[Game.monster.get(Game.monster.size()-i).x][Game.monster.get(Game.monster.size()-i).y].busy = true;
 			}

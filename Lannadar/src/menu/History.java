@@ -1,4 +1,4 @@
-﻿package base;
+﻿package menu;
 
 import java.awt.Font;
 import java.awt.event.KeyEvent;
@@ -57,12 +57,14 @@ public class History extends JFrame{
 	JLabel t17 = new JLabel("0.3.2 - добавлена возможность сохранения игрока");
 	JLabel t18 = new JLabel("0.3.3 - добавлены описания квестов, квесты можно взять");
 	JLabel t19 = new JLabel("0.3.4 - квесты можно сдавать, добавлены некоторые анимации");
-	JLabel t20 = new JLabel("0.4.0 (BETA) - добавлена панель взятых квестов и значки квестов");
+	JLabel t20 = new JLabel("0.4.0 (ALPHA) - добавлена панель взятых квестов и значки квестов");
 	JLabel t21 = new JLabel("0.4.1 - сделаны нормальные сохранения, исправлены баги");
 	
 	JLabel t22 = new JLabel("0.4.2 - сделаны разговорные квесты, опознавательный");
 	JLabel t022 = new JLabel("знак доступного квеста");
-	JLabel t23 = new JLabel("0.4.3 - улуччшена графика, исправлены баги");
+	JLabel t23 = new JLabel("0.4.3 - улучшена графика, исправлены баги");
+	JLabel t24 = new JLabel("0.4.5 - улучшен интерфейс, полоса опыта заполняется красиво");
+	JLabel t25 = new JLabel("0.5.0 - добавлен инвертарь, без взаимодействия с ним");
 	
 	JTabbedPane jtp;
 	
@@ -79,7 +81,7 @@ public class History extends JFrame{
 		p1.setLayout(null);
 		p2.setLayout(null);
 		p3.setLayout(null);
-		Font f = new Font("Verdana", Font.BOLD, 15);
+		Font f = new Font("Verdana", Font.BOLD, 14);
 		t.setBounds(10, 20, 300, 30);
 		t.setFont(f);
 		t2.setBounds(10, 60, 300, 30);
@@ -134,9 +136,12 @@ public class History extends JFrame{
 		t22.setFont(f);
 		t022.setBounds(10, 60, 600, 30);
 		t022.setFont(f);
-		
-		t22.setBounds(10, 100, 600, 30);
-		t22.setFont(f);
+		t23.setBounds(10, 100, 600, 30);
+		t23.setFont(f);
+		t24.setBounds(10, 140, 600, 30);
+		t24.setFont(f);
+		t25.setBounds(10, 180, 600, 30);
+		t25.setFont(f);
 		
 		p1.add(t);
 		p1.add(t2);
@@ -167,6 +172,8 @@ public class History extends JFrame{
 		p3.add(t22);
 		p3.add(t022);
 		p3.add(t23);
+		p3.add(t24);
+		p3.add(t25);
 		jtp = new JTabbedPane();
 		jtp.setBounds(0, 0, 600, 541);
 		add(jtp);

@@ -31,6 +31,7 @@ import javax.swing.border.Border;
 
 import heroPanel.HeroPanel;
 import inventory.InventList;
+import menu.Menu;
 
 
 /**
@@ -51,12 +52,6 @@ public class Game extends JFrame implements Runnable {
 	static ImageIcon portalI;
 	
 	static paint p; //Панель с персонажем
-	HpPaint hpp; //Панель с хп игрока
-	MpPanel mpP = new MpPanel(); //Панель с маной игрока
-	ExpPanel expP = new ExpPanel(); //Панель с опытом игрока
-	LevelPanel lP = new LevelPanel(); //Панель с уровнем игрока
-	HpMobs hpM = new HpMobs(); //Панель с хп монстров
-	LevelMobs lmP = new LevelMobs(); //Панель с уровнем моба
 	
 	public static Player pl;
 	Massiv ms = new Massiv(); //Заполняет тайлы
@@ -69,19 +64,14 @@ public class Game extends JFrame implements Runnable {
 	//Thread loadingThread;
 	
 	static boolean move; //Проверяет, нажал ли игрок кнопку движения
-	static boolean hpMB; //Если игрок в бою добавляет панели моба
+	//static boolean hpMB; //Если игрок в бою добавляет панели моба
 	static boolean stop; //Не дает двигаться бесконечно при нажатии на кнопку
 	static boolean informB = false; //Надо ли закрыть окно с информацией
 	
 	static int currentLocation = 1; 
 	static int oldLocation = 0;
 	static int direction; //Направление движения
-	static int hpMax, hpThis, hpPoint;
-	/*
-	 * hpMax - максимально возможное hp
-	 * hpThis - hp в данный момент
-	 * hpPoint - сколько hp на каждый процент полосы
-	 */
+
 	final static int TILE = 48; //Размер тайла
 	
 	static int[][] map = new int[15][12]; //Массив с данными уровня из файла
@@ -99,7 +89,7 @@ public class Game extends JFrame implements Runnable {
 	//static File playerCont = new File("res/Player.txt"); Не используется
 	//InputStream portalFile;
 	
-	JLabel upPanel = new JLabel();
+	UpPanel upPanel;
 	JLabel downPanel = new JLabel();
 	static JLabel inform; //Информация в начале игры
 	
@@ -118,10 +108,6 @@ public class Game extends JFrame implements Runnable {
 				continued();
 			} else {
 				pl = new Player();
-				
-				hpMax = pl.endurance*2;
-				hpThis = hpMax;
-				hpPoint = hpMax / 100;
 				
 				activeQwests();
 				QwestList qwl = new QwestList();
@@ -143,10 +129,9 @@ public class Game extends JFrame implements Runnable {
 			Border border = BorderFactory.createLineBorder(Color.BLACK, 2);
 			Border borderGray = BorderFactory.createLineBorder(Color.GRAY, 2);
 			Color BROWN = new Color(185, 122, 87);
+			
+			upPanel = new UpPanel();
 			upPanel.setBounds(0, 0, 721, 51);
-			upPanel.setBorder(border);
-			upPanel.setOpaque(true);
-			upPanel.setBackground(BROWN);
 			
 			downPanel.setBounds(0, 627, 721, 48);
 			downPanel.setBorder(border);
@@ -156,33 +141,10 @@ public class Game extends JFrame implements Runnable {
 			menuB.setBounds(604, 2, 115, 44);
 			menuB.addMouseListener(new NpcListener());
 			
-			//hpp.setBounds(10, 9, 104, 30);
-			//mpP.setBounds(120, 9, 104, 30);
-			//expP.setBounds(230, 9, 104, 30);
-			//lP.setBounds(340, 9, 30, 30);
-			hpp.setBounds(10, 2, 104, 16);//22
-			hpp.setBorder(border);
-			mpP.setBounds(10, 18, 104, 16);//10, 24, 104, 22
-			mpP.setBorder(border);
-			expP.setBounds(10, 34, 104, 15);//120, 24, 104, 22
-			expP.setBorder(border);
-			lP.setBounds(228, 9, 30, 30);
-			
-			hpM.setBounds(570, 18, 104, 16);
-			hpM.setBorder(border);
-			hpM.setVisible(hpMB);
-			lmP.setBounds(680, 9, 30, 30);
-			
 			p.setBounds(0, 0, 726, 704);
 			
 			mainPane.add(upPanel, new Integer(0));
 			mainPane.add(downPanel, new Integer(0));
-			upPanel.add(hpp);
-			upPanel.add(mpP);
-			upPanel.add(expP);
-			upPanel.add(lP);
-			upPanel.add(hpM);
-			upPanel.add(lmP);
 			downPanel.add(menuB);
 			mainPane.add(p, new Integer(1));
 			p.setLayout(null);
@@ -204,7 +166,6 @@ public class Game extends JFrame implements Runnable {
 		setIconImage(icon);
 		//Стартовые установки
 		p = new paint();
-		hpp = new HpPaint();
 		p.addKeyListener(new Listener());
 		
 		f2 = Game.class.getResourceAsStream("res/levels/" + currentLocation + ".txt");
@@ -279,7 +240,7 @@ public class Game extends JFrame implements Runnable {
 	}
 	
 	//Панель с хп игрока
-	private class HpPaint extends JLabel {
+	/*private class HpPaint extends JLabel {
 		public void paintComponent(Graphics g) {
 			super.paintComponents(g);
 			Graphics2D g2d = (Graphics2D)g;
@@ -295,7 +256,7 @@ public class Game extends JFrame implements Runnable {
 			int pixW = (int) smw.getStringBounds("" + hpThis, new FontRenderContext(null, true, true)).getWidth();
 			g2d.drawString(hpThis + "", (getWidth() - pixW) / 2, 15);
 		}
-	}
+	}*/
 	
 	// Добавляет на карту монстров
 	public void addMonster() {

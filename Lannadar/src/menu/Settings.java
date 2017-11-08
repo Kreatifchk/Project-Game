@@ -1,4 +1,4 @@
-﻿package base;
+﻿package menu;
 
 import java.awt.Font;
 import java.awt.Image;
@@ -13,18 +13,19 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import base.Music;
 import javazoom.jlgui.basicplayer.BasicPlayerException;
 
 @SuppressWarnings("serial")
 public class Settings extends JFrame implements ChangeListener, ActionListener{
 	
-	Image icon = new ImageIcon(getClass().getResource("res/icon.png")).getImage();
+	Image icon = new ImageIcon(getClass().getResource("/base/res/Image/icon.png")).getImage();
 	
 	static int startValue = 12;
 	JLabel t = new JLabel("Громкость музыки");
 	JSlider value = new JSlider(0, 100, startValue);
 	JButton back = new JButton("В меню");
-	static double volume = 0.12;
+	public static double volume = 0.12;
 	
 	public Settings() {
 		super("Lannadar");

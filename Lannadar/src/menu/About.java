@@ -1,4 +1,4 @@
-package base;
+package menu;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -17,8 +17,8 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public class About extends JFrame {
 	
-	Image bc = new ImageIcon(getClass().getResource("res/bc.png")).getImage();
-	Image icon = new ImageIcon(getClass().getResource("res/icon.png")).getImage();
+	Image bc = new ImageIcon(getClass().getResource("/base/res/Image/menu/bc.png")).getImage();
+	Image icon = new ImageIcon(getClass().getResource("/base/res/Image/icon.png")).getImage();
 	
 	MenuPanel background = new MenuPanel();
 	JLabel author = new JLabel("Создатель: Kreatifchk");

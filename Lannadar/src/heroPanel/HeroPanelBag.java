@@ -4,6 +4,8 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 
 import javax.swing.JLabel;
 
@@ -12,11 +14,14 @@ import inventory.InventList;
 import inventory.Inventory;
 
 @SuppressWarnings("serial")
-public class HeroPanelBag extends JLabel {
+public class HeroPanelBag extends JLabel implements MouseMotionListener {
 	
 	Inventory[] invent = new Inventory[10];
 	
+	int selX = -1, selY = -1; //Номера выделенной клетки
+	
 	public HeroPanelBag() {
+		addMouseMotionListener(this);
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -62,6 +67,27 @@ public class HeroPanelBag extends JLabel {
 				y += 42;
 				x = 53;
 			}
+		}
+		
+		//Подсвечивает выделенную ячейку
+		if (selX != -1 & selY != -1) {
+			g2d.setColor(new Color(50, 34, 22, 56));
+			g2d.fillRect(53+44*selX, 34+42*selY, 40, 38);
+		}
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent arg0) {
+	}
+	@Override
+	public void mouseMoved(MouseEvent a) {
+		if (a.getX() >= 55 & a.getX() < 578
+				& a.getY() >= 34 & a.getY() <= 406) {
+			selX = (a.getX() - 7) / 44 - 1;
+			selY = (a.getY() - 34) / 42;
+		} else {
+			selX = -1;
+			selY = -1;
 		}
 	}
 	

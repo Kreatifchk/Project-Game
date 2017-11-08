@@ -4,6 +4,8 @@ import java.io.InputStream;
 
 import javax.swing.JOptionPane;
 
+import menu.Menu;
+
 public class Dead {
 	
 	//File f2;
@@ -17,7 +19,7 @@ public class Dead {
 	
 	//respawnLoc - локация на которой умер
 	public void dead(int respawnLoc) {
-		if (Game.hpThis <= 0) {
+		if (Game.pl.hpThis <= 0) {
 			Battle.battle = false;
 			Music.stop();
 			if (respawnLoc == 2) {
@@ -26,19 +28,19 @@ public class Dead {
 				Game.pl.mY = 6;
 				Game.pl.x = Game.pl.mX * 48;
 				Game.pl.y = Game.pl.mY * 48 + 49;
-				Game.hpThis = Game.hpMax;
-				Menu.g.hpM.setVisible(false);
+				Game.pl.hpThis = Game.pl.hpMax;
+				Menu.g.upPanel.hpM.setVisible(false);
 			} else {
 				JOptionPane.showMessageDialog(null, "Вы умерли");
 				
 				oldLocation = Game.currentLocation;
 				
 				Game.currentLocation = 2;
-				Game.hpThis = Game.hpMax;
+				Game.pl.hpThis = Game.pl.hpMax;
 				
 				Game.oldLocation = oldLocation;
 				Menu.g.loadLocation(2);
-				Menu.g.hpM.setVisible(false);
+				Menu.g.upPanel.hpM.setVisible(false);
 				
 				Game.pl.mX = 1;
 				Game.pl.mY = 6;

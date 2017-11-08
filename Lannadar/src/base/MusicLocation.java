@@ -1,5 +1,7 @@
 ﻿package base;
 
+import menu.Settings;
+
 public class MusicLocation {
 	
 	public static void music(int location) {

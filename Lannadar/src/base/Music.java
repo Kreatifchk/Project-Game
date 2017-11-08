@@ -7,7 +7,7 @@ import javazoom.jlgui.basicplayer.BasicPlayerException;
 
 public class Music {
 	
-	static BasicPlayer player = new BasicPlayer();
+	public static BasicPlayer player = new BasicPlayer();
 	static boolean izm = false;
 	
 	public static void start(String name, double value) {

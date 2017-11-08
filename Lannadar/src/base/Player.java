@@ -14,20 +14,21 @@ public class Player implements Serializable {
 	public static Image playerU[] = new Image[3];
 	
 	// сила, выносливость, интеллект, броня, регенрация
-	public static int force = 2, endurance = 50, intellect, armor = 0, regeneration;
-		
-	int mX = 2, mY = 7;
+	public int force = 2, endurance = 50, intellect, armor = 0, regeneration = 2;
 	
-	int x = mX * 48, y = 48 * mY + 48;//, y = 0;
+	int playerAttack = force * 3 + 2; //Сила атаки
+	int hpMax, hpThis;
+	/*
+	 * hpMax - максимально возможное hp
+	 * hpThis - hp в данный момент
+	 */
 	
-	int playerAttack = force * 3 + 2;
+	int mX = 2, mY = 7; //Тайл на котором находится персонаж
+	int x = mX * 48, y = 48 * mY + 48; //Координаты реальные
 	
 	public int level = 1;
-
 	static int maxLevel = 20;
-
 	int exp = 0;
-
 	int maxExp;
 	
 	int currentLocation;

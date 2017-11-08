@@ -25,6 +25,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.Timer;
 import javax.swing.border.Border;
 
+import menu.Menu;
+
 @SuppressWarnings("serial")
 public class Editor extends JFrame implements ActionListener {
 

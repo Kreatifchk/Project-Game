@@ -15,8 +15,12 @@ public class Initialize {
 	
 	public static Font uph, smw;
 	
-	static Image bc, icon, startI, start2I, continuedI,
-	editorI, aboutI, settingsI, exitI, logo; static ImageIcon alpha, beta;
+	public static Image bc, icon, startI;
+
+	public static Image start2I, continuedI,
+	editorI, aboutI, settingsI, exitI, logo;
+	
+	public static ImageIcon alpha, beta;
 	
 	public Initialize() {
 		initImage();

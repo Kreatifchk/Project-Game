@@ -6,11 +6,11 @@ public class Recovery implements Runnable {
 	public void run() {
 		while(true) {
 			Animation.sleep(5);
-			if (Game.hpThis < Game.hpMax) {
+			if (Game.pl.hpThis < Game.pl.hpMax) {
 				if (Battle.battle != true) {
-					Game.hpThis += Player.regeneration;
-					if (Game.hpThis > Game.hpMax) {
-						Game.hpThis = Game.hpMax;
+					Game.pl.hpThis += Game.pl.regeneration;
+					if (Game.pl.hpThis > Game.pl.hpMax) {
+						Game.pl.hpThis = Game.pl.hpMax;
 					}
 					Animation.sleep(2000);
 				}

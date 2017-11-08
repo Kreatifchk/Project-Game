@@ -2,6 +2,8 @@ package base;
 
 import java.util.Random;
 
+import menu.Menu;
+
 public class Battle implements Runnable{
 	
 	static boolean battle = false;
@@ -22,7 +24,7 @@ public class Battle implements Runnable{
 			Animation.sleep(10);
 			if (battle == true) {
 				if (zdr = true) {
-					Menu.g.hpM.setVisible(true); //Создает панель с хп моба
+					Menu.g.upPanel.hpM.setVisible(true); //Создает панель с хп моба
 					Animation.sleep(300);
 					zdr = false;
 				}
@@ -39,7 +41,7 @@ public class Battle implements Runnable{
 					//Menu.g.removeComponent(Game.monster.get(id));
 					Game.mainPane.remove(Game.monster.get(id)); //Убирает убитого монстра с карты
 					Game.mapx[mobX][mobY].busy = false; //Освобождает клетку от монстра
-					Menu.g.hpM.setVisible(false); //Убирает панель с хп моба
+					Menu.g.upPanel.hpM.setVisible(false); //Убирает панель с хп моба
 					
 					HpMobs.xpCurrent = 0;
 					HpMobs.xpMax = 0;
@@ -109,9 +111,9 @@ public class Battle implements Runnable{
 	}
 	
 	private void mobeAttack() {
-		Game.hpThis -= mobAttack;
-		if (Game.hpThis < 0) {
-			Game.hpThis = 0; //В случае если после атаки хп меньше нуля, чтоб не показывало отрицательное hp
+		Game.pl.hpThis -= mobAttack;
+		if (Game.pl.hpThis < 0) {
+			Game.pl.hpThis = 0; //В случае если после атаки хп меньше нуля, чтоб не показывало отрицательное hp
 		}
 	}
 	
