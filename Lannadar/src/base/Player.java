@@ -52,6 +52,7 @@ public class Player implements Serializable {
 			}
 		}
 		bagPlayer[0].idInv = 0;
+		bagPlayer[1].idInv = 1;
 		
 		playerR[0] = new ImageIcon(getClass().getResource("res/Image/Player/r0.png")).getImage();
 		playerR[1] = new ImageIcon(getClass().getResource("res/Image/Player/r1.png")).getImage();

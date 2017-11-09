@@ -239,25 +239,6 @@ public class Game extends JFrame implements Runnable {
 		}
 	}
 	
-	//Панель с хп игрока
-	/*private class HpPaint extends JLabel {
-		public void paintComponent(Graphics g) {
-			super.paintComponents(g);
-			Graphics2D g2d = (Graphics2D)g;
-			int x = 2;
-			int hpPointThis = hpThis / hpPoint;
-			for (int i = 1; i <= hpPointThis; i++) {
-				g2d.drawImage(hpI, x, 1, null);
-				x++;
-			}
-			Font smw = Initialize.smw.deriveFont(19F);
-			g2d.setFont(smw);
-			g2d.setColor(Color.black);
-			int pixW = (int) smw.getStringBounds("" + hpThis, new FontRenderContext(null, true, true)).getWidth();
-			g2d.drawString(hpThis + "", (getWidth() - pixW) / 2, 15);
-		}
-	}*/
-	
 	// Добавляет на карту монстров
 	public void addMonster() {
 		boolean exit = false; //Если монстры с текущей лок. кончились, закончить цикл

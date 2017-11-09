@@ -4,7 +4,9 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import javax.swing.JLabel;
@@ -14,14 +16,19 @@ import inventory.InventList;
 import inventory.Inventory;
 
 @SuppressWarnings("serial")
-public class HeroPanelBag extends JLabel implements MouseMotionListener {
+public class HeroPanelBag extends JLabel implements MouseMotionListener, MouseListener {
 	
 	Inventory[] invent = new Inventory[10];
 	
 	int selX = -1, selY = -1; //Номера выделенной клетки
+	int point; //выбранная йчейка (для переноса предметов)
+	boolean press; //Нажата ли кнопка мыши (перемещение только когда true)
+	int objX, objY; //Коррдинаты пермещения предмета
+	int oldPoint = -1; //Старая клетка предмета
 	
 	public HeroPanelBag() {
 		addMouseMotionListener(this);
+		addMouseListener(this);
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -57,11 +64,30 @@ public class HeroPanelBag extends JLabel implements MouseMotionListener {
 		y = 34;
 		for (int i = 0; i < 108; i++) {
 			if (Player.bagPlayer[i].access == false) {
-				g2d.fillRect(x, y, 40, 38);
-			} else if (Player.bagPlayer[i].idInv != -1){
-				int id = Player.bagPlayer[i].idInv; //Ид предмета из инвертаря
+				g2d.fillRect(x, y, 40, 38); //Если ячейка еще не доступна, заполняем серым
+			}
+			x+=44;
+			if (i > 0 & (i+1) % 12 == 0) {
+				y += 42;
+				x = 53;
+			}
+		}
+		//Заполняет клетки предмета и отображает перемещение предметов
+		x = 53;
+		y = 34;
+		for (int i = 0; i < 108; i++) {
+			//Отображение перемещения предмета
+			if (i == oldPoint & press == true & (objX != 0 & objY !=0)) {
+				int id = Player.bagPlayer[i].idInv;
+				g2d.drawImage(InventList.inventory.get(id).icon, objX, objY, null);
+			}
+			
+			//Отображение предмета в клетке
+			if (Player.bagPlayer[i].idInv != -1 & i != oldPoint){
+				int id = Player.bagPlayer[i].idInv;//Ид предмета,лежашего в инвертаре
 				g2d.drawImage(InventList.inventory.get(id).icon, x, y, null);
 			}
+			
 			x+=44;
 			if (i > 0 & (i+1) % 12 == 0) {
 				y += 42;
@@ -77,18 +103,75 @@ public class HeroPanelBag extends JLabel implements MouseMotionListener {
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent arg0) {
+	public void mouseDragged(MouseEvent a) {
+		if (press == true & a.getModifiers() == InputEvent.BUTTON1_MASK) {
+			//Если зажата правая кнопка мыши
+			if (a.getX() >= 55 & a.getX() < 578
+					& a.getY() >= 34 & a.getY() <= 406) {
+				selX = (a.getX() - 7) / 44 - 1;
+				selY = (a.getY() - 34) / 42;
+				point = 11*selY+selX+selY;
+			} else {
+				//Выбросить предмет
+			}
+			objX = a.getX() - 15;
+			objY = a.getY() - 15;
+		}
 	}
 	@Override
 	public void mouseMoved(MouseEvent a) {
+		//Собирает координаты ячейки на которую указывает мышь и ее номер
 		if (a.getX() >= 55 & a.getX() < 578
 				& a.getY() >= 34 & a.getY() <= 406) {
 			selX = (a.getX() - 7) / 44 - 1;
 			selY = (a.getY() - 34) / 42;
+			point = 11*selY+selX+selY;
 		} else {
 			selX = -1;
 			selY = -1;
 		}
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent arg0) {
+	}
+	@Override
+	public void mouseEntered(MouseEvent arg0) {	
+	}
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+	}
+	@Override
+	public void mousePressed(MouseEvent a) {
+		if (Player.bagPlayer[point].idInv != -1
+				& a.getModifiers() == InputEvent.BUTTON1_MASK) {
+			//Если щелчек по не пустой ячейке (для пермещения предметов)
+			press = true;
+			oldPoint = point;
+		}
+	}
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+		press = false;
+		if (oldPoint != point & Player.bagPlayer[point].access == true) {
+			int idInv = Player.bagPlayer[oldPoint].idInv; //id перемещаемого предмета
+			if (Player.bagPlayer[point].idInv == -1) {
+				//Если ячейка в которую перемещают - пустая
+				Player.bagPlayer[oldPoint].idInv = -1;
+				Player.bagPlayer[point].idInv = idInv;
+			} else {
+				//Если занята
+				int idZam = Player.bagPlayer[point].idInv; //Предмет из новой ячейки
+				Player.bagPlayer[oldPoint].idInv = idZam;
+				Player.bagPlayer[point].idInv = idInv;
+			}
+			oldPoint = -1;
+		} else {
+			oldPoint = -1;
+		}
+		
+		objX = 0;
+		objY = 0;
 	}
 	
 }
