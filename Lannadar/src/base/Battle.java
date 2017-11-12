@@ -7,30 +7,31 @@ import menu.Menu;
 public class Battle implements Runnable{
 	
 	static boolean battle = false;
-	boolean zdr = true;
-	
-	//boolean hpFreeze = true; //Не дает максимальному хп моба изменяться во время боя
 	
 	static int mobAttack, mobMp, mobLevel, mobExp, mobX, mobY;
+	static int hpMax, hpCurrent;
 	static String name;
 	
 	Dead d = new Dead();
 	
-	static int id;
+	static int id; //id монстра
 	
 	@Override
 	public void run() {
 		while (true) {
 			Animation.sleep(10);
 			if (battle == true) {
-				if (zdr = true) {
-					Menu.g.upPanel.hpM.setVisible(true); //Создает панель с хп моба
-					Animation.sleep(300);
-					zdr = false;
-				}
+				//Показывает панели с хп, манной, именем моба
+				Menu.g.upPanel.nameM.setVisible(true);
+				Menu.g.upPanel.hpM.setVisible(true);
+				Menu.g.upPanel.mpM.setVisible(true);
+				Menu.g.upPanel.lvlM.setVisible(true);
+				
+				Animation.sleep(300);
+					
 				mobeAttack(); //Атака монстра
 				playerAttack(); //Атака персонажа
-				if (HpMobs.xpCurrent <= 0) {
+				if (hpCurrent <= 0) {
 					//Если у моба осталось меньше 0 хп
 					battle = false;
 					if (Game.pl.level < Player.maxLevel) {
@@ -38,14 +39,29 @@ public class Battle implements Runnable{
 						LevelUp.levelUp();
 					}
 					
-					//Menu.g.removeComponent(Game.monster.get(id));
-					Game.mainPane.remove(Game.monster.get(id)); //Убирает убитого монстра с карты
+					Game.monster.get(id).alive = false;
+					Game.monster.get(id).setVisible(false); //Убирает убитого монстра с карты
 					Game.mapx[mobX][mobY].busy = false; //Освобождает клетку от монстра
-					Menu.g.upPanel.hpM.setVisible(false); //Убирает панель с хп моба
+					//Респаун мобов
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							int id = Battle.id;
+							Animation.sleep(30000);
+							Monsters mns = Game.monster.get(id);
+							mns.alive = true;
+							mns.setVisible(true);
+							Game.mapx[mns.x][mns.y].busy = true;
+						}
+					}).start();
+					//Скрывает панели моба
+					Menu.g.upPanel.nameM.setVisible(false);
+					Menu.g.upPanel.hpM.setVisible(false);
+					Menu.g.upPanel.mpM.setVisible(false);
+					Menu.g.upPanel.lvlM.setVisible(false);
 					
-					HpMobs.xpCurrent = 0;
-					HpMobs.xpMax = 0;
-					zdr = true;
+					hpCurrent = 0;
+					hpMax = 0;
 					
 					try {
 						qwestTest();
@@ -98,15 +114,15 @@ public class Battle implements Runnable{
 		int pAttack = Game.pl.playerAttack;
 		if (sh >= 0 & sh <= 40) {
 			pAttack -= Maths.persentageNumber(pAttack, 3);
-			HpMobs.xpCurrent -= pAttack;
+			hpCurrent -= pAttack;
 		} else if (sh >= 41 & sh <= 60) {
-			HpMobs.xpCurrent -= pAttack;
+			hpCurrent -= pAttack;
 		} else if (sh >= 61 & sh < 80){
 			pAttack += Maths.persentageNumber(pAttack, 3);
-			HpMobs.xpCurrent -= pAttack;
+			hpCurrent -= pAttack;
 		} else {
 			pAttack += Maths.persentageNumber(pAttack, 100);
-			HpMobs.xpCurrent -= pAttack;
+			hpCurrent -= pAttack;
 		}
 	}
 	

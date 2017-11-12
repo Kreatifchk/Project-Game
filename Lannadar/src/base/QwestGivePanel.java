@@ -64,6 +64,7 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 		
 		exit.setBounds(405, 6, 30, 30);
 		exit.setOpaque(false);
+		exit.addActionListener(this);
 		
 		listQwests.setBounds(6, 47, 430, 480);
 		add(listQwests);
@@ -114,7 +115,7 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 	}
 	
 	//Инициализация изображений - букв
-	protected void init() {
+	public void init() {
 		for (int i = 1; i <= 33; i++) {
 			lettersI[i] =  new ImageIcon(getClass().getResource("res/letters/" + i + ".png")).getImage();
 		}
@@ -356,6 +357,11 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 				Game.qGP = null;
 				takeQwests();
 				break;
+			}
+			if (a.getSource() == exit) {
+				Game.mainPane.remove(this);
+				Game.qGP = null;
+				Game.p.requestFocus();
 			}
 		}
 	}

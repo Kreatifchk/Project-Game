@@ -5,6 +5,8 @@ import java.io.Serializable;
 
 import javax.swing.ImageIcon;
 
+import inventory.BagPoint;
+
 @SuppressWarnings("serial")
 public class Player implements Serializable {
 	

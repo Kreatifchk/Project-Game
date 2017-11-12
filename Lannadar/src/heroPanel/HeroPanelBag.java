@@ -11,6 +11,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.font.FontRenderContext;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
 import base.Animation;
@@ -24,12 +25,15 @@ public class HeroPanelBag extends JLabel implements MouseMotionListener, MouseLi
 	Inventory[] invent = new Inventory[10];
 	
 	int selX = -1, selY = -1; //Номера выделенной клетки
-	int point; //выбранная йчейка (для переноса предметов)
+	int point = -1; //выбранная йчейка (для переноса предметов)
+	int startPoint = -1; //Выбранная клетка (для выбрасывания)
 	boolean press; //Нажата ли кнопка мыши (перемещение только когда true)
-	int objX, objY; //Коррдинаты пермещения предмета
+	int objX, objY; //Координаты пермещения предмета
 	int oldPoint = -1; //Старая клетка предмета
 	int oldPoint2 = -1; //Старая клетка (для всплывающей подсказки)
 	boolean move; //Для всплывающих подсказок
+	boolean eject; //Выбросить предмет
+	boolean taken; //Взят ли предмет (чтоб выбросить)
 	
 	public HeroPanelBag() {
 		addMouseMotionListener(this);
@@ -118,6 +122,7 @@ public class HeroPanelBag extends JLabel implements MouseMotionListener, MouseLi
 				point = 11*selY+selX+selY;
 			} else {
 				//Выбросить предмет
+				eject = true;
 			}
 			objX = a.getX() - 15;
 			objY = a.getY() - 15;
@@ -197,35 +202,54 @@ public class HeroPanelBag extends JLabel implements MouseMotionListener, MouseLi
 	}
 	@Override
 	public void mousePressed(MouseEvent a) {
-		if (Player.bagPlayer[point].idInv != -1
-				& a.getModifiers() == InputEvent.BUTTON1_MASK) {
-			//Если щелчек по не пустой ячейке (для пермещения предметов)
-			press = true;
-			oldPoint = point;
+		try {
+			if (Player.bagPlayer[point].idInv != -1
+					& a.getModifiers() == InputEvent.BUTTON1_MASK) {
+				//Если щелчек по не пустой ячейке (для пермещения предметов)
+				press = true;
+				oldPoint = point;
+				taken = true;
+				startPoint = point;
+			}
+		} catch (Exception e) {
 		}
 	}
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		press = false;
-		if (oldPoint != point & Player.bagPlayer[point].access == true) {
-			int idInv = Player.bagPlayer[oldPoint].idInv; //id перемещаемого предмета
-			if (Player.bagPlayer[point].idInv == -1) {
-				//Если ячейка в которую перемещают - пустая
-				Player.bagPlayer[oldPoint].idInv = -1;
-				Player.bagPlayer[point].idInv = idInv;
+		try {
+			if (oldPoint != point & Player.bagPlayer[point].access == true) {
+				int idInv = Player.bagPlayer[oldPoint].idInv; //id перемещаемого предмета
+				if (Player.bagPlayer[point].idInv == -1) {
+					//Если ячейка в которую перемещают - пустая
+					Player.bagPlayer[oldPoint].idInv = -1;
+					Player.bagPlayer[point].idInv = idInv;
+				} else {
+					//Если занята
+					int idZam = Player.bagPlayer[point].idInv; //Предмет из новой ячейки
+					Player.bagPlayer[oldPoint].idInv = idZam;
+					Player.bagPlayer[point].idInv = idInv;
+				}
+				oldPoint = -1;
 			} else {
-				//Если занята
-				int idZam = Player.bagPlayer[point].idInv; //Предмет из новой ячейки
-				Player.bagPlayer[oldPoint].idInv = idZam;
-				Player.bagPlayer[point].idInv = idInv;
+				oldPoint = -1;
 			}
-			oldPoint = -1;
-		} else {
-			oldPoint = -1;
+		} catch (Exception e) {
 		}
+		
+		//Выбрасывание предмета
+		if (eject == true & taken == true) {
+			if (JOptionPane.showConfirmDialog(this, "Выбросить?", "Потверждение", 0) == 0) {
+				Player.bagPlayer[startPoint].idInv = -1;
+			}
+			eject = false;
+		}
+		taken = false;
 		
 		objX = 0;
 		objY = 0;
+		point = -1;
+		startPoint = -1;
 	}
 	
 }

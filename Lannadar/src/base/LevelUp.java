@@ -20,6 +20,8 @@ public class LevelUp {
 			
 			Game.pl.force += 1;
 			Game.pl.playerAttack = Game.pl.force * 3 + 2;
+			
+			Game.pl.regeneration++;
 		}
 	}
 	

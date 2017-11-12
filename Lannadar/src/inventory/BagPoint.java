@@ -1,4 +1,4 @@
-package base;
+package inventory;
 
 /** Класс - ячейка инвертаря */
 public class BagPoint {

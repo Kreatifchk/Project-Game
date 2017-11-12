@@ -1,4 +1,4 @@
-﻿package base;
+﻿package heroPanel;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -10,7 +10,7 @@ import javax.swing.JButton;
 @SuppressWarnings("serial")
 public class PersButton extends JButton{
 	
-	Image persI = new ImageIcon(getClass().getResource("res/pers.png")).getImage();
+	Image persI = new ImageIcon(getClass().getResource("/base/res/pers.png")).getImage();
 	
 	@Override
 	public void paintComponent(Graphics g) {

@@ -21,11 +21,11 @@ public class Settings extends JFrame implements ChangeListener, ActionListener{
 	
 	Image icon = new ImageIcon(getClass().getResource("/base/res/Image/icon.png")).getImage();
 	
-	static int startValue = 12;
+	static int startValue = 30;
 	JLabel t = new JLabel("Громкость музыки");
 	JSlider value = new JSlider(0, 100, startValue);
 	JButton back = new JButton("В меню");
-	public static double volume = 0.12;
+	public static double volume = 0.30;
 	
 	public Settings() {
 		super("Lannadar");

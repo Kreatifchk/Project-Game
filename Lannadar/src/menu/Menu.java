@@ -55,7 +55,7 @@ public class Menu extends JFrame {
 	
 	public static BasicPlayer player = new BasicPlayer();
 	
-	final static JLabel VERSION = new JLabel("Версия: 0.5.1");
+	final static JLabel VERSION = new JLabel("Версия: 0.5.2");
 	static JLabel logo = new LogoLabel();
 	//JLabel beta = new BetaLabel();
 	//JLabel alpha = new AlphaLabel();
@@ -308,7 +308,7 @@ public class Menu extends JFrame {
 		try {
 			player.open(new BufferedInputStream(Game.class.getResourceAsStream("res/music/Antarctica.mp3")));
 			player.play();
-			player.setGain(0.13);
+			player.setGain(0.30);
 		} catch (BasicPlayerException e) {
 			e.printStackTrace();
 		}

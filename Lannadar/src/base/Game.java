@@ -1,7 +1,6 @@
 ﻿package base;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -11,7 +10,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.font.FontRenderContext;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -30,7 +28,7 @@ import javax.swing.Timer;
 import javax.swing.border.Border;
 
 import heroPanel.HeroPanel;
-import inventory.InventList;
+import heroPanel.PersButton;
 import menu.Menu;
 
 
@@ -55,16 +53,15 @@ public class Game extends JFrame implements Runnable {
 	
 	public static Player pl;
 	Massiv ms = new Massiv(); //Заполняет тайлы
-	TimerListener tl = new TimerListener();
+	
+	TimerListener tl = new TimerListener(); //Показывает ОЗУ
 	Timer t = new Timer(40, tl);
 	
 	Thread movePlayer = new Thread(this);
-	Thread recovery = new Thread(new Recovery()); //Восстанавливает хп
+	Thread gameLoop = new Thread(new GameLoop()); //Восстанавливает хп, респавним монстров
 	Thread animation = new Thread(new Animat());
-	//Thread loadingThread;
 	
 	static boolean move; //Проверяет, нажал ли игрок кнопку движения
-	//static boolean hpMB; //Если игрок в бою добавляет панели моба
 	static boolean stop; //Не дает двигаться бесконечно при нажатии на кнопку
 	static boolean informB = false; //Надо ли закрыть окно с информацией
 	
@@ -109,7 +106,7 @@ public class Game extends JFrame implements Runnable {
 			} else {
 				pl = new Player();
 				
-				activeQwests();
+				//activeQwests();
 				QwestList qwl = new QwestList();
 				
 				/*inform = new JLabel();
@@ -142,19 +139,19 @@ public class Game extends JFrame implements Runnable {
 			menuB.addMouseListener(new NpcListener());
 			
 			p.setBounds(0, 0, 726, 704);
+			p.setLayout(null);
+			p.setFocusable(true);
 			
 			mainPane.add(upPanel, new Integer(0));
 			mainPane.add(downPanel, new Integer(0));
 			downPanel.add(menuB);
 			mainPane.add(p, new Integer(1));
-			p.setLayout(null);
+			
 			addMonster();
 			addNPC();
 			
 			addTile(); //Добавляет тайлы на карту
-			p.setFocusable(true);
 			addMouseListener(new NpcListener());
-			//Music.start("Refl1.mp3", Settings.volume);
 		}
 	}
 
@@ -173,24 +170,17 @@ public class Game extends JFrame implements Runnable {
 		LocationFile.openFile(null);
 		LocationFile.readFile(); //Читает файл с локациями
 		
-		//Инициализирует изображения букв
-		QwestGivePanel qInit = new QwestGivePanel();
-		qInit.init();
-		qInit = null;
-		
 		imageInit();
-		MonsterList mnl = new MonsterList(); //Массив с мнострами
-		NPCList npl = new NPCList(); //Массив с NPC
 		ms.massiv(); //Располагает тайлы на фрейме
-		Portals.portals();
 		Portals.addPortal();
 		
 		player = Player.playerD[0];
+		
 		movePlayer.start();
 		Move.battle.start();
 		animation.start();
 		t.start();
-		recovery.start();
+		gameLoop.start();
 	}
 	
 	//Считывает данные игрока при входе через продолжить
@@ -519,27 +509,6 @@ public class Game extends JFrame implements Runnable {
 				pan.setBounds(0, 0, 726, 701);//726, 701
 				mainPane.add(pan, new Integer(20));
 			}
-			if (a.getComponent() == pan.exit) {
-				mainPane.remove(pan);
-				p.requestFocus();
-			}
-			try {
-				if (a.getComponent() == qGP.exit) {
-					//Кнопка exit в окне с получение квеста
-					mainPane.remove(qGP);
-					p.requestFocus();
-					qGP = null;
-				}
-				/*if (a.getComponent() == qGP.take) {
-					//Кнопка взять квест у NPC
-					//Animation.sleep(10);
-					p.remove(qGP);
-					p.requestFocus();
-					qGP = null;
-				}*/
-			} catch (NullPointerException e) {
-				
-			}
 		}
 		@Override
 		public void mouseEntered(MouseEvent arg0) {
@@ -616,15 +585,5 @@ public class Game extends JFrame implements Runnable {
 				sl += 50;
 			}
 		}
-	}
-
-	/** Добавляет на панель персонажа */
-	protected void addComponent(JComponent comp) {
-		p.add(comp);
-	}
-	
-	/** Убирает с панели персонажа */
-	protected void removeComponent(JComponent comp) {
-		p.remove(comp);
 	}
 }

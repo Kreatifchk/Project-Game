@@ -155,6 +155,7 @@ public class HeroPanel extends JLabel implements ActionListener {
 			remove(x);
 			x = infoP;
 			add(infoP);
+			Game.mainPane.remove(this);
 			
 			qwestsP = null;
 			/*textQwest.remove(jsb);

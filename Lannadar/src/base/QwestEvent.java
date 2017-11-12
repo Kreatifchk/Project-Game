@@ -16,9 +16,9 @@ public class QwestEvent {
 			portalOpen(0);
 		}
 		if (id == 6) {
-			Game.monster.add(new Monsters(3, 14, 5, "skelet", 70, 0, 9, 3, 1, 12, "—келет"));
-			Game.monster.add(new Monsters(3, 14, 7, "skelet", 70, 0, 9, 3, 1, 12, "—келет"));
-			Game.monster.add(new Monsters(3, 14, 9, "skelet", 70, 0, 9, 3, 1, 12, "—келет"));
+			Game.monster.add(new Monsters(3, 3, 14, 5, "skelet", 70, 0, 9, 3, 12, "Скелет"));
+			Game.monster.add(new Monsters(3, 3, 14, 7, "skelet", 70, 0, 9, 3, 12, "Скелет"));
+			Game.monster.add(new Monsters(3, 3, 14, 9, "skelet", 70, 0, 9, 3, 12, "Скелет"));
 			for (int i = 1; i <= 3; i++) {
 				Game.monster.get(Game.monster.size()-i).setBounds(Game.monster.get(Game.monster.size()-i).x*Game.TILE, Game.monster.get(Game.monster.size()-i).y*Game.TILE+48, Game.TILE, Game.TILE);
 				Game.monster.get(Game.monster.size()-i).setIcon(new ImageIcon(Menu.g.getClass().getResource("res/Image/monsters/" + Game.monster.get(Game.monster.size()-i).icon + ".png")));

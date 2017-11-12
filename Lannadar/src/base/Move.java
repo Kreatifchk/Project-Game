@@ -67,7 +67,6 @@ public class Move {
 			for (int i = 0; i <= Game.monster.size()-1; i++) {
 				if (Game.monster.get(i).x == x && Game.monster.get(i).y == y) {
 					Battle.battle = true;
-					LevelMobs.level = Game.monster.get(i).level;
 					Battle.mobLevel = Game.monster.get(i).level;
 					Battle.mobExp = Game.monster.get(i).exp;
 					Battle.mobAttack = Game.monster.get(i).attack;
@@ -77,8 +76,8 @@ public class Move {
 					Battle.mobX = Game.monster.get(i).x;
 					Battle.mobY = Game.monster.get(i).y;
 					
-					HpMobs.xpMax = Game.monster.get(i).xp;
-					HpMobs.xpCurrent = Game.monster.get(i).xp;
+					Battle.hpMax = Game.monster.get(i).xp;
+					Battle.hpCurrent = Game.monster.get(i).xp;
 				}
 			}
 		}
