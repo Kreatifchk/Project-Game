@@ -2,6 +2,8 @@
 
 import javax.swing.ImageIcon;
 
+import initialize.TilesImage;
+
 public class Massiv {
 	
 	static ImageIcon[][] animIcon = new ImageIcon[2][];

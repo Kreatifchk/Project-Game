@@ -25,8 +25,8 @@ import javax.swing.JScrollBar;
 import javax.swing.plaf.metal.MetalScrollBarUI;
 
 import base.Game;
-import base.Initialize;
 import base.QwestGivePanel;
+import initialize.InitFont;
 
 //В панели персонажа вкладка с заданиями
 @SuppressWarnings("serial")
@@ -42,7 +42,7 @@ public class HeroPanelQwests extends MouseAdapter implements ActionListener, Adj
 	String name;
 	boolean pt; //Отрисовывать ли название квеста
 	
-	Font uph = Initialize.uph, uphMini = null;
+	Font uph = InitFont.uph, uphMini = null;
 	
 	public HeroPanelQwests() {
 		qp = new QwestsPanel();

@@ -12,7 +12,7 @@ public class InventList {
 	
 	private void consumable() {
 		inventory.add(new Consumable(0, 10, "Малое зелье жизни", InitImage.h1, 0));
-		inventory.add(new Consumable(1, 10, "Малое зелье маны", InitImage.m1, 0));
+		inventory.add(new Consumable(1, 10, "Малое зелье маны", InitImage.m1, 1));
 	}
 	
 }

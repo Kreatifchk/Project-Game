@@ -12,6 +12,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.border.Border;
 
+import initialize.InitFont;
+
 @SuppressWarnings("serial")
 public class UpPanel extends JLabel {
 	
@@ -69,7 +71,7 @@ public class UpPanel extends JLabel {
 				g2d.drawImage(hpI, x, 1, null);
 				x++;
 			}
-			Font smw = Initialize.smw.deriveFont(19F);
+			Font smw = InitFont.smw.deriveFont(19F);
 			g2d.setFont(smw);
 			g2d.setColor(Color.black);
 			int pixW = (int) smw.getStringBounds("" + Game.pl.hpThis, new FontRenderContext(null, true, true)).getWidth();

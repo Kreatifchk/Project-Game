@@ -2,6 +2,7 @@
 
 import javax.swing.JFrame;
 
+import initialize.Loading;
 import menu.Menu;
 
 public class Main {
@@ -13,7 +14,7 @@ public class Main {
 			history = true;
 		}
 		
-		new Initialize(); //Инициализация всего
+		new Loading();
 		
 		Menu m = new Menu();
 		m.setVisible(true);

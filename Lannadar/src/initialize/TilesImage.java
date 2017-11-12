@@ -1,24 +1,24 @@
-﻿package base;
+﻿package initialize;
 
 import javax.swing.ImageIcon;
 
 public class TilesImage {
 	
 	//Улица
-	static ImageIcon grass, grassFire, three, water, mount,
+	public static ImageIcon grass, grassFire, three, water, mount,
 	brickWallP, brickWall, three2, water1, grassDark, threeDark, threeDark2, well;
 	
 	//Дороги
-	static ImageIcon path, brickPath, brickPathG, bridge;
+	public static ImageIcon path, brickPath, brickPathG, bridge;
 	
 	//Здания
-	static ImageIcon home01, home02, home03, homeFire;
+	public static ImageIcon home01, home02, home03, homeFire;
 	
 	//Внутри дома
-	static ImageIcon homeWall, flooring, homeWallRigth, homeWallLeft, flooringRigth,
-	flooringLeft, voidI, window;
+	public static ImageIcon homeWall, flooring, homeWallRigth, homeWallLeft,
+	flooringRigth, flooringLeft, voidI, window;
 	
-	public String file = "res/Image/Tiles/";
+	public String file = "/base/res/Image/Tiles/";
 	
 	public TilesImage() {
 		grass = new ImageIcon(getClass().getResource(file + "grass.png"));

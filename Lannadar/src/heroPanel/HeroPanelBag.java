@@ -8,9 +8,12 @@ import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.font.FontRenderContext;
 
 import javax.swing.JLabel;
+import javax.swing.SwingWorker;
 
+import base.Animation;
 import base.Player;
 import inventory.InventList;
 import inventory.Inventory;
@@ -25,6 +28,8 @@ public class HeroPanelBag extends JLabel implements MouseMotionListener, MouseLi
 	boolean press; //Нажата ли кнопка мыши (перемещение только когда true)
 	int objX, objY; //Коррдинаты пермещения предмета
 	int oldPoint = -1; //Старая клетка предмета
+	int oldPoint2 = -1; //Старая клетка (для всплывающей подсказки)
+	boolean move; //Для всплывающих подсказок
 	
 	public HeroPanelBag() {
 		addMouseMotionListener(this);
@@ -118,6 +123,9 @@ public class HeroPanelBag extends JLabel implements MouseMotionListener, MouseLi
 			objY = a.getY() - 15;
 		}
 	}
+	
+	boolean sW; //Не даст SwingWorker заработать больше одного раза
+	
 	@Override
 	public void mouseMoved(MouseEvent a) {
 		//Собирает координаты ячейки на которую указывает мышь и ее номер
@@ -126,20 +134,66 @@ public class HeroPanelBag extends JLabel implements MouseMotionListener, MouseLi
 			selX = (a.getX() - 7) / 44 - 1;
 			selY = (a.getY() - 34) / 42;
 			point = 11*selY+selX+selY;
+			//Если увели курсор с ячейки
+			if (point != oldPoint2) {
+				move = false;
+				oldPoint2 = point;
+				//Остановить счетчик
+			} else {
+				move = true; //Запустить счетчик до всплывающей подсказки
+			}
 		} else {
 			selX = -1;
 			selY = -1;
 		}
+		
+		//Всплывающая подсказка
+		if (sW == false & move == true) {
+			new SwingWorker<Object, Object>() {
+				@Override
+				protected Object doInBackground() throws Exception {
+					sW = true;
+					boolean z = true;
+					for (int i = 0; i <= 25; i++) {
+						if (move == true) {
+							Animation.sleep(25);
+						} else {
+							z = false;
+							break;
+						}
+					}
+					
+					if (z == true) {
+						if (Player.bagPlayer[point].idInv != -1) {
+							String name =  InventList.inventory.get(Player.bagPlayer[point].idInv).name;
+							Tip inf = new Tip(name);
+							add(inf);
+							int width = (int) inf.getFont().getStringBounds(name, new FontRenderContext(null, true, true)).getWidth();
+							inf.setBounds((selX+1)*44+47, selY*42+44, width + 8, 18);
+							while(move == true) {
+								Animation.sleep(1);
+							}
+							remove(inf);
+						}
+					}
+					sW = false;
+					return null;
+				}
+			}.execute();
+		}
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent arg0) {
+	public void mouseClicked(MouseEvent a) {
 	}
 	@Override
-	public void mouseEntered(MouseEvent arg0) {	
+	public void mouseEntered(MouseEvent a) {	
 	}
 	@Override
-	public void mouseExited(MouseEvent arg0) {
+	public void mouseExited(MouseEvent a) {
+		sW = false;
+		move = false;
+		oldPoint2 = -1;
 	}
 	@Override
 	public void mousePressed(MouseEvent a) {

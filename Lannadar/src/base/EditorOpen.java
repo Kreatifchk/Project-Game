@@ -6,6 +6,8 @@ import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 
+import initialize.TilesImage;
+
 public class EditorOpen {
 	
 	static File levelOpen; //‘айл с уровнем дл¤ открыти¤

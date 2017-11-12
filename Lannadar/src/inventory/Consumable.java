@@ -11,7 +11,7 @@ public class Consumable extends Inventory {
 	 * @param stack - максимальное кло-во вещей в стеке
 	 * @param name - название предмета
 	 * @param icon - изображение
-	 * @param subType - сабтип (не помню зачем)
+	 * @param subType - подтип (какой расходник и на что влияет)
 	 */
 	public Consumable(int id, int stack, String name, Image icon, int subType) {
 		super(id, 1, stack, name, icon);

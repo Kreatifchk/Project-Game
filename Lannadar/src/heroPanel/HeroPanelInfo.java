@@ -7,10 +7,11 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 
 import javax.swing.JLabel;
-import base.Resize;
+
 import base.Game;
-import base.Initialize;
 import base.Player;
+import base.Resize;
+import initialize.InitFont;
 
 @SuppressWarnings("serial")
 public class HeroPanelInfo extends JLabel {
@@ -43,7 +44,7 @@ public class HeroPanelInfo extends JLabel {
 		g2d.drawLine(165, 302, 165, 448);
 		g2d.drawLine(458, 302, 458, 448);
 		
-		g2d.setFont(Initialize.uph.deriveFont(26F));
+		g2d.setFont(InitFont.uph.deriveFont(26F));
 		g2d.drawString("Уровень:", 170, 325);
 		g2d.drawString(Game.pl.level + "", 380, 325);
 		g2d.drawString("Сила:", 170, 348);

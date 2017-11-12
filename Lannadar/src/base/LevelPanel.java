@@ -8,12 +8,14 @@ import java.awt.font.FontRenderContext;
 
 import javax.swing.JPanel;
 
+import initialize.InitFont;
+
 @SuppressWarnings("serial")
 public class LevelPanel extends JPanel {
 	
 	//Image base = new ImageIcon(getClass().getResource("res/Image/Panels/base.png")).getImage();
 	
-	Font smw = Initialize.smw.deriveFont(36F);//24
+	Font smw = InitFont.smw.deriveFont(36F);//24
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponents(g);

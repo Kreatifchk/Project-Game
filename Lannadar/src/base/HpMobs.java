@@ -10,6 +10,8 @@ import java.awt.font.FontRenderContext;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
+import initialize.InitFont;
+
 @SuppressWarnings("serial")
 public class HpMobs extends JPanel {
 	
@@ -24,7 +26,7 @@ public class HpMobs extends JPanel {
 	 * xpPercent текущее xp в процентах, дл¤ отрисовки полоски
 	 */
 	
-	Font smw = Initialize.smw.deriveFont(19F);
+	Font smw = InitFont.smw.deriveFont(19F);
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponents(g);

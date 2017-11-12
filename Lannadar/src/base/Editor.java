@@ -25,6 +25,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.Timer;
 import javax.swing.border.Border;
 
+import initialize.TilesImage;
 import menu.Menu;
 
 @SuppressWarnings("serial")

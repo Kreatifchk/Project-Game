@@ -21,26 +21,26 @@ import javax.swing.JPanel;
 
 import base.Editor;
 import base.Game;
-import base.Initialize;
 import base.Main;
+import initialize.InitImage;
 import javazoom.jlgui.basicplayer.BasicPlayer;
 import javazoom.jlgui.basicplayer.BasicPlayerException;
 
 @SuppressWarnings("serial")
 public class Menu extends JFrame {
 	
-	Image bc = Initialize.bc;
-	Image icon = Initialize.icon;
-	Image startI = Initialize.startI;
-	Image start2I = Initialize.start2I;
-	Image continuedI = Initialize.continuedI;
-	Image editorI = Initialize.editorI;
-	Image aboutI = Initialize.aboutI;
-	Image settingsI = Initialize.settingsI;
-	Image exitI = Initialize.exitI;
-	ImageIcon alphaI = Initialize.alpha;
-	ImageIcon betaI = Initialize.beta;
-	static Image logoI = Initialize.logo;
+	Image bc = InitImage.bc;
+	Image icon = InitImage.icon;
+	Image startI = InitImage.startI;
+	Image start2I = InitImage.start2I;
+	Image continuedI = InitImage.continuedI;
+	Image editorI = InitImage.editorI;
+	Image aboutI = InitImage.aboutI;
+	Image settingsI = InitImage.settingsI;
+	Image exitI = InitImage.exitI;
+	ImageIcon alphaI = InitImage.alpha;
+	ImageIcon betaI = InitImage.beta;
+	static Image logoI = InitImage.logo;
 	
 	SButton start = new SButton();
 	CButton continued = new CButton();

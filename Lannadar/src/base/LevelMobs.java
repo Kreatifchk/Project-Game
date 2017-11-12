@@ -10,6 +10,8 @@ import java.awt.font.FontRenderContext;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
+import initialize.InitFont;
+
 @SuppressWarnings("serial")
 public class LevelMobs extends JPanel {
 	
@@ -19,7 +21,7 @@ public class LevelMobs extends JPanel {
 	
 	static int level;
 	
-	Font smw = Initialize.smw.deriveFont(24F);
+	Font smw = InitFont.smw.deriveFont(24F);
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponents(g);
