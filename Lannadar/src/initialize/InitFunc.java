@@ -4,7 +4,6 @@ import base.Game;
 import base.MonsterList;
 import base.NPCList;
 import base.Portals;
-import base.QwestGivePanel;
 import inventory.InventList;
 
 public class InitFunc {
@@ -15,10 +14,6 @@ public class InitFunc {
 		Portals.portals();
 		new MonsterList(); //Массив с монстрами
 		new NPCList(); //Массив с NPC
-		//Инициализирует изображения букв
-		QwestGivePanel qInit = new QwestGivePanel();
-		qInit.init();
-		qInit = null;
 	}
 	
 	//Делает массив взятых квестов пустым

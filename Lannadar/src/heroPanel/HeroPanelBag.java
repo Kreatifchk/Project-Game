@@ -16,6 +16,8 @@ import javax.swing.SwingWorker;
 
 import base.Animation;
 import base.Player;
+import initialize.InitFont;
+import inventory.InitImage;
 import inventory.InventList;
 import inventory.Inventory;
 
@@ -44,23 +46,26 @@ public class HeroPanelBag extends JLabel implements MouseMotionListener, MouseLi
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setColor(Color.black);
+		g2d.drawImage(InitImage.money, 80, 9, null);
+		g2d.setFont(InitFont.smw.deriveFont(28F));
+		g2d.drawString("- " + Player.money, 150, 43);
 		//Вертикальные линии рамки
-		g2d.drawLine(50, 0, 50, 446);
-		g2d.drawLine(579, 0, 579, 446);
+		g2d.drawLine(50, 74, 50, 446);//0 to 74
+		g2d.drawLine(579, 74, 579, 446);
 		//Горизонтальные линии рамки
-		g2d.drawLine(0, 31, 634, 31);//18
-		g2d.drawLine(0, 410, 634, 410);//427
+		g2d.drawLine(0, 73, 634, 73);//31
+		//g2d.drawLine(0, 410, 634, 410);
 		g2d.setColor(Color.ORANGE);
 		g2d.setStroke(new BasicStroke(4));
 		//Вертикальные линии
-		int x = 95, y = 36;
+		int x = 95, y = 78;//36
 		for (int i = 0; i < 11; i++) {
 			g2d.drawLine(x, y, x, y+370);
 			x += 44;
 		}
 		//Горизонтальные линии
 		x = 55;
-		y = 74;
+		y = 116;//74
 		for (int i = 0; i < 8; i++) {
 			g2d.drawLine(x, y, x+44*12-8, y);
 			y += 42;
@@ -70,7 +75,7 @@ public class HeroPanelBag extends JLabel implements MouseMotionListener, MouseLi
 		g2d.setColor(Color.gray);
 		g2d.setStroke(new BasicStroke(3));
 		x = 53;
-		y = 34;
+		y = 76;//34
 		for (int i = 0; i < 108; i++) {
 			if (Player.bagPlayer[i].access == false) {
 				g2d.fillRect(x, y, 40, 38); //Если ячейка еще не доступна, заполняем серым
@@ -83,7 +88,7 @@ public class HeroPanelBag extends JLabel implements MouseMotionListener, MouseLi
 		}
 		//Заполняет клетки предмета и отображает перемещение предметов
 		x = 53;
-		y = 34;
+		y = 76;//34
 		for (int i = 0; i < 108; i++) {
 			//Отображение перемещения предмета
 			if (i == oldPoint & press == true & (objX != 0 & objY !=0)) {
@@ -107,7 +112,7 @@ public class HeroPanelBag extends JLabel implements MouseMotionListener, MouseLi
 		//Подсвечивает выделенную ячейку
 		if (selX != -1 & selY != -1) {
 			g2d.setColor(new Color(50, 34, 22, 56));
-			g2d.fillRect(53+44*selX, 34+42*selY, 40, 38);
+			g2d.fillRect(53+44*selX, 76+42*selY, 40, 38);//34 to 76
 		}
 	}
 
@@ -116,9 +121,10 @@ public class HeroPanelBag extends JLabel implements MouseMotionListener, MouseLi
 		if (press == true & a.getModifiers() == InputEvent.BUTTON1_MASK) {
 			//Если зажата правая кнопка мыши
 			if (a.getX() >= 55 & a.getX() < 578
-					& a.getY() >= 34 & a.getY() <= 406) {
+					& a.getY() >= 76) {
+				//a.getY() <= 406
 				selX = (a.getX() - 7) / 44 - 1;
-				selY = (a.getY() - 34) / 42;
+				selY = (a.getY() - 76) / 42;//34 to 76
 				point = 11*selY+selX+selY;
 			} else {
 				//Выбросить предмет
@@ -135,9 +141,10 @@ public class HeroPanelBag extends JLabel implements MouseMotionListener, MouseLi
 	public void mouseMoved(MouseEvent a) {
 		//Собирает координаты ячейки на которую указывает мышь и ее номер
 		if (a.getX() >= 55 & a.getX() < 578
-				& a.getY() >= 34 & a.getY() <= 406) {
+				& a.getY() >= 76) {
+			//a.getY() <= 406
 			selX = (a.getX() - 7) / 44 - 1;
-			selY = (a.getY() - 34) / 42;
+			selY = (a.getY() - 76) / 42;//34 to 76
 			point = 11*selY+selX+selY;
 			//Если увели курсор с ячейки
 			if (point != oldPoint2) {

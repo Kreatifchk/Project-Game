@@ -35,12 +35,10 @@ public class Player implements Serializable {
 	
 	int currentLocation;
 	
-	//File expF;
-	//InputStream expF;
-	
 	static int[] expTable = new int[maxLevel];
 	
 	public static BagPoint[] bagPlayer = new BagPoint[108];
+	public static int money = 0;
 	
 	public void init() {
 		expTable();

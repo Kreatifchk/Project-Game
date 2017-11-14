@@ -11,12 +11,8 @@ public class GameLoop implements Runnable {
 				recoveryPlayer(); //Регенирируем игроку здоровье
 			}
 			
-			if (sl == 30000) {
-				//respawnMobs();
-			}
-			
 			Animation.sleep(20);
-			if (sl == 30020) {
+			if (sl == 2020) {
 				sl = 0;
 			}
 			sl += 20;
@@ -30,21 +26,6 @@ public class GameLoop implements Runnable {
 				if (Game.pl.hpThis > Game.pl.hpMax) {
 					Game.pl.hpThis = Game.pl.hpMax;
 				}
-			}
-		}
-	}
-	
-	Monsters mns;
-	private void respawnMobs() {
-		System.out.println("work");
-		for (int i = 0; i < Game.monster.size(); i++) {
-			//System.out.println(i);
-			if (Game.monster.get(i).alive == false) {
-				//System.out.println("in");
-				mns = Game.monster.get(i);
-				Game.monster.get(i).alive = true;
-				Game.monster.get(i).setVisible(true);
-				Game.mapx[mns.x][mns.y].busy = true;
 			}
 		}
 	}

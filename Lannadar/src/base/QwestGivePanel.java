@@ -1,7 +1,9 @@
 package base;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -10,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
+import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 
 import javax.swing.ImageIcon;
@@ -18,6 +21,8 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JScrollBar;
 import javax.swing.plaf.metal.MetalScrollBarUI;
+
+import initialize.InitFont;
 
 /**
  * Класс - Label, с окном для получения/сдачи квестов
@@ -50,6 +55,8 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 	int x, y; //Координаты кнопок
 	static String nameNPC;
 	
+	Font determ = InitFont.determ.deriveFont(24F);
+	
 	
 	boolean bx = false;
 	boolean kon = false; //не дает сразу завершить квест, если он разговорный
@@ -67,27 +74,16 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 		exit.addActionListener(this);
 		
 		listQwests.setBounds(6, 47, 430, 480);
+		//listQwests.setOpaque(true);
+		//listQwests.setBackground(Color.pink);
 		add(listQwests);
 		
 		nameN = new NameNPC(nameNPC);
-		//Где расположить имя нпс
-		int xName = 0, lName = nameNPC.length();
-		if (lName <= 4) {
-			xName = 150;
-		} else if (lName <= 8) {
-			xName = 120;
-		} else if (lName <= 11) {
-			xName = 80;
-		} else if (lName <= 14) {
-			xName = 50;
-		}
-		nameN.setBounds(xName, 5, 500, 40);
+		nameN.setBounds(7, 5, 425, 33);
 		
 		add(exit);
 		add(nameN);
 		exit.addMouseListener(new Game.NpcListener());
-		
-		init();
 		
 		//Устанавливает размер массива по количеству квестов у NPC
 		qwests = new qwestButton[Game.npc[id].qwest.length];
@@ -114,33 +110,6 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 		y = 5;
 	}
 	
-	//Инициализация изображений - букв
-	public void init() {
-		for (int i = 1; i <= 33; i++) {
-			lettersI[i] =  new ImageIcon(getClass().getResource("res/letters/" + i + ".png")).getImage();
-		}
-		lettersI[34] = new ImageIcon(getClass().getResource("res/letters/space.png")).getImage();
-		//пробел
-		lettersI[35] = new ImageIcon(getClass().getResource("res/letters/t.png")).getImage();
-		//точка
-		lettersI[36] = new ImageIcon(getClass().getResource("res/letters/v.png")).getImage();
-		//восклицательный знак
-		lettersI[37] = new ImageIcon(getClass().getResource("res/letters/z.png")).getImage();
-		//запятая
-		lettersI[38] = new ImageIcon(getClass().getResource("res/letters/vp.png")).getImage();
-		//Двоеточие
-		lettersI[39] = new ImageIcon(getClass().getResource("res/letters/dv.png")).getImage();
-		//Слеш
-		lettersI[40] = new ImageIcon(getClass().getResource("res/letters/sl.png")).getImage();
-		//Тире
-		lettersI[41] = new ImageIcon(getClass().getResource("res/letters/tr.png")).getImage();
-		int x = 42;
-		for (int i = 0; i <= 9; i++) {
-			lettersI[x] =  new ImageIcon(getClass().getResource("res/letters/0" + i + ".png")).getImage();
-			x++;
-		}
-	}
-	
 	//Добавляет кнопки - квесты
 	private void addButton(String name, int count, int y, int number) {
 		//Сделать чтоб если квест взят, но не выполнен, на него нельзя нажать
@@ -158,21 +127,21 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 				
 				qwests[count].textN = Game.qwest[number].textN;
 				qwests[count].request = Game.qwest[number].request;
-				qwests[count].id = Game.qwest[number].id;
 				qwests[count].status = Game.qwest[number].status;
+				qwests[count].id = Game.qwest[number].id;
 			} else {
 				if (Game.qwest[number].idNPC != npcId) {
 					QwestGivePanel.name = name;
 					qwests[count] = new qwestButton();
-					qwests[count].setBounds(5, y, 400, 24);
+					qwests[count].setBounds(0, y, 400, 24);
 					listQwests.add(qwests[count]); //Добавляет на сам JLabel (фон)
 					qwests[count].setOpaque(false);
 					qwests[count].addActionListener(this);
 					
 					qwests[count].textN = Game.qwest[number].textN;
 					qwests[count].request = Game.qwest[number].request;
-					qwests[count].id = Game.qwest[number].id;
 					qwests[count].status = Game.qwest[number].status;
+					qwests[count].id = Game.qwest[number].id;
 				}
 			}
 		}
@@ -188,8 +157,8 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 				
 				qwests[count].textK = Game.qwest[number].textK;
 				qwests[count].request = Game.qwest[number].request;
-				qwests[count].id = Game.qwest[number].id;
 				qwests[count].status = Game.qwest[number].status;
+				qwests[count].id = Game.qwest[number].id;
 			} else {
 				//Если квест разговорный
 				if (Game.qwest[number].idNPC == npcId) {
@@ -202,8 +171,8 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 					
 					qwests[count].textK = Game.qwest[number].textK;
 					qwests[count].request = Game.qwest[number].request;
-					qwests[count].id = Game.qwest[number].id;
 					qwests[count].status = Game.qwest[number].status;
+					qwests[count].id = Game.qwest[number].id;
 				}
 			}
 		}
@@ -214,6 +183,7 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 		super.paintComponents(g);
 		Graphics2D g2d = (Graphics2D)g;
 		g2d.drawImage(bc, 0, 0, null);
+		g2d.setColor(Color.black);
 		((Graphics2D) g).setStroke(new BasicStroke(10));
 		g2d.drawLine(11, 44, 429, 44);
 	}
@@ -271,7 +241,6 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 		boolean stop = false; //Служит для остановки цикла когда NPC с текущей локации кончились
 		for (int i = 0; i <= Game.npc.length - 1; i++) {
 			if (Game.npc[i].location == Game.currentLocation && i != zId) {
-				//Game.signQwest(Game.npc[i].id);
 				SignQwest.sign(Game.npc[i].id);
 				stop = true;
 			} else {
@@ -285,42 +254,33 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 	//Слушатель кнопкок - квестов
 	@Override
 	public void actionPerformed(ActionEvent a) {
-		int l = qwests.length - 1;
-		for (int i = 0; i <= l; i++) {
+		int l = qwests.length;
+		for (int i = 0; i < l; i++) {
 			if (a.getSource() == qwests[i]) {
 				//кнопка - квест
-				listQwests.setVisible(false);
-				
+				listQwests.setVisible(false); //Убирает ссылки - названия квестов
 				id = qwests[i].id;
-				if (qwests[i].status == 1) {
-					textN = qwests[i].textN;
-					status = qwests[i].status;
-				}
-				if (qwests[i].status == 3) {
-					textK = qwests[i].textK;
-					status = qwests[i].status;
-				}
+				
+				textN = qwests[i].textN;
+				status = qwests[i].status;
+				textK = qwests[i].textK;
+				
 				reques = qwests[i].request;
 				
-				fDescribe.setBounds(6, 47, 430, 388); //y2 = 460
+				fDescribe.setBounds(6, 47, 430, 353); //y = 47, height = 388
 				add(fDescribe);
-				
 				describe = new QwestTextLabel();
 				describe.setBounds(0, 0, 453, 1527); //x2 = 436
-				//describe.setBorder(border);
 				fDescribe.add(describe);
 				
-				fRequest.setBounds(2, 435, 430, 70);
-				//fRequest.setBorder(border2);
+				fRequest.setBounds(2, 400, 432, 105);//y1 = 435 height = 70
 				add(fRequest);
-				
 				request = new RequestLabel();
-				request.setBounds(0, 5, 460, 580); //y1 = 405, y2 = 58
-				//request.setBorder(border);
+				request.setBounds(0, 5, 460, 600);//y1 = 5 height = 580
 				fRequest.add(request);
 				
 				//JScroll бары
-				jsb.setBounds(400, 5, 20, 380);
+				jsb.setBounds(408, 2, 20, 351);//y2 = 380
 				jsb.addAdjustmentListener(this);
 				jsb.setMinimum(0);
 				jsb.setMaximum(1058);
@@ -328,7 +288,7 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 				fDescribe.add(jsb);
 				revalidate();
 				
-				jsb2.setBounds(403, 6, 20, 56);
+				jsb2.setBounds(412, 6, 20, 91);
 				jsb2.addAdjustmentListener(this);
 				jsb2.setMinimum(0);
 				jsb2.setMaximum(100);
@@ -342,7 +302,6 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 				take.addActionListener(this);
 				take.addMouseListener(new Game.NpcListener());
 				if (status == 3) {
-					//take.setText("Сдать");
 					take.setIcon(endI);
 				}
 				add(take);
@@ -366,165 +325,6 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 		}
 	}
 	
-	//Буквы
-	public static Image letters(char l) {
-		String lt = "" + l;
-		if (lt.equals("а")) {
-			letter = lettersI[1];
-		}
-		else if (lt.equals("б") || (lt.equals("Б"))) {
-			letter = lettersI[2];
-		}
-		else if (lt.equals("в") || (lt.equals("В"))) {
-			letter = lettersI[3];
-		}
-		else if (lt.equals("г") || (lt.equals("Г"))) {
-			letter = lettersI[4];
-		}
-		else if (lt.equals("д") || (lt.equals("Д"))) {
-			letter = lettersI[5];
-		}
-		else if (lt.equals("е") || (lt.equals("Е"))) {
-			letter = lettersI[6];
-		}
-		else if (lt.equals("ё")) {
-			letter = lettersI[7];
-		}
-		else if (lt.equals("ж")) {
-			letter = lettersI[8];
-		}
-		else if (lt.equals("з") || (lt.equals("З"))) {
-			letter = lettersI[9];
-		}
-		else if (lt.equals("и") || lt.equals("И")) {
-			letter = lettersI[10];
-		}
-		else if (lt.equals("й")) {
-			letter = lettersI[11];
-		}
-		else if (lt.equals("к") || lt.equals("К")) {
-			letter = lettersI[12];
-		}
-		else if (lt.equals("л") || lt.equals("Л")) {
-			letter = lettersI[13];
-		}
-		else if (lt.equals("м") || lt.equals("М")) {
-			letter = lettersI[14];
-		}
-		else if (lt.equals("н") || (lt.equals("Н"))) {
-			letter = lettersI[15];
-		}
-		else if (lt.equals("о") || lt.equals("О")) {
-			letter = lettersI[16];
-		}
-		else if (lt.equals("п") || lt.equals("П")) {
-			letter = lettersI[17];
-		}
-		else if (lt.equals("р") || lt.equals("Р")) {
-			letter = lettersI[18];
-		}
-		else if (lt.equals("с") || lt.equals("С")) {
-			letter = lettersI[19];
-		}
-		else if (lt.equals("т") || lt.equals("Т")) {
-			letter = lettersI[20];
-		}
-		else if (lt.equals("у") || lt.equals("У")) {
-			letter = lettersI[21];
-		}
-		else if (lt.equals("ф")) {
-			letter = lettersI[22];
-		}
-		else if (lt.equals("х") || (lt.equals("Х"))) {
-			letter = lettersI[23];
-		}
-		else if (lt.equals("ц")) {
-			letter = lettersI[24];
-		}
-		else if (lt.equals("ч") || (lt.equals("Ч"))) {
-			letter = lettersI[25];
-		}
-		else if (lt.equals("ш")) {
-			letter = lettersI[26];
-		}
-		else if (lt.equals("щ")) {
-			letter = lettersI[27];
-		}
-		else if (lt.equals("ъ")) {
-			letter = lettersI[28];
-		}
-		else if (lt.equals("ы")) {
-			letter = lettersI[29];
-		}
-		else if (lt.equals("ь")) {
-			letter = lettersI[30];
-		}
-		else if (lt.equals("э") || (lt.equals("Э"))) {
-			letter = lettersI[31];
-		}
-		else if (lt.equals("ю")) {
-			letter = lettersI[32];
-		}
-		else if (lt.equals("я") || lt.equals("Я")) {
-			letter = lettersI[33];
-		}
-		else if (lt.equals(" ")) {
-			letter = lettersI[34];
-		}
-		else if (lt.equals(".")) {
-			letter = lettersI[35];
-		}
-		else if (lt.equals("!")) {
-			letter = lettersI[36];
-		}
-		else if (lt.equals(",")) {
-			letter = lettersI[37];
-		}
-		else if (lt.equals("?")) {
-			letter = lettersI[38];
-		}
-		else if (lt.equals(":")) {
-			letter = lettersI[39];
-		}
-		else if (lt.equals("/")) {
-			letter = lettersI[40];
-		}
-		else if (lt.equals("-")) {
-			letter = lettersI[41];
-		}
-		else if (lt.equals("0")) {
-			letter = lettersI[42];
-		}
-		else if (lt.equals("1")) {
-			letter = lettersI[43];
-		}
-		else if (lt.equals("2")) {
-			letter = lettersI[44];
-		}
-		else if (lt.equals("3")) {
-			letter = lettersI[45];
-		}
-		else if (lt.equals("4")) {
-			letter = lettersI[46];
-		}
-		else if (lt.equals("5")) {
-			letter = lettersI[47];
-		}
-		else if (lt.equals("6")) {
-			letter = lettersI[48];
-		}
-		else if (lt.equals("7")) {
-			letter = lettersI[49];
-		}
-		else if (lt.equals("8")) {
-			letter = lettersI[50];
-		}
-		else if (lt.equals("9")) {
-			letter = lettersI[51];
-		}
-		return letter;
-	}
-	
 	//Крест в верхнем правом углу
 	private class exitButton extends JButton {
 		public void paintComponent(Graphics g) {
@@ -545,108 +345,73 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 		public void paintComponent(Graphics g) {
 			super.paintComponents(g);
 			Graphics2D g2d = (Graphics2D)g;
-			length = name.length();
+			g2d.setColor(Color.black);
+			g2d.setFont(determ);
+			int bound = (int) determ.getStringBounds(name,
+					new FontRenderContext(null, true, true)).getWidth();
+			int x = (getWidth() - bound) / 2; y = 24;
+			g2d.drawString(name, x, 20);
+			
+			/*length = name.length();
 			int x = 0, y = 0;
 			for (int i = 0; i <= length - 1; i++) {
 				char l = name.charAt(i);
-				g2d.drawImage(letters(l), x, y, null);
+				//g2d.drawImage(letters(l), x, y, null);
 				if (l == ' ') {
 					//Меньше размер пробелов
 					x -= 10;
 				}
 				x += 24;
-			}
+			}*/
 		}
 		public void paintBorder(Graphics g) {
 		}
 	}
 	
+	//Имя NPC
 	private class NameNPC extends JLabel {
-		//Имя NPC
 		String nameNPC;
-		
 		public NameNPC(String name) {
 			nameNPC = name;
 		}
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			Graphics2D g2d = (Graphics2D)g;
-			int length = nameNPC.length();
-			int x = 0; y = 0;
-			for (int i = 0; i <= length - 1; i++) {
-				char l = nameNPC.charAt(i);
-				g2d.drawImage(letters(l), x, y, null);
-				x += 24;
-			}
+			g2d.setColor(Color.black);
+			g2d.setFont(InitFont.determ.deriveFont(24F));
+			int bound = (int) InitFont.determ.deriveFont(24F).getStringBounds(nameNPC,
+					new FontRenderContext(null, true, true)).getWidth();
+			int x = (getWidth() - bound) / 2; y = 24;
+			g2d.drawString(nameNPC, x, y);
 		}
 	}
 
 	//Label с текстом квеста
 	private class QwestTextLabel extends JLabel{
 		public void paintComponent(Graphics g) {
-			super.paintComponents(g);
 			Graphics2D g2d = (Graphics2D)g;
+			String text = null;
 			if (status == 1) {
 				length = textN.length();
+				text = textN;
 			}
 			if (status == 3) {
 				length = textK.length();
+				text = textK;
 			}
-			int x = 5; y = 0;
-			/*g2d.setFont(new Font("Times new Roman", Font.BOLD, 20));
-			g2d.drawString(text, 10, 30);*/
-			char l = 0;
-			for (int i = 0; i <= length - 1; i++) {
-				if (status == 1) {
-					l = textN.charAt(i);
+			g2d.setColor(Color.black);
+			int x = 5; y = 25;
+			g2d.setFont(determ);
+			String[] sub = text.split(" "); //Разделение строки на слова
+			for (int i = 0; i < sub.length; i++) {
+				int bound = (int) determ.getStringBounds(sub[i],
+						new FontRenderContext(null, true, true)).getWidth();
+				if (x + bound >= 400) {
+					x = 5;
+					y += 35;
 				}
-				if (status == 3) {
-					l = textK.charAt(i);
-				}
-				
-				int y2 = 0;
-				boolean prob = false;
-				if (l == ',') {
-					//Немного опустить запятую
-					y2 = y + 3;
-				} else if (l == 'щ') {
-					y2 = y + 1;
-				} else if (l == ' ') {
-					prob = true;
-				} else {
-					y2 = y;
-				}
-				g2d.drawImage(letters(l), x, y2, null);
-				
-				if (prob == true) {
-					x -= 4;
-					prob = false;
-				}
-				
-				//Добавляет переносы строки
-				int xx = x;
-				if (l == ' ') {
-					int c = i + 1; //устанавливает с какого символа пробегать (слово)
-					char l2 = 0;
-					try {
-						while (l2 != ' ') {
-							if (status == 1) {
-								l2 = textN.charAt(c);
-							}
-							if (status == 3) {
-								l2 = textK.charAt(c);
-							}
-							xx += 21; //21
-							c++;
-							if (xx > 410) {
-								y += 21; //21
-								x = -21 + 5;
-								break;
-							}
-						}
-					} catch (StringIndexOutOfBoundsException e) {}
-				}
-				x += 21;
+				g2d.drawString(sub[i], x, y);
+				x += bound + 18;
 			}
 		}
 	}
@@ -657,51 +422,31 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 			super.paintComponents(g);
 			Graphics2D g2d = (Graphics2D)g;
 			((Graphics2D) g).setStroke(new BasicStroke(7));
-			g2d.drawLine(8, 2, 427, 2);
-			g2d.drawLine(8, 65, 425, 65); //455
+			g2d.setColor(Color.black);
+			g2d.drawLine(8, 2, 432, 2);
+			g2d.drawLine(8, 100, 430, 100);
 		}
 	}
 	
 	//Label с требованием квеста
 	private class RequestLabel extends JLabel {
 		public void paintComponent(Graphics g) {
-			super.paintComponents(g);
 			Graphics2D g2d = (Graphics2D)g;
 			
-			int lengthR = reques.length();
-			int x = 5, y = 0;
-			for (int i = 0; i <= lengthR - 1; i++) {
-				char l = reques.charAt(i);
-				
-				int y2 = 0;
-				if (l == 'щ') {
-					y2 = y + 1;
-				} else {
-					y2 = y;
+			g2d.setColor(Color.black);
+			String text = reques;
+			int x = 5, y = 25;
+			g2d.setFont(determ);
+			String[] sub = text.split(" "); //Разделение строки на слова
+			for (int i = 0; i < sub.length; i++) {
+				int bound = (int) determ.getStringBounds(sub[i],
+						new FontRenderContext(null, true, true)).getWidth();
+				if (x + bound >= 400) {
+					x = 5;
+					y += 35;
 				}
-						
-				g2d.drawImage(letters(l), x, y2, null);
-				
-				int xx = x;
-				//Далее проверяется побуквенно, влезает ли слово в строку, если нет - перенос на новую
-				if (l == ' ') {
-					int c = i + 1; //устанавливает с какого символа пробегать (слово)
-					char l2 = 0;
-					try {
-						while (l2 != ' ') {
-							l2 = reques.charAt(c);
-							xx += 21;
-							c++;
-							if (xx > 250) {
-								y += 30;
-								x = -21 + 5;
-								break;
-							}
-						}
-					} catch (StringIndexOutOfBoundsException e) {}
-				}
-				x += 21;
-				
+				g2d.drawString(sub[i], x, y);
+				x += bound + 18;
 			}
 		}
 	}

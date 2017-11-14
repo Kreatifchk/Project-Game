@@ -2,7 +2,6 @@
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -35,6 +34,7 @@ public class HeroPanel extends JLabel implements ActionListener {
 	HeroPanelButton.QwestsButton qwests;
 	HeroPanelButton.BagButton bag;
 	HeroPanelButton.SkillsButton skills;
+	HeroPanelButton.MapButton map;
 	
 	//QwestButton[] qwestsM; //Кнопки квесты
 	
@@ -60,6 +60,7 @@ public class HeroPanel extends JLabel implements ActionListener {
 		qwests = new HeroPanelButton().qb;
 		bag = new HeroPanelButton().bb;
 		skills = new HeroPanelButton().sb;
+		map = new HeroPanelButton().mb;
 		
 		exit.setBounds(645, 88, 30, 30);
 		exit.setBorderPainted(false);
@@ -76,11 +77,14 @@ public class HeroPanel extends JLabel implements ActionListener {
 		bag.addActionListener(this);
 		skills.setBounds(402, 87, 120, 31);
 		skills.setOpaque(false);
+		map.setBounds(522, 87, 120, 31);
+		map.setOpaque(false);
 		add(exit);
 		add(hero);
 		add(qwests);
 		add(bag);
 		add(skills);
+		add(map);
 		
 		infoP = new HeroPanelInfo();
 		infoP.setBounds(42, 123, 636, 451);
@@ -101,24 +105,6 @@ public class HeroPanel extends JLabel implements ActionListener {
 		g2d.setColor(Color.black);
 		g2d.setStroke(new BasicStroke(5));
 		g2d.drawLine(44, 120, 676, 120);
-	}
-	
-	public class QwestButton extends JButton {
-		String name, text, request;
-		int progress, max;
-		public QwestButton(String name) {
-			this.name = name;
-		}
-		public void paintComponent(Graphics g) {
-			super.paintComponents(g);
-			Graphics2D g2d = (Graphics2D)g;
-			g2d.setFont(new Font("Times new Roman", Font.BOLD, 20));
-			g2d.setColor(Color.BLACK);
-			g2d.drawString(name, 5, 20);
-		}
-		public void paintBorder(Graphics g) {
-			
-		}
 	}
 	
 	@Override

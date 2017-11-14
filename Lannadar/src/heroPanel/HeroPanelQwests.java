@@ -192,7 +192,7 @@ public class HeroPanelQwests extends MouseAdapter implements ActionListener, Adj
 				} else {
 					y2 = y;
 				}
-				g2d.drawImage(QwestGivePanel.letters(l), x, y2, null);
+				//g2d.drawImage(QwestGivePanel.letters(l), x, y2, null);
 					
 				if (l == '.') {
 					//Меньше расстояние после точки
@@ -256,7 +256,7 @@ public class HeroPanelQwests extends MouseAdapter implements ActionListener, Adj
 				} else {
 					y2 = y;
 				}
-				g2d.drawImage(QwestGivePanel.letters(l), x, y2, null);
+				//g2d.drawImage(QwestGivePanel.letters(l), x, y2, null);
 				if (l == '.') {
 					//Меньше расстояние после точки
 					x -= 12;
@@ -294,7 +294,7 @@ public class HeroPanelQwests extends MouseAdapter implements ActionListener, Adj
 			char sb = 0;
 			for (int i = 0; i <= dop.length() - 1; i++) {
 				sb = dop.charAt(i);
-				g2d.drawImage(QwestGivePanel.letters(sb), x, y, null);
+				//g2d.drawImage(QwestGivePanel.letters(sb), x, y, null);
 				x += 21;
 			}
 		}

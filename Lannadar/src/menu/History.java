@@ -33,6 +33,7 @@ public class History extends JFrame{
 	//Заменить требование при сдаче квеста на награды
 	//Сделать респаун мобов
 	//Сделать чтоб по клику открывалась панель хп и информации об npc и монстрах, а по двойному взаимодействие
+	//Сделать порталы в виде класса с ArrayList
 	
 	JLabel menu = new JLabel();
 	
@@ -67,6 +68,8 @@ public class History extends JFrame{
 	JLabel t23 = new JLabel("0.4.3 - улучшена графика, исправлены баги");
 	JLabel t24 = new JLabel("0.4.5 - улучшен интерфейс, полоса опыта заполняется красиво");
 	JLabel t25 = new JLabel("0.5.0 - добавлен инвертарь, без взаимодействия с ним");
+	JLabel t26 = new JLabel("0.5.2 - добавлено взаимодействие с инвертарем, ");
+	JLabel t27 = new JLabel("0.5.3 - улучшения верхней панели, респаун монстров");
 	
 	JTabbedPane jtp;
 	
@@ -144,6 +147,10 @@ public class History extends JFrame{
 		t24.setFont(f);
 		t25.setBounds(10, 180, 600, 30);
 		t25.setFont(f);
+		t26.setBounds(10, 220, 600, 30);
+		t26.setFont(f);
+		t27.setBounds(10, 260, 600, 30);
+		t27.setFont(f);
 		
 		p1.add(t);
 		p1.add(t2);
@@ -176,6 +183,8 @@ public class History extends JFrame{
 		p3.add(t23);
 		p3.add(t24);
 		p3.add(t25);
+		p3.add(t26);
+		p3.add(t27);
 		jtp = new JTabbedPane();
 		jtp.setBounds(0, 0, 600, 541);
 		add(jtp);

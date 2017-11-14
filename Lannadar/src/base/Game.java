@@ -54,11 +54,11 @@ public class Game extends JFrame implements Runnable {
 	public static Player pl;
 	Massiv ms = new Massiv(); //Заполняет тайлы
 	
-	TimerListener tl = new TimerListener(); //Показывает ОЗУ
+	TimerListener tl = new TimerListener(); //Показывает ОЗУ, перерисовывает экран
 	Timer t = new Timer(40, tl);
 	
 	Thread movePlayer = new Thread(this);
-	Thread gameLoop = new Thread(new GameLoop()); //Восстанавливает хп, респавним монстров
+	Thread gameLoop = new Thread(new GameLoop()); //Восстанавливает хп
 	Thread animation = new Thread(new Animat());
 	
 	static boolean move; //Проверяет, нажал ли игрок кнопку движения
