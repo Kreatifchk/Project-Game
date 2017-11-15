@@ -22,11 +22,11 @@ public class Qwest implements Serializable {
 	 * exp - кол-во опыта
 	 */
 	
-	String nameMonster;
-	public int count, progress; //—колько необходимо убить и сколько уже убито
-	public int idNPC; //— каким NPC необходимо поговорить
+	String[] nameMonster;
+	public int count[], progress[]; //Сколько необходимо убить и сколько уже убито
+	public int idNPC; //С каким NPC необходимо поговорить
 	
-	public Qwest(int id, String name, String textN, String textK, String request, 
+	public Qwest(int id, String name, String textN, String textK, String request,
 			int status, int exp) {
 		this.id = id;
 		this.name = name;

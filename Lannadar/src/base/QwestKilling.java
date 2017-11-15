@@ -6,26 +6,26 @@ import java.io.Serializable;
 public class QwestKilling extends Qwest implements Serializable {
 	
 	//String nameMonster; //Какого монстра необходимо убивать
-	//int number; //Сколько необходоимо убить
+	//int count; //Сколько необходоимо убить
 	//Остальные в классе Qwest
 	
-	public QwestKilling(String nameMonster, int number, int id, String name, 
-			String textN, String textK, String request, int status, int exp) {
-		super(id, name, textN, textK, request, status, exp);
+	public QwestKilling(String[] nameMonster, int count[], int id, String name, 
+			String textN, String textK, String request, int exp) {
+		super(id, name, textN, textK, request, 1, exp);
 		this.nameMonster = nameMonster;
-		this.count = number;
-		this.progress = 0;
+		this.count = count;
+		this.progress = new int[count.length];
 		this.lastId = -1;
 		this.idNPC = -1;
 	}
 	
-	public QwestKilling(String nameMonster, int number, int id,
-			String name, String textN, String textK, String request, int status,
+	public QwestKilling(String[] nameMonster, int count[], int id,
+			String name, String textN, String textK, String request,
 			int exp, int lastId) {
-		super(id, name, textN, textK, request, status, exp, lastId);
+		super(id, name, textN, textK, request, 1, exp, lastId);
 		this.nameMonster = nameMonster;
-		this.count = number;
-		this.progress = 0;
+		this.count = count;
+		this.progress = new int[count.length];
 		this.idNPC = -1;
 	}
 	

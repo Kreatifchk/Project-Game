@@ -99,13 +99,14 @@ public class HeroPanelQwests extends MouseAdapter implements ActionListener, Adj
 		
 		int st = 0; //Номер строки - квеста на панели
 		int x = 0, y = 6;//10, 10
+		System.out.println();
 		for (int i = 0; i < Game.takeQwests.length; i++) {
 			if (Game.takeQwests[i] != -1) {
 				qwestsM[st] = new QwestButton(Game.qwest[Game.takeQwests[i]].name);
 				qwestsM[st].text = Game.qwest[Game.takeQwests[i]].textN;
 				qwestsM[st].request = Game.qwest[Game.takeQwests[i]].request;
-				qwestsM[st].progress = Game.qwest[Game.takeQwests[i]].progress;
-				qwestsM[st].max = Game.qwest[Game.takeQwests[i]].count;
+				qwestsM[st].progress = Game.qwest[Game.takeQwests[i]].progress[0];
+				qwestsM[st].max = Game.qwest[Game.takeQwests[i]].count[0];
 				qwestsM[st].numb = i;
 				name = Game.qwest[Game.takeQwests[i]].name; //Название квеста
 				qwestsM[st].setBounds(x, y, 283, 45); //270, 30

@@ -1,5 +1,6 @@
 package base;
 
+import java.util.Arrays;
 import java.util.Random;
 
 import menu.Menu;
@@ -74,20 +75,26 @@ public class Battle implements Runnable{
 		}
 	}
 	
+	//Повышает прогресс в выполнении квеста
 	private void qwestTest() {
-		//Повышает прогресс в выполнении квеста
-		for (int i = 0; i <= Game.takeQwests.length-1; i++) {
-			if (Game.takeQwests[i] != -1 &&
-					Game.qwest[Game.takeQwests[i]].nameMonster.equals(name)) {
-				//Если убиваешь моба который нужен по квесту
-				if (Game.qwest[Game.takeQwests[i]].progress < Game.qwest[Game.takeQwests[i]].count) {
-					//Если еще не убил достаточно, прибавить число убитых
-					Game.qwest[Game.takeQwests[i]].progress++;
-					if (Game.qwest[Game.takeQwests[i]].progress ==
-							Game.qwest[Game.takeQwests[i]].count) {
-						//И еще раз проверяешь и если это максимум то поменять статус
-						Game.qwest[Game.takeQwests[i]].status = 3;
-						sign(Game.qwest[Game.takeQwests[i]].id);
+		int take;
+		for (int i = 0; i < Game.takeQwests.length; i++) {
+			if (Game.takeQwests[i] != -1) {
+				//Если есть взятый квест
+				take = Game.takeQwests[i];
+				for (int j = 0; j < Game.qwest[take].nameMonster.length; j++) {
+					//Пробегает по всем целям квеста (даже если одна)
+					if (Game.qwest[take].nameMonster[j].equals(name)) {
+						//Если цель совпадает с убитым мобом
+						if (Game.qwest[take].progress[j] < Game.qwest[take].count[j]) {
+							//Если убито таких целей меньше чем надо в квесте, увеличить прогресс
+							Game.qwest[take].progress[j]++;
+ 							if (Arrays.equals(Game.qwest[take].progress, Game.qwest[take].count)) {
+								//И еще раз проверяешь и если это максимум то поменять статус
+								Game.qwest[take].status = 3;
+								sign(Game.qwest[take].id);
+							}
+						}
 					}
 				}
 			}

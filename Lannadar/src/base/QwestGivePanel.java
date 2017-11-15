@@ -115,7 +115,7 @@ MouseListener {
 			qwests[count].addActionListener(this);
 			qwests[count].addMouseListener(this);
 			qwests[count].setBorder(null);
-			y += 40;
+			y += 49;
 			
 			qwests[count].textN = Game.qwest[id].textN;
 			qwests[count].textK = Game.qwest[id].textK;
@@ -128,7 +128,6 @@ MouseListener {
 	
 	//Отрисовка фона и линии сверху
 	public void paintComponent(Graphics g) {
-		super.paintComponents(g);
 		Graphics2D g2d = (Graphics2D)g;
 		g2d.drawImage(bc, 0, 0, null);
 		g2d.setColor(Color.black);
@@ -341,6 +340,7 @@ MouseListener {
 			g2d.setColor(Color.black);
 			int x = 5, y = 25;
 			g2d.setFont(determ);
+			try {
 			String[] sub = text.split(" "); //Разделение строки на слова
 			for (int i = 0; i < sub.length; i++) {
 				int bound = (int) determ.getStringBounds(sub[i],
@@ -351,6 +351,9 @@ MouseListener {
 				}
 				g2d.drawString(sub[i], x, y);
 				x += bound + 18;
+			}
+			} catch (Exception e) {
+				
 			}
 		}
 	}

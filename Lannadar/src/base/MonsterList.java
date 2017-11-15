@@ -5,7 +5,7 @@ public class MonsterList {
 	//Перед добавление увеличь размер массива в класе Game
 	
 	public MonsterList() {
-		//Аргументы Location, x, y, icon, xp, mp, attack, level, exp, name
+		//Аргументы IDtype, location, x, y, icon, xp, mp, attack, level, exp, name
 		Game.monster.add(new Monsters(0, 2, 2, 1, "zombie", 40, 0, 4, 1, 6, "Зомби"));
 		Game.monster.add(new Monsters(0, 2, 7, 1, "zombie", 40, 0, 4, 1, 6, "Зомби"));
 		Game.monster.add(new Monsters(0, 2, 9, 0, "zombie", 40, 0, 4, 1, 6, "Зомби"));
