@@ -8,6 +8,7 @@ import javax.swing.ImageIcon;
 
 public class Resize {
 	
+	//Со сглаживанием
 	public static Image resize(Image img, int width, int height) {
 		Image im;
 		BufferedImage bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_RGB);
@@ -17,6 +18,7 @@ public class Resize {
 		return im;
 	}
 	
+	//Без сглаживания
 	public static Image resizeA(Image img, int width, int height) {
 		Image im;
 		BufferedImage bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);

@@ -2,12 +2,10 @@ package heroPanel;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.AdjustmentEvent;
@@ -15,17 +13,14 @@ import java.awt.event.AdjustmentListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.font.FontRenderContext;
-import java.awt.geom.AffineTransform;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JScrollBar;
-import javax.swing.plaf.metal.MetalScrollBarUI;
 
 import base.Game;
-import base.QwestGivePanel;
+import base.QwestScrollUI;
 import initialize.InitFont;
 
 //В панели персонажа вкладка с заданиями
@@ -43,6 +38,7 @@ public class HeroPanelQwests extends MouseAdapter implements ActionListener, Adj
 	boolean pt; //Отрисовывать ли название квеста
 	
 	Font uph = InitFont.uph, uphMini = null;
+	Font determ = InitFont.determ.deriveFont(24F);
 	
 	public HeroPanelQwests() {
 		qp = new QwestsPanel();
@@ -65,13 +61,13 @@ public class HeroPanelQwests extends MouseAdapter implements ActionListener, Adj
 			add(reqBase);
 
 			jsb.setBounds(328, 0, 20, 330); //330, 0, 20, 350
-			jsb.setUI(new BarUI());
+			jsb.setUI(new QwestScrollUI());
 			jsb.setMinimum(0);
 			jsb.setMaximum(610);
 			jsb.addAdjustmentListener(HeroPanelQwests.this);
 			
 			jsb2.setBounds(328, 0, 20, 86);
-			jsb2.setUI(new BarUI());
+			jsb2.setUI(new QwestScrollUI());
 			jsb2.setMinimum(0);
 			jsb2.setMaximum(315);
 			jsb2.addAdjustmentListener(HeroPanelQwests.this);
@@ -103,9 +99,6 @@ public class HeroPanelQwests extends MouseAdapter implements ActionListener, Adj
 		
 		int st = 0; //Номер строки - квеста на панели
 		int x = 0, y = 6;//10, 10
-		/*for (int i = 0; i < Game.takeQwests.length; i++) {
-			Game.takeQwests[i] = 0;
-		}*/
 		for (int i = 0; i < Game.takeQwests.length; i++) {
 			if (Game.takeQwests[i] != -1) {
 				qwestsM[st] = new QwestButton(Game.qwest[Game.takeQwests[i]].name);
@@ -117,8 +110,6 @@ public class HeroPanelQwests extends MouseAdapter implements ActionListener, Adj
 				name = Game.qwest[Game.takeQwests[i]].name; //Название квеста
 				qwestsM[st].setBounds(x, y, 283, 45); //270, 30
 				qwestsM[st].addActionListener(this);
-				//qwestsM[st].setOpaque(true);
-				//qwestsM[st].setBackground(Color.PINK);
 				qp.add(qwestsM[st]);
 				st++;
 				y += 45;
@@ -150,15 +141,12 @@ public class HeroPanelQwests extends MouseAdapter implements ActionListener, Adj
 				textQwest.add(textQwestDop);
 				textQwest.add(jsb);
 						
-				//System.out.println(qwestsM[i].progress);
 				textRequest = new RequestQwest(qwestsM[i].request);
 				textRequest.progress = qwestsM[i].progress;
 				textRequest.max = qwestsM[i].max;
 				textRequest.setBounds(0, 0, 330, 400);
 				reqBase.add(textRequest);
 				reqBase.add(jsb2);
-						
-				//System.out.println(qwestsM[i].text);
 			}
 		}
 	}
@@ -167,63 +155,25 @@ public class HeroPanelQwests extends MouseAdapter implements ActionListener, Adj
 	private class TextQwest extends JLabel {
 		String text;
 		public TextQwest(String text) {
-			//System.out.println(text);
 			this.text = text;
 		}
 		@Override
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			Graphics2D g2d = (Graphics2D) g;
-				
-			int length = text.length();
-			int y = 0, x = 5;
-			char l = 0;
-			for (int i = 0; i <= length - 1; i++) {	
-				l = text.charAt(i);
-				int y2 = 0;
-				boolean prob = false;
-				if (l == ',') {
-					//Немного опустить запятую
-					y2 = y + 3;
-				} else if (l == 'щ') {
-					y2 = y + 5;
-				} else if (l == ' ') {
-					prob = true;
-				} else {
-					y2 = y;
+			g2d.setColor(Color.black);
+			int x = 5, y = 25;
+			g2d.setFont(determ);
+			String[] sub = text.split(" "); //Разделение строки на слова
+			for (int i = 0; i < sub.length; i++) {
+				int bound = (int) determ.getStringBounds(sub[i],
+						new FontRenderContext(null, true, true)).getWidth();
+				if (x + bound >= 330) {
+					x = 5;
+					y += 35;
 				}
-				//g2d.drawImage(QwestGivePanel.letters(l), x, y2, null);
-					
-				if (l == '.') {
-					//Меньше расстояние после точки
-					x -= 12;
-				}
-					
-				if (prob == true) {
-					//Меньше размер пробелов
-					x -= 10;
-					prob = false;
-				}
-					
-				//Добавляет переносы строки
-				int xx = x;
-				if (l == ' ') {
-					int c = i + 1; //устанавливает с какого символа пробегать (слово)
-					char l2 = 0;
-					try {
-						while (l2 != ' ') {
-							l2 = text.charAt(c);
-							xx += 21;
-							c++;
-							if (xx > 330) {
-								y += 21;
-								x = -21 + 5;
-								break;
-							}
-						}
-					} catch (StringIndexOutOfBoundsException e) {}
-				}
-				x += 21;
+				g2d.drawString(sub[i], x, y);
+				x += bound + 18;
 			}
 		}
 	}
@@ -239,64 +189,22 @@ public class HeroPanelQwests extends MouseAdapter implements ActionListener, Adj
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			Graphics2D g2d = (Graphics2D) g;
-			int length = request.length();
-			int y = 0, x = 5;
-			char l = 0;
-			for (int i = 0; i <= length - 1; i++) {	
-				l = request.charAt(i);
-				int y2 = 0;
-				boolean prob = false;
-				if (l == ',') {
-					//Немного опустить запятую
-					y2 = y + 3;
-				} else if (l == 'щ') {
-					y2 = y + 5;
-				} else if (l == ' ') {
-					prob = true;
-				} else {
-					y2 = y;
+			g2d.setColor(Color.black);
+			int x = 5, y = 25;
+			g2d.setFont(determ);
+			String[] sub = request.split(" "); //Разделение строки на слова
+			for (int i = 0; i < sub.length; i++) {
+				int bound = (int) determ.getStringBounds(sub[i],
+						new FontRenderContext(null, true, true)).getWidth();
+				if (x + bound >= 330) {
+					x = 5;
+					y += 35;
 				}
-				//g2d.drawImage(QwestGivePanel.letters(l), x, y2, null);
-				if (l == '.') {
-					//Меньше расстояние после точки
-					x -= 12;
-				}
-				if (prob == true) {
-					//Меньше размер пробелов
-					x -= 10;
-					prob = false;
-				}
-				//Добавляет переносы строки
-				int xx = x;
-				if (l == ' ') {
-					int c = i + 1; //устанавливает с какого символа пробегать (слово)
-					char l2 = 0;
-					try {
-						while (l2 != ' ') {
-							l2 = request.charAt(c);
-							xx += 21;
-							c++;
-							if (xx > 320) {
-								y += 21;
-								x = -21 + 5;
-								break;
-							}
-						}
-					} catch (StringIndexOutOfBoundsException e) {}
-				}
-				x += 21;
+				g2d.drawString(sub[i], x, y);
+				x += bound + 18;
 			}
-			
-			x = 5;
-			y += 41;
-			String prog = progress + "/" + max;
-			String dop = "Выполнено: " + prog;
-			char sb = 0;
-			for (int i = 0; i <= dop.length() - 1; i++) {
-				sb = dop.charAt(i);
-				//g2d.drawImage(QwestGivePanel.letters(sb), x, y, null);
-				x += 21;
-			}
+			String prog = "Выполнено:  " + progress + " / " + max;
+			g2d.drawString(prog, 5, y + 35);
 		}
 	}
 	
@@ -344,70 +252,6 @@ public class HeroPanelQwests extends MouseAdapter implements ActionListener, Adj
 			int x = (283 - pix) / 2; //Расчитываем центр для установки туда названия
 			
 			g2d.drawString(name, x, 30); //25 30
-		}
-	}
-	
-	//Для скролл бара
-	private class BarUI extends MetalScrollBarUI {
-		Image jsbI = new ImageIcon(getClass().getResource("/base/res/others/jsb.png")).getImage();
-		Image jsbI2 = new ImageIcon(getClass().getResource("/base/res/others/jsb1.png")).getImage();
-		@Override
-		protected void paintTrack(Graphics g, JComponent c, Rectangle trackBounds) {
-			Graphics2D g2d = (Graphics2D)g;
-			g2d.drawImage(jsbI, 0, 0, null);
-		}
-	    @Override
-	    protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
-	    	g.translate(thumbBounds.x, thumbBounds.y);
-	        AffineTransform transform = AffineTransform.getScaleInstance((double)thumbBounds.width/jsbI2.getWidth(null),(double)thumbBounds.height/jsbI2.getHeight(null));
-	        ((Graphics2D)g).drawImage(jsbI2, transform, null);
-	        g.translate( -thumbBounds.x, -thumbBounds.y );
-	    }
-	    //Верхняя
-	    @Override
-	    protected JButton createDecreaseButton(int orientation) {
-	    	DecButton but = new DecButton();
-	    	Dimension zeroDim = new Dimension(14,14);
-	    	but.setPreferredSize(zeroDim);
-	    	but.setMinimumSize(zeroDim);
-	    	but.setMaximumSize(zeroDim);
-	    	return but;
-	    }
-	    //Нижняя
-	    @Override
-	    protected JButton createIncreaseButton(int orientation) {
-	    	IncButton but = new IncButton();
-	    	Dimension zeroDim = new Dimension(14,14);
-	    	but.setPreferredSize(zeroDim);
-	    	but.setMinimumSize(zeroDim);
-	    	but.setMaximumSize(zeroDim);
-	    	return but;
-	    }
-	}
-	
-	private class IncButton extends JButton {
-		Image jsbD = new ImageIcon(getClass().getResource("/base/res/others/jsbD.png")).getImage();
-		@Override
-		public void paintComponent(Graphics g) {
-			Graphics2D g2d = (Graphics2D)g;
-			g2d.drawImage(jsbD, 0, 0, null);
-		}
-		@Override
-		public void paintBorder(Graphics g) {
-			
-		}
-	}
-	
-	private class DecButton extends JButton {
-		Image jsbU = new ImageIcon(getClass().getResource("/base/res/others/jsbU.png")).getImage();
-		@Override
-		public void paintComponent(Graphics g) {
-			Graphics2D g2d = (Graphics2D)g;
-			g2d.drawImage(jsbU, 0, 0, null);
-		}
-		@Override
-		public void paintBorder(Graphics g) {
-			
 		}
 	}
 		

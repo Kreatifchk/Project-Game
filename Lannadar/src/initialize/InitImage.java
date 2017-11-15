@@ -6,6 +6,7 @@ import javax.swing.ImageIcon;
 
 import base.Game;
 import base.Player;
+import base.Resize;
 
 public class InitImage {
 	
@@ -14,8 +15,11 @@ public class InitImage {
 	editorI, aboutI, settingsI, exitI, logo;
 	public static ImageIcon alpha, beta;
 	
+	public static Image frameQwestA, frameQwestD;
+	
 	public InitImage() {
 		menuImage();
+		panelImage();
 		new TilesImage();
 		new Player().init();
 		new inventory.InitImage();
@@ -35,6 +39,13 @@ public class InitImage {
 		alpha = new ImageIcon(Game.class.getResource(file + "menu/alpha.png"));
 		beta = new ImageIcon(Game.class.getResource(file + "menu/beta.png"));
 		logo = new ImageIcon(Game.class.getResource(file + "menu/logo.png")).getImage();
+	}
+	
+	private static void panelImage() {;
+		frameQwestA = new ImageIcon(Game.class.getResource("res/others/frameQwest.png")).getImage();
+		frameQwestD = new ImageIcon(Game.class.getResource("res/others/frameQwestA.png")).getImage();
+		frameQwestA = Resize.resizeA(frameQwestA, 428, 49);
+		frameQwestD = Resize.resizeA(frameQwestD, 428, 49);
 	}
 	
 }

@@ -2,40 +2,37 @@ package base;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.font.FontRenderContext;
-import java.awt.geom.AffineTransform;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JScrollBar;
-import javax.swing.plaf.metal.MetalScrollBarUI;
 
 import initialize.InitFont;
+import initialize.InitImage;
 
 /**
  * Класс - Label, с окном для получения/сдачи квестов
  */
 @SuppressWarnings("serial")
-public class QwestGivePanel extends JLabel implements ActionListener, AdjustmentListener{
+public class QwestGivePanel extends JLabel implements ActionListener, AdjustmentListener,
+MouseListener {
 	
 	Image bc = new ImageIcon(getClass().getResource("res/others/qwestGivePanel.png")).getImage();
 	Image exitI = new ImageIcon(getClass().getResource("res/others/exit.png")).getImage();
 	ImageIcon takeI = new ImageIcon(getClass().getResource("res/takeQwest.png"));
 	ImageIcon endI = new ImageIcon(getClass().getResource("res/endQwest.png"));
-	static Image letter; //Определяет и показывает текущую букву (для циклов и отрисовки)
-	static Image lettersI[] = new Image[52]; //Массив изображений букв
 	
 	JButton exit = new exitButton(); //Кнопка для закрытия окна
 	JButton take = new JButton(takeI);
@@ -52,13 +49,11 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 	
 	static String name, textN, textK, reques;
 	int length, id, status, npcId;
-	int x, y; //Координаты кнопок
+	int frm = -1; //Номер квеста на который нажимают (для подсветки)
 	static String nameNPC;
 	
 	Font determ = InitFont.determ.deriveFont(24F);
 	
-	
-	boolean bx = false;
 	boolean kon = false; //не дает сразу завершить квест, если он разговорный
 	JScrollBar jsb = new JScrollBar();
 	JScrollBar jsb2 = new JScrollBar();
@@ -73,9 +68,7 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 		exit.setOpaque(false);
 		exit.addActionListener(this);
 		
-		listQwests.setBounds(6, 47, 430, 480);
-		//listQwests.setOpaque(true);
-		//listQwests.setBackground(Color.pink);
+		listQwests.setBounds(6, 47, 430, 490);
 		add(listQwests);
 		
 		nameN = new NameNPC(nameNPC);
@@ -83,98 +76,53 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 		
 		add(exit);
 		add(nameN);
-		exit.addMouseListener(new Game.NpcListener());
 		
 		//Устанавливает размер массива по количеству квестов у NPC
 		qwests = new qwestButton[Game.npc[id].qwest.length];
 		
 		//Вызывает метод для добавления квестов на панель
-		int y = 5;
-		for (int i = 0; i <= Game.npc[id].qwest.length-1; i++) {
+		int y = 2;
+		for (int i = 0; i < Game.npc[id].qwest.length; i++) {
 			int number = Game.npc[id].qwest[i]; //id квеста
 			if (Game.qwest[number].lastId != -1) {
+				//Если для открытия квеста должен быть пройден предыдущий
 				if (Game.qwest[Game.qwest[number].lastId].status == 4) {
 					//Если предыд. квест пройден
 					addButton(Game.qwest[number].name, i, y, number);
 				}
 			} else {
+				//Если квест открыт сразу
 				addButton(Game.qwest[number].name, i, y, number);
 			}
 			
-			if (Game.qwest[Game.npc[id].qwest[i]].status == 1
-					|| Game.qwest[Game.npc[id].qwest[i]].status == 3) {
+			if (Game.qwest[number].status == 1
+					|| Game.qwest[number].status == 3) {
 				//Если квест еще не взят (или окончен) то следующий опустить вниз
-				y += 40;
+				y += 49;
 			}
 		}
-		y = 5;
+		y = 2;
 	}
 	
-	//Добавляет кнопки - квесты
-	private void addButton(String name, int count, int y, int number) {
-		//Сделать чтоб если квест взят, но не выполнен, на него нельзя нажать
-		if (Game.qwest[number].status == 1) {
-			if (Game.qwest[number].idNPC == -1) {
-				/*Если этому NPC надо сдавать квест,
-				 * а он еще не получен, то не показывать
-				 */
-				QwestGivePanel.name = name;
-				qwests[count] = new qwestButton();
-				qwests[count].setBounds(5, y, 400, 24);
-				listQwests.add(qwests[count]); //Добавляет на сам JLabel (фон)
-				qwests[count].setOpaque(false);
-				qwests[count].addActionListener(this);
-				
-				qwests[count].textN = Game.qwest[number].textN;
-				qwests[count].request = Game.qwest[number].request;
-				qwests[count].status = Game.qwest[number].status;
-				qwests[count].id = Game.qwest[number].id;
-			} else {
-				if (Game.qwest[number].idNPC != npcId) {
-					QwestGivePanel.name = name;
-					qwests[count] = new qwestButton();
-					qwests[count].setBounds(0, y, 400, 24);
-					listQwests.add(qwests[count]); //Добавляет на сам JLabel (фон)
-					qwests[count].setOpaque(false);
-					qwests[count].addActionListener(this);
-					
-					qwests[count].textN = Game.qwest[number].textN;
-					qwests[count].request = Game.qwest[number].request;
-					qwests[count].status = Game.qwest[number].status;
-					qwests[count].id = Game.qwest[number].id;
-				}
-			}
-		}
-		if (Game.qwest[number].status == 3) {
-			if (Game.qwest[number].idNPC == -1) {
-				//Если квест не разговорный
-				QwestGivePanel.name = name;
-				qwests[count] = new qwestButton();
-				qwests[count].setBounds(5, y, 400, 24);
-				listQwests.add(qwests[count]); //Добавляет на сам JLabel (фон)
-				qwests[count].setOpaque(false);
-				qwests[count].addActionListener(this);
-				
-				qwests[count].textK = Game.qwest[number].textK;
-				qwests[count].request = Game.qwest[number].request;
-				qwests[count].status = Game.qwest[number].status;
-				qwests[count].id = Game.qwest[number].id;
-			} else {
-				//Если квест разговорный
-				if (Game.qwest[number].idNPC == npcId) {
-					QwestGivePanel.name = name;
-					qwests[count] = new qwestButton();
-					qwests[count].setBounds(5, y, 400, 24);
-					listQwests.add(qwests[count]); //Добавляет на сам JLabel (фон)
-					qwests[count].setOpaque(false);
-					qwests[count].addActionListener(this);
-					
-					qwests[count].textK = Game.qwest[number].textK;
-					qwests[count].request = Game.qwest[number].request;
-					qwests[count].status = Game.qwest[number].status;
-					qwests[count].id = Game.qwest[number].id;
-				}
-			}
+	//Добавляет кнопки - квесты. count - это номер квеста по счету у npc
+	private void addButton(String name, int count, int y, int id) {
+		if (Game.qwest[id].status != 0 & Game.qwest[id].status != 4) {
+			QwestGivePanel.name = name;
+			qwests[count] = new qwestButton();
+			qwests[count].setBounds(0, y, 428, 49);//height = 24
+			listQwests.add(qwests[count]); //Добавляет на сам JLabel (фон)
+			qwests[count].setOpaque(false);
+			qwests[count].addActionListener(this);
+			qwests[count].addMouseListener(this);
+			qwests[count].setBorder(null);
+			y += 40;
+			
+			qwests[count].textN = Game.qwest[id].textN;
+			qwests[count].textK = Game.qwest[id].textK;
+			qwests[count].request = Game.qwest[id].request;
+			qwests[count].status = Game.qwest[id].status;
+			qwests[count].id = Game.qwest[id].id;
+			qwests[count].numb = count;
 		}
 	}
 	
@@ -284,7 +232,7 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 				jsb.addAdjustmentListener(this);
 				jsb.setMinimum(0);
 				jsb.setMaximum(1058);
-				jsb.setUI(new BarUI());
+				jsb.setUI(new QwestScrollUI());
 				fDescribe.add(jsb);
 				revalidate();
 				
@@ -292,7 +240,7 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 				jsb2.addAdjustmentListener(this);
 				jsb2.setMinimum(0);
 				jsb2.setMaximum(100);
-				jsb2.setUI(new BarUI());
+				jsb2.setUI(new QwestScrollUI());
 				fRequest.add(jsb2);
 				revalidate();
 				
@@ -341,30 +289,21 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 		//Название квеста
 		String name = QwestGivePanel.name;
 		String textN, textK, request;
-		int id, status;
+		int id, status, numb;
 		public void paintComponent(Graphics g) {
 			super.paintComponents(g);
 			Graphics2D g2d = (Graphics2D)g;
+			if (frm == numb) {
+				g2d.drawImage(InitImage.frameQwestD, 0, 0, null);
+			} else {
+				g2d.drawImage(InitImage.frameQwestA, 0, 0, null);
+			}
 			g2d.setColor(Color.black);
 			g2d.setFont(determ);
 			int bound = (int) determ.getStringBounds(name,
 					new FontRenderContext(null, true, true)).getWidth();
-			int x = (getWidth() - bound) / 2; y = 24;
-			g2d.drawString(name, x, 20);
-			
-			/*length = name.length();
-			int x = 0, y = 0;
-			for (int i = 0; i <= length - 1; i++) {
-				char l = name.charAt(i);
-				//g2d.drawImage(letters(l), x, y, null);
-				if (l == ' ') {
-					//Меньше размер пробелов
-					x -= 10;
-				}
-				x += 24;
-			}*/
-		}
-		public void paintBorder(Graphics g) {
+			int x = (getWidth() - bound) / 2;
+			g2d.drawString(name, x, 35);
 		}
 	}
 	
@@ -381,7 +320,7 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 			g2d.setFont(InitFont.determ.deriveFont(24F));
 			int bound = (int) InitFont.determ.deriveFont(24F).getStringBounds(nameNPC,
 					new FontRenderContext(null, true, true)).getWidth();
-			int x = (getWidth() - bound) / 2; y = 24;
+			int x = (getWidth() - bound) / 2, y = 24;
 			g2d.drawString(nameNPC, x, y);
 		}
 	}
@@ -400,7 +339,7 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 				text = textK;
 			}
 			g2d.setColor(Color.black);
-			int x = 5; y = 25;
+			int x = 5, y = 25;
 			g2d.setFont(determ);
 			String[] sub = text.split(" "); //Разделение строки на слова
 			for (int i = 0; i < sub.length; i++) {
@@ -461,68 +400,30 @@ public class QwestGivePanel extends JLabel implements ActionListener, Adjustment
 			request.setLocation(0, request.getX() - a.getValue());
 		}
 	}
-	
-	//Для скролл бара
-	private class BarUI extends MetalScrollBarUI {
-		Image jsbI = new ImageIcon(getClass().getResource("res/others/jsb.png")).getImage();
-		Image jsbI2 = new ImageIcon(getClass().getResource("res/others/jsb1.png")).getImage();
-		@Override
-		protected void paintTrack(Graphics g, JComponent c, Rectangle trackBounds) {
-			Graphics2D g2d = (Graphics2D)g;
-			g2d.drawImage(jsbI, 0, 0, null);
-		}
-	    @Override
-	    protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
-	    	g.translate(thumbBounds.x, thumbBounds.y);
-	        AffineTransform transform = AffineTransform.getScaleInstance((double)thumbBounds.width/jsbI2.getWidth(null),(double)thumbBounds.height/jsbI2.getHeight(null));
-	        ((Graphics2D)g).drawImage(jsbI2, transform, null);
-	        g.translate( -thumbBounds.x, -thumbBounds.y );
-	    }
-	    //Верхняя
-	    @Override
-	    protected JButton createDecreaseButton(int orientation) {
-	    	DecButton but = new DecButton();
-	    	Dimension zeroDim = new Dimension(14,14);
-	    	but.setPreferredSize(zeroDim);
-	    	but.setMinimumSize(zeroDim);
-	    	but.setMaximumSize(zeroDim);
-	    	return but;
-	    }
-	    //Нижняя
-	    @Override
-	    protected JButton createIncreaseButton(int orientation) {
-	    	IncButton but = new IncButton();
-	    	Dimension zeroDim = new Dimension(14,14);
-	    	but.setPreferredSize(zeroDim);
-	    	but.setMinimumSize(zeroDim);
-	    	but.setMaximumSize(zeroDim);
-	    	return but;
-	    }
+
+	@Override
+	public void mouseClicked(MouseEvent arg0) {
 	}
-	
-	private class IncButton extends JButton {
-		Image jsbD = new ImageIcon(getClass().getResource("res/others/jsbD.png")).getImage();
-		@Override
-		public void paintComponent(Graphics g) {
-			Graphics2D g2d = (Graphics2D)g;
-			g2d.drawImage(jsbD, 0, 0, null);
-		}
-		@Override
-		public void paintBorder(Graphics g) {
-			
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+	}
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+	}
+	@Override
+	public void mousePressed(MouseEvent a) {
+		for (int i = 0; i < qwests.length; i++) {
+			if (a.getSource() == qwests[i]) {
+				frm = i;
+			}
 		}
 	}
-	
-	private class DecButton extends JButton {
-		Image jsbU = new ImageIcon(getClass().getResource("res/others/jsbU.png")).getImage();
-		@Override
-		public void paintComponent(Graphics g) {
-			Graphics2D g2d = (Graphics2D)g;
-			g2d.drawImage(jsbU, 0, 0, null);
-		}
-		@Override
-		public void paintBorder(Graphics g) {
-			
+	@Override
+	public void mouseReleased(MouseEvent a) {
+		for (int i = 0; i < qwests.length; i++) {
+			if (a.getSource() == qwests[i]) {
+				frm = -1;
+			}
 		}
 	}
 }
