@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class LocationFile {
 	
-	static Scanner s; //—канер читающий файлы с локаци¤ми
+	static Scanner s; //Сканер читающий файлы с локаци¤ми
 	
 	public static void readFile() {
 		while(s.hasNext()) {
@@ -21,7 +21,7 @@ public class LocationFile {
 	public static void openFile(InputStream f) {
 		try {
 			if (f != null) {
-				s = new Scanner(f); //ƒл¤ респавна после смерти
+				s = new Scanner(f); //Для респавна после смерти
 			} else {
 				//Game.f2 = new File("res/levels/" + Game.currentLocation + ".txt");
 				s = new Scanner(Game.f2);

@@ -16,14 +16,15 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.border.Border;
 
@@ -75,9 +76,9 @@ public class Game extends JFrame implements Runnable {
 	static Tiles[][] mapx = new Tiles[15][12]; //Массив непосредственнно самих тайлов
 	static Portals[] portal = new Portals[10]; //Массив хранящий данные о порталах
 	static ArrayList<Monsters> monster = new ArrayList<Monsters>();
+	static ArrayList<Item> item = new ArrayList<Item>();
 	static NPC[] npc = new NPC[8]; //Массив с NPC
 	public static Qwest[] qwest = new Qwest[11]; //Все квесты
-	
 	public static int[] takeQwests = new int[10]; //Взятые квесты (номера/id)
 	
 	//Изменить здесь, в Dead.java и LocationFile.java
@@ -91,8 +92,9 @@ public class Game extends JFrame implements Runnable {
 	static JLabel inform; //Информация в начале игры
 	
 	static PersButton menuB = new PersButton(); //Кнопка, открывает меню персонажа
-	static HeroPanel pan = new HeroPanel();//Непосредственно меню персонажа
 	static QwestGivePanel qGP;
+	
+	Random r = new Random();
 	
 	public Game() {
 	}
@@ -105,8 +107,7 @@ public class Game extends JFrame implements Runnable {
 				continued();
 			} else {
 				pl = new Player();
-				
-				//activeQwests();
+
 				QwestList qwl = new QwestList();
 				
 				/*inform = new JLabel();
@@ -149,6 +150,7 @@ public class Game extends JFrame implements Runnable {
 			
 			addMonster();
 			addNPC();
+			addItem();
 			
 			addTile(); //Добавляет тайлы на карту
 			addMouseListener(new NpcListener());
@@ -249,7 +251,7 @@ public class Game extends JFrame implements Runnable {
 	
 	public void deleteMonster() {
 		boolean exit = false; //Если монстры с текущей лок. кончились, закончить цикл
-		for (int i = 0; i <= monster.size()-1; i++) {
+		for (int i = 0; i < monster.size(); i++) {
 			if (monster.get(i).location == oldLocation) {
 				mainPane.remove(monster.get(i));
 			} else {
@@ -263,14 +265,13 @@ public class Game extends JFrame implements Runnable {
 	
 	// Добавляет на карту NPC
 	protected void addNPC() {
-		boolean exit = false; //Если npc с текущей лок. кончились, закончить цикл
+		//boolean exit = false; //Если npc с текущей лок. кончились, закончить цикл
 		for (int i = 0; i < npc.length; i++) {
 			if (npc[i].location == currentLocation) {
 				npc[i].setBounds(npc[i].x*Game.TILE, npc[i].y*Game.TILE+48, Game.TILE, Game.TILE);
 				npc[i].setIcon(new ImageIcon(getClass().getResource("res/Image/NPC/" + npc[i].icon + ".png")));
 				mapx[npc[i].x][npc[i].y].busy = true;
 				mainPane.add(npc[i], new Integer(2));
-				//signQwest(i);
 				SignQwest.sign(i);
 				
 				JLabel name = new JLabel();
@@ -278,24 +279,53 @@ public class Game extends JFrame implements Runnable {
 				name.setText(npc[i].name);
 				name.setForeground(Color.BLACK);
 				mapx[npc[i].x][npc[i].y-1].add(name);
-			} else {
-				if (exit == true) {
-					exit = false;
-					break;
-				}
 			}
 		}
 	}
 	
 	protected void deleteNPC() {
-		boolean exit = false; //Если монстры с текущей лок. кончились, закончить цикл
-		for (int i = 0; i <= npc.length-1; i++) {
-			if (npc[i].location == oldLocation) {;
+		for (int i = 0; i < npc.length; i++) {
+			if (npc[i].location != currentLocation) {
 				mainPane.remove(npc[i]);
-			} else {
-				if (exit == true) {
-					exit = false;
-					break;
+			}
+		}
+	}
+	
+	Item[] itemM;
+	protected void addItem() {
+		//Массив создает аналогичные объекты, так как один и тот же объект не добавляется
+		int x = 0, y = 0; //координаты тайла на котором появится предмет
+		for (int i = 0; i < item.size(); i++) {
+			if (item.get(i).location == currentLocation) {
+				itemM = new Item[item.get(i).count];
+				Item itemX = item.get(i); //Для сокращения кода
+				for (int j = 0; j < itemX.count; j++) {
+					//Сгенерировать столько раз сколько прописано
+					x = r.nextInt(map.length);
+					y = r.nextInt(map[0].length);
+					if (mapx[x][y].busy == true || mapx[x][y].item == true) {
+						//Если тайл занят не генерировать
+						j--;
+					} else if (map[x][y] == 24) {
+						//Если тайл трава
+						//Цикл для массива idInvent делается так как иначе
+						//он будет во всех экземплярах один и тот же
+						int a[] = new int[itemX.idInvent.length];
+						for (int z = 0; z < itemX.idInvent.length; z++) {
+							a[z] = itemX.idInvent[z];
+						}
+						
+ 						itemM[j] = new Item(itemX.id, itemX.location, itemX.count, itemX.icon, a);
+						a = null;
+						itemM[j].setBounds(16, 16, 16, 16);
+						itemM[j].setIcon(new ImageIcon(getClass().getResource("res/Image/Item/" + item.get(i).icon + ".png")));
+						itemM[j].mX = x;
+						itemM[j].mY = y;
+						mapx[x][y].item = true;
+						mapx[x][y].add(itemM[j]);
+					} else {
+						j--;
+					}
 				}
 			}
 		}
@@ -348,6 +378,7 @@ public class Game extends JFrame implements Runnable {
 		Animation.sleep(500);
 		addMonster();
 		addNPC();
+		addItem();
 		
 		Portals.removePortal();
 		Portals.portals();
@@ -388,22 +419,29 @@ public class Game extends JFrame implements Runnable {
 		}
 	}
 	
+	static boolean lock; //Блокировка движения
 	//Слушатель нажатий клавиатуры
 	public static class Listener extends KeyAdapter {
 		public void keyPressed(KeyEvent e) {
 			int key = e.getExtendedKeyCode();
-			if (key == KeyEvent.VK_DOWN || key == KeyEvent.VK_S) {
-				Move.move(1, true);
-			}
-			if (key == KeyEvent.VK_UP || key == KeyEvent.VK_W) {
-				Move.move(2, true);
-			}
-			if (key == KeyEvent.VK_LEFT || key == KeyEvent.VK_A) {
-				Move.move(3, true);
-			}
-			if (key == KeyEvent.VK_RIGHT || key == KeyEvent.VK_D) {
-				Move.move(4, true);
-			}
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					if (lock != true) {
+						if (key == KeyEvent.VK_DOWN || key == KeyEvent.VK_S) {
+							Move.move(1, true);
+						}
+						if (key == KeyEvent.VK_UP || key == KeyEvent.VK_W) {
+							Move.move(2, true);
+						}
+						if (key == KeyEvent.VK_LEFT || key == KeyEvent.VK_A) {
+							Move.move(3, true);
+						}
+						if (key == KeyEvent.VK_RIGHT || key == KeyEvent.VK_D) {
+							Move.move(4, true);
+						}
+					}
+				}
+			});
 			if (key == KeyEvent.VK_F4) {
 				Music.stop();
 			}
@@ -431,22 +469,28 @@ public class Game extends JFrame implements Runnable {
 		
 		public void keyReleased(KeyEvent e) {
 			int key = e.getExtendedKeyCode();
-			if (key == KeyEvent.VK_DOWN || key == KeyEvent.VK_S) {
-				Move.move(1, false);
-				stop = false;
-			}
-			if (key == KeyEvent.VK_UP || key == KeyEvent.VK_W) {
-				Move.move(2, false);
-				stop = false;
-			}
-			if (key == KeyEvent.VK_LEFT || key == KeyEvent.VK_A) {
-				Move.move(3, false);
-				stop = false;
-			}
-			if (key == KeyEvent.VK_RIGHT || key == KeyEvent.VK_D) {
-				Move.move(4, false);
-				stop = false;
-			}
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					if (lock != true) {
+						if (key == KeyEvent.VK_DOWN || key == KeyEvent.VK_S) {
+							Move.move(1, false);
+							stop = false;
+						}
+						if (key == KeyEvent.VK_UP || key == KeyEvent.VK_W) {
+							Move.move(2, false);
+							stop = false;
+						}
+						if (key == KeyEvent.VK_LEFT || key == KeyEvent.VK_A) {
+							Move.move(3, false);
+							stop = false;
+						}
+						if (key == KeyEvent.VK_RIGHT || key == KeyEvent.VK_D) {
+							Move.move(4, false);
+							stop = false;
+						}
+					}
+				}
+			});
 		}
 	}
 	
@@ -506,8 +550,7 @@ public class Game extends JFrame implements Runnable {
 				}
 			}
 			if (a.getComponent() == menuB) {
-				pan.setBounds(0, 0, 726, 701);//726, 701
-				mainPane.add(pan, new Integer(20));
+				mainPane.add(new HeroPanel(), new Integer(20));
 			}
 		}
 		@Override
@@ -532,6 +575,7 @@ public class Game extends JFrame implements Runnable {
 							qGP = new QwestGivePanel(id); //Панель со списоком квестов
 							qGP.setBounds(140, 70, 440, 540); //530
 							mainPane.add(qGP, new Integer(10));
+							lock = true;
 							break;
 						} else {
 							JOptionPane.showMessageDialog(null, "Что бы взять задание подойдите вплотную");

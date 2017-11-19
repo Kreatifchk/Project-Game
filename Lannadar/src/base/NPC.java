@@ -28,10 +28,11 @@ public class NPC extends JLabel {
 		this.icon = icon;
 		this.name = name;
 		
-		this.qwest = new int[qwest.length]; //Устанавливает размер массива
+		this.qwest = qwest;
+		/*this.qwest = new int[qwest.length]; //Устанавливает размер массива
 		for (int i = 0; i <= qwest.length - 1; i++) {
 			this.qwest[i] = qwest[i]; //Получает массив с id квестов выдаваемых этим NPC
-		}
+		}*/
 	}
 	
 	public NPC(int id, int location, int x, int y, String icon, int xp, int mp, int attack,

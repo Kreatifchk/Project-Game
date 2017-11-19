@@ -54,6 +54,8 @@ public class HeroPanel extends JLabel implements ActionListener {
 	//String nameQ;
 	
 	public HeroPanel() {
+		setBounds(0, 0, 726, 701);
+		
 		new HeroPanelButton();
 		
 		hero = new HeroPanelButton().hb;

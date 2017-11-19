@@ -262,12 +262,14 @@ MouseListener {
 				Game.p.requestFocus();
 				Game.qGP = null;
 				takeQwests();
+				Game.lock = false;
 				break;
 			}
 			if (a.getSource() == exit) {
 				Game.mainPane.remove(this);
 				Game.qGP = null;
 				Game.p.requestFocus();
+				Game.lock = false;
 			}
 		}
 	}

@@ -1,6 +1,7 @@
 package initialize;
 
 import base.Game;
+import base.ItemList;
 import base.MonsterList;
 import base.NPCList;
 import base.Portals;
@@ -14,6 +15,7 @@ public class InitFunc {
 		Portals.portals();
 		new MonsterList(); //Массив с монстрами
 		new NPCList(); //Массив с NPC
+		new ItemList();
 	}
 	
 	//Делает массив взятых квестов пустым

@@ -42,6 +42,29 @@ public class HeroPanelBag extends JLabel implements MouseMotionListener, MouseLi
 		addMouseListener(this);
 	}
 	
+	//Получение предмета
+	public static boolean take(int id, int stack) {
+		int point = -1; //Доступная клетка
+		boolean succes = false;
+		for (int i = 0; i < Player.bagPlayer.length; i++) {
+			if (Player.bagPlayer[i].idInv == -1
+					& Player.bagPlayer[i].access == true) {
+				point = i;
+				break;
+			}
+		}
+		//Если нашло свободнуюю ячейку
+		if (point != -1) {
+			Player.bagPlayer[point].idInv = id;
+			Player.bagPlayer[point].stack = stack;
+			succes = true;
+		} else {
+			//Если инвертарь заполнен
+			succes = false;
+		}
+		return succes;
+	}
+	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;

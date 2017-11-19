@@ -8,11 +8,9 @@ public class Tiles extends JLabel {
 	int id;
 	
 	boolean solid;
-	
 	boolean portal;
-	
 	boolean busy; //занят
-	
+	boolean item; //Размещен ли предмет
 	boolean anim = false;
 	
 	int number; //номер анимационного ид (для анимации)
