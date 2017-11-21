@@ -106,7 +106,8 @@ MouseListener {
 	
 	//Добавляет кнопки - квесты. count - это номер квеста по счету у npc
 	private void addButton(String name, int count, int y, int id) {
-		if (Game.qwest[id].status != 0 & Game.qwest[id].status != 4) {
+		if (Game.qwest[id].status != 0 & Game.qwest[id].status != 4
+				& Game.qwest[id].status != 2) {
 			QwestGivePanel.name = name;
 			qwests[count] = new qwestButton();
 			qwests[count].setBounds(0, y, 428, 49);//height = 24

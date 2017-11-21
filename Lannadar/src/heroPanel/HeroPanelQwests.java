@@ -22,6 +22,7 @@ import javax.swing.JScrollBar;
 import base.Game;
 import base.QwestScrollUI;
 import initialize.InitFont;
+import inventory.InventList;
 
 //В панели персонажа вкладка с заданиями
 @SuppressWarnings("serial")
@@ -99,14 +100,20 @@ public class HeroPanelQwests extends MouseAdapter implements ActionListener, Adj
 		
 		int st = 0; //Номер строки - квеста на панели
 		int x = 0, y = 6;//10, 10
-		System.out.println();
 		for (int i = 0; i < Game.takeQwests.length; i++) {
 			if (Game.takeQwests[i] != -1) {
 				qwestsM[st] = new QwestButton(Game.qwest[Game.takeQwests[i]].name);
 				qwestsM[st].text = Game.qwest[Game.takeQwests[i]].textN;
 				qwestsM[st].request = Game.qwest[Game.takeQwests[i]].request;
-				qwestsM[st].progress = Game.qwest[Game.takeQwests[i]].progress[0];
-				qwestsM[st].max = Game.qwest[Game.takeQwests[i]].count[0];
+				try {
+					qwestsM[st].nameMonster = Game.qwest[Game.takeQwests[i]].nameMonster;
+					qwestsM[st].idItem = Game.qwest[Game.takeQwests[i]].idItem;
+					
+					qwestsM[st].progress = Game.qwest[Game.takeQwests[i]].progress;
+					qwestsM[st].count = Game.qwest[Game.takeQwests[i]].count;
+				} catch (NullPointerException e) {
+				}
+				
 				qwestsM[st].numb = i;
 				name = Game.qwest[Game.takeQwests[i]].name; //Название квеста
 				qwestsM[st].setBounds(x, y, 283, 45); //270, 30
@@ -143,8 +150,10 @@ public class HeroPanelQwests extends MouseAdapter implements ActionListener, Adj
 				textQwest.add(jsb);
 						
 				textRequest = new RequestQwest(qwestsM[i].request);
+				textRequest.nameMonster = qwestsM[i].nameMonster;
+				textRequest.idItem = qwestsM[i].idItem;
 				textRequest.progress = qwestsM[i].progress;
-				textRequest.max = qwestsM[i].max;
+				textRequest.count = qwestsM[i].count;
 				textRequest.setBounds(0, 0, 330, 400);
 				reqBase.add(textRequest);
 				reqBase.add(jsb2);
@@ -182,7 +191,8 @@ public class HeroPanelQwests extends MouseAdapter implements ActionListener, Adj
 	//Выводит текст - требование задания
 	private class RequestQwest extends JLabel {
 		String request;
-		int progress, max;
+		int progress[], count[], idItem[];
+		String nameMonster[];
 		public RequestQwest(String request) {
 			this.request = request;
 		}
@@ -204,8 +214,26 @@ public class HeroPanelQwests extends MouseAdapter implements ActionListener, Adj
 				g2d.drawString(sub[i], x, y);
 				x += bound + 18;
 			}
-			String prog = "Выполнено:  " + progress + " / " + max;
-			g2d.drawString(prog, 5, y + 35);
+			
+			y += 35;
+			if (nameMonster != null) {
+				g2d.drawString("Убито: ", 5, y);
+				y += 35;
+				for (int i = 0; i < nameMonster.length; i++) {
+					String prog = nameMonster[i] + "  " + progress[i] + " / " + count[i];
+					g2d.drawString(prog, 5, y);
+					y += 35;
+				}
+			}
+			if (idItem != null) {
+				g2d.drawString("Собрано: ", 5, y);
+				y += 35;
+				for (int i = 0; i < idItem.length; i++) {
+					String prog = InventList.inventory.get(Game.item.get(idItem[i]).idInvent[i]).name + "  " + progress[i] + " / " + count[i];
+					g2d.drawString(prog, 5, y);
+					y += 35;
+				}
+			}
 		}
 	}
 	
@@ -229,7 +257,9 @@ public class HeroPanelQwests extends MouseAdapter implements ActionListener, Adj
 	//Кнопка квест
 	public class QwestButton extends JButton {
 		String name, text, request;
-		int progress, max;
+		String nameMonster[];
+		int idItem[];
+		int progress[], count[];
 		int numb;
 		public QwestButton(String name) {
 			this.name = name;

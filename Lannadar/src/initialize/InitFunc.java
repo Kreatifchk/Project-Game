@@ -5,12 +5,14 @@ import base.ItemList;
 import base.MonsterList;
 import base.NPCList;
 import base.Portals;
+import base.QwestList;
 import inventory.InventList;
 
 public class InitFunc {
 	
 	public InitFunc() {
 		new InventList();
+		new QwestList();
 		activeQwests();
 		Portals.portals();
 		new MonsterList(); //Массив с монстрами

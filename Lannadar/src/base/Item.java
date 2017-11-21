@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -21,7 +22,8 @@ import inventory.InventList;
 @SuppressWarnings("serial")
 public class Item extends JLabel implements MouseListener {
 	
-	int id, location, count, idInvent[];
+	int id, location, count;
+	public int idInvent[];
 	int mX, mY;
 	String icon;
 	
@@ -64,7 +66,6 @@ public class Item extends JLabel implements MouseListener {
 						Animation.sleep(10);
 					}
 					Game.mainPane.remove(jpb);
-					Game.mapx[mX][mY].remove(Item.this);
 					
 					Game.mainPane.add(ip = new ItemPane(idInvent), new Integer(300));
 					lock = true;
@@ -75,6 +76,52 @@ public class Item extends JLabel implements MouseListener {
 					jpb.setValue(jpb.getValue() + values.get(0));
 				}
 			}.execute();
+		}
+	}
+	
+	private void qwestTest() {
+		int take;
+		for (int i = 0; i < Game.takeQwests.length; i++) {
+			if (Game.takeQwests[i] != -1) {
+				//Если есть взятый квест
+				take = Game.takeQwests[i];
+				if (Game.qwest[take].idItem != null) {
+					//Если квест не собирательный
+					for (int j = 0; j < Game.qwest[take].idItem.length; j++) {
+						//Пробегает по всем целям квеста (даже если одна)
+						if (Game.qwest[take].idItem[j] == id) {
+							//Если подобранный предмет сопадает с целью
+							progressUp(take, j);
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	private void progressUp(int take, int j) {
+		if (Game.qwest[take].progress[j] < Game.qwest[take].count[j]) {
+			//Если собрано таких целей меньше чем надо в квесте, увеличить прогресс
+			Game.qwest[take].progress[j]++;
+				if (Arrays.equals(Game.qwest[take].progress, Game.qwest[take].count)) {
+				//И еще раз проверяешь и если это максимум то поменять статус
+				Game.qwest[take].status = 3;
+				sign(Game.qwest[take].id);
+				QwestCollect.clearBag(idInvent);//Уберет итемы из инвертаря
+			}
+		}
+	}
+	
+	private void sign(int id) {
+		for (int i = 0; i < Game.npc.length; i++) {
+			if (Game.npc[i].qwest != null) {
+				for (int j = 0; j < Game.npc[i].qwest.length; j++) {
+					if (Game.qwest[Game.npc[i].qwest[j]].status == 3) {
+						SignQwest.sign(i);
+						break;
+					}
+				}
+			}
 		}
 	}
 
@@ -107,9 +154,10 @@ public class Item extends JLabel implements MouseListener {
 				int length = idInvent.length;
 				if (numberP < length) {
 					if (HeroPanelBag.take(idInvent[numberP], 1) == true) {
-						//ip.item[numberP] = -1;
+						Game.mapx[mX][mY].remove(Item.this);
+						qwestTest();
 						idInvent[numberP] = -1;
-					}
+					} 
 				}
 			}
 		}

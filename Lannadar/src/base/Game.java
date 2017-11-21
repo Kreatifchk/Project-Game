@@ -76,9 +76,9 @@ public class Game extends JFrame implements Runnable {
 	static Tiles[][] mapx = new Tiles[15][12]; //Массив непосредственнно самих тайлов
 	static Portals[] portal = new Portals[10]; //Массив хранящий данные о порталах
 	static ArrayList<Monsters> monster = new ArrayList<Monsters>();
-	static ArrayList<Item> item = new ArrayList<Item>();
+	public static ArrayList<Item> item = new ArrayList<Item>();
 	static NPC[] npc = new NPC[8]; //Массив с NPC
-	public static Qwest[] qwest = new Qwest[11]; //Все квесты
+	public static Qwest[] qwest = new Qwest[12]; //Все квесты
 	public static int[] takeQwests = new int[10]; //Взятые квесты (номера/id)
 	
 	//Изменить здесь, в Dead.java и LocationFile.java
@@ -107,8 +107,6 @@ public class Game extends JFrame implements Runnable {
 				continued();
 			} else {
 				pl = new Player();
-
-				QwestList qwl = new QwestList();
 				
 				/*inform = new JLabel();
 				inform.setBounds(-5, 48, inf.getIconWidth(), inf.getIconHeight());
@@ -234,7 +232,7 @@ public class Game extends JFrame implements Runnable {
 	// Добавляет на карту монстров
 	public void addMonster() {
 		boolean exit = false; //Если монстры с текущей лок. кончились, закончить цикл
-		for (int i = 0; i <= monster.size()-1; i++) {
+		for (int i = 0; i < monster.size(); i++) {
 			if (monster.get(i).location == currentLocation) {
 				monster.get(i).setBounds(monster.get(i).x*Game.TILE, monster.get(i).y*Game.TILE+48, Game.TILE, Game.TILE);
 				monster.get(i).setIcon(new ImageIcon(getClass().getResource("res/Image/monsters/" + monster.get(i).icon + ".png")));
@@ -414,6 +412,8 @@ public class Game extends JFrame implements Runnable {
 	protected void deleteTile() {
 		for (int i = 0; i <= 11; i++) {
 			for (int j = 0; j <= 14; j++) {
+				mapx[j][i].busy = false;
+				mapx[j][i].item = false;
 				mainPane.remove(mapx[j][i]);
 			}
 		}
@@ -444,6 +444,11 @@ public class Game extends JFrame implements Runnable {
 			});
 			if (key == KeyEvent.VK_F4) {
 				Music.stop();
+			}
+			if (key == KeyEvent.VK_F9) {
+				pl.force += 100;
+				pl.endurance += 100;
+				pl.regeneration += 100;
 			}
 			if (key == KeyEvent.VK_F5) {
 				//Сохранение

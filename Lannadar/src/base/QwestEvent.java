@@ -15,7 +15,7 @@ public class QwestEvent {
 		if (id == 4) {
 			portalOpen(0);
 		}
-		if (id == 6) {
+		if (id == 7) {
 			Game.monster.add(new Monsters(3, 3, 14, 5, "skelet", 70, 0, 9, 3, 12, "Скелет"));
 			Game.monster.add(new Monsters(3, 3, 14, 7, "skelet", 70, 0, 9, 3, 12, "Скелет"));
 			Game.monster.add(new Monsters(3, 3, 14, 9, "skelet", 70, 0, 9, 3, 12, "Скелет"));
@@ -26,7 +26,7 @@ public class QwestEvent {
 				Game.mapx[Game.monster.get(Game.monster.size()-i).x][Game.monster.get(Game.monster.size()-i).y].busy = true;
 			}
 		}
-		if (id == 9) {
+		if (id == 8) {
 			portalOpen(0);
 		}
 		if (id == 10) {
@@ -36,9 +36,9 @@ public class QwestEvent {
 	
 	//Ивенты при сдаче квеста
 	protected static void passEvent(int id) {
-		if (id == 6) {
+		/*if (id == 6) {
 			portalOpen(0);
-		}
+		}*/
 	}
 	
 	private static void portalOpen(int portal) {

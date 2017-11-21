@@ -9,9 +9,8 @@ public class QwestKilling extends Qwest implements Serializable {
 	//int count; //Сколько необходоимо убить
 	//Остальные в классе Qwest
 	
-	public QwestKilling(String[] nameMonster, int count[], int id, String name, 
-			String textN, String textK, String request, int exp) {
-		super(id, name, textN, textK, request, 1, exp);
+	public QwestKilling(String[] nameMonster, int count[], int id, int exp) {
+		super(id, name(id), textN(id), textK(id), request(id), 1, exp);
 		this.nameMonster = nameMonster;
 		this.count = count;
 		this.progress = new int[count.length];
@@ -19,10 +18,8 @@ public class QwestKilling extends Qwest implements Serializable {
 		this.idNPC = -1;
 	}
 	
-	public QwestKilling(String[] nameMonster, int count[], int id,
-			String name, String textN, String textK, String request,
-			int exp, int lastId) {
-		super(id, name, textN, textK, request, 1, exp, lastId);
+	public QwestKilling(String[] nameMonster, int count[], int id, int exp, int lastId) {
+		super(id, name(id), textN(id), textK(id), request(id), 1, exp, lastId);
 		this.nameMonster = nameMonster;
 		this.count = count;
 		this.progress = new int[count.length];

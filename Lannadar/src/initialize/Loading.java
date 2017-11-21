@@ -29,7 +29,7 @@ public class Loading extends JFrame {
 		logo.setBounds((getWidth()-352) / 2, (getHeight() - 107) / 2 - 50, 352, 107);
 		
 		jpb.setIndeterminate(true);
-		jpb.setBounds(200, 336, 200, 29);
+		jpb.setBounds(200, 300, 200, 29);
 		
 		getContentPane().setBackground(Color.BLACK);
 		getContentPane().add(logo);

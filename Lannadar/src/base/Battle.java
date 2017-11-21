@@ -50,9 +50,12 @@ public class Battle implements Runnable{
 							int id = Battle.id;
 							Animation.sleep(30000);
 							Monsters mns = Game.monster.get(id);
-							mns.alive = true;
-							mns.setVisible(true);
-							Game.mapx[mns.x][mns.y].busy = true;
+							if (Game.currentLocation == mns.location) {
+								//Если уйти с локации то респавна не будет
+								mns.alive = true;
+								mns.setVisible(true);
+								Game.mapx[mns.x][mns.y].busy = true;
+							}
 						}
 					}).start();
 					//Скрывает панели моба
@@ -82,18 +85,14 @@ public class Battle implements Runnable{
 			if (Game.takeQwests[i] != -1) {
 				//Если есть взятый квест
 				take = Game.takeQwests[i];
-				for (int j = 0; j < Game.qwest[take].nameMonster.length; j++) {
-					//Пробегает по всем целям квеста (даже если одна)
-					if (Game.qwest[take].nameMonster[j].equals(name)) {
-						//Если цель совпадает с убитым мобом
-						if (Game.qwest[take].progress[j] < Game.qwest[take].count[j]) {
-							//Если убито таких целей меньше чем надо в квесте, увеличить прогресс
-							Game.qwest[take].progress[j]++;
- 							if (Arrays.equals(Game.qwest[take].progress, Game.qwest[take].count)) {
-								//И еще раз проверяешь и если это максимум то поменять статус
-								Game.qwest[take].status = 3;
-								sign(Game.qwest[take].id);
-							}
+				if (Game.qwest[take].nameMonster != null) {
+					//Если квест не на сражения
+					for (int j = 0; j < Game.qwest[take].nameMonster.length; j++) {
+						//Пробегает по всем целям квеста (даже если одна)
+						if (Game.qwest[take].nameMonster[j].equals(name)) {
+							//System.out.println();
+							//Если цель совпадает с убитым мобом
+							progressUp(take, j);
 						}
 					}
 				}
@@ -101,10 +100,22 @@ public class Battle implements Runnable{
 		}
 	}
 	
+	private void progressUp(int take, int j) {
+		if (Game.qwest[take].progress[j] < Game.qwest[take].count[j]) {
+			//Если убито таких целей меньше чем надо в квесте, увеличить прогресс
+			Game.qwest[take].progress[j]++;
+				if (Arrays.equals(Game.qwest[take].progress, Game.qwest[take].count)) {
+				//И еще раз проверяешь и если это максимум то поменять статус
+				Game.qwest[take].status = 3;
+				sign(Game.qwest[take].id);
+			}
+		}
+	}
+	
 	private void sign(int id) {
-		for (int i = 0; i <= Game.npc.length - 1; i++) {
+		for (int i = 0; i < Game.npc.length; i++) {
 			if (Game.npc[i].qwest != null) {
-				for (int j = 0; j <= Game.npc[i].qwest.length - 1; j++) {
+				for (int j = 0; j < Game.npc[i].qwest.length; j++) {
 					if (Game.qwest[Game.npc[i].qwest[j]].status == 3) {
 						SignQwest.sign(i);
 						break;
