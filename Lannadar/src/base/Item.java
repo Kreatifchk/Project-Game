@@ -49,6 +49,7 @@ public class Item extends JLabel implements MouseListener {
 	private void collect() {
 		if (lock != true) {
 			Game.lock = true;
+			lock = true;
 			
 			JProgressBar jpb = new JProgressBar();
 			jpb.setMaximum(100);
@@ -68,7 +69,6 @@ public class Item extends JLabel implements MouseListener {
 					Game.mainPane.remove(jpb);
 					
 					Game.mainPane.add(ip = new ItemPane(idInvent), new Integer(300));
-					lock = true;
 					return null;
 				}
 				@Override
@@ -127,6 +127,7 @@ public class Item extends JLabel implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent a) {
+		//Клик по предмету в мире (на карте)
 		if ((Game.pl.mX+1 == mX & Game.pl.mY == mY) || (Game.pl.mX-1 == mX & Game.pl.mY == mY)
 				|| (Game.pl.mX == mX & Game.pl.mY+1 == mY) || (Game.pl.mX == mX & Game.pl.mY-1 == mY)) {
 			collect();
@@ -143,9 +144,11 @@ public class Item extends JLabel implements MouseListener {
 		if (a.getSource() == ip) {
 			int x = a.getX(), y = a.getY();
 			if (y >= 0 & y < 40) {
+				//Подскветка кнопки "закрыть"
 				ip.exitP = true;
 			}
 			if (y >= 167) {
+				//Подсветка кнопки "Взять все"
 				ip.getP = true;
 			}
 			if (y > 41 & y < 166) {
@@ -153,10 +156,11 @@ public class Item extends JLabel implements MouseListener {
 				int numberP = 2 * yPoint + xPoint + yPoint;
 				int length = idInvent.length;
 				if (numberP < length) {
-					if (HeroPanelBag.take(idInvent[numberP], 1) == true) {
+					if (idInvent[numberP] > -1 
+							&& HeroPanelBag.take(idInvent[numberP], 1) == true) {
 						Game.mapx[mX][mY].remove(Item.this);
 						qwestTest();
-						idInvent[numberP] = -1;
+						idInvent[numberP] = -2;
 					} 
 				}
 			}
@@ -166,8 +170,27 @@ public class Item extends JLabel implements MouseListener {
 	public void mouseReleased(MouseEvent a) {
 		try {
 			if (ip.getP == true) {
-				
+				//Кнопка - взять все
+				boolean succes = true;
+				for (int i = 0; i < idInvent.length; i++) {
+					if (idInvent[i] > -1 && HeroPanelBag.take(idInvent[i], 1) == true) {
+						qwestTest();
+						idInvent[i] = -2;
+					} else {
+						//Если не может собрать предмет
+						succes = false;
+						break;
+					}
+				}
+				if (succes == true) {
+					Game.mainPane.remove(ip);
+					ip = null;
+					lock = false;
+					Game.lock = false;
+				}
+				Game.mapx[mX][mY].remove(Item.this);
 			}
+			
 			if (ip.exitP == true) {
 				Game.mainPane.remove(ip);
 				ip = null;
@@ -185,7 +208,6 @@ public class Item extends JLabel implements MouseListener {
 		boolean exitP, getP; //Подсветка этих областей когда нажата кнопка
 		public ItemPane(int... item) {
 			//Аргумент item - предметы которые лежат в мобе/предмете
-			//this.item = item;
 			setBounds((Game.mainPane.getWidth() - 132) /2,
 					(Game.mainPane.getHeight() - 191) / 2, 132, 207);
 			setBorder(BorderFactory.createLineBorder(Color.BLACK, 4));
@@ -224,8 +246,11 @@ public class Item extends JLabel implements MouseListener {
 			y = 41;
 			for (int i = 0; i < idInvent.length; i++) {
 				if (idInvent[i] != -1) {
-					Image icon = InventList.inventory.get(idInvent[i]).icon;
-					g2d.drawImage(icon, x, y, null);
+					if (idInvent[i] != -2) {
+						//Чтоб при взятии этого предмета картинка следующего не перемещалась
+						Image icon = InventList.inventory.get(idInvent[i]).icon;
+						g2d.drawImage(icon, x, y, null);
+					}
 					x += 44;
 					if (x > 122) {
 						x = 38;

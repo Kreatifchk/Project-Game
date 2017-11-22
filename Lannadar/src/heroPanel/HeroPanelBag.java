@@ -47,16 +47,21 @@ public class HeroPanelBag extends JLabel implements MouseMotionListener, MouseLi
 		int point = -1; //Доступная клетка
 		boolean succes = false;
 		for (int i = 0; i < Player.bagPlayer.length; i++) {
-			if (Player.bagPlayer[i].idInv == -1
-					& Player.bagPlayer[i].access == true) {
+			if ((Player.bagPlayer[i].idInv == -1 & Player.bagPlayer[i].access == true) 
+					|| (Player.bagPlayer[i].idInv == id & Player.bagPlayer[i].stack < InventList.inventory.get(id).stack)) {
 				point = i;
 				break;
 			}
 		}
 		//Если нашло свободнуюю ячейку
 		if (point != -1) {
-			Player.bagPlayer[point].idInv = id;
-			Player.bagPlayer[point].stack = stack;
+			if (Player.bagPlayer[point].idInv == id) {
+				//Если такой предмет есть то просто увеличить его количество
+				Player.bagPlayer[point].stack += stack;
+			} else {
+				Player.bagPlayer[point].idInv = id;
+				Player.bagPlayer[point].stack = stack;
+			}
 			succes = true;
 		} else {
 			//Если инвертарь заполнен
@@ -123,6 +128,16 @@ public class HeroPanelBag extends JLabel implements MouseMotionListener, MouseLi
 			if (Player.bagPlayer[i].idInv != -1 & i != oldPoint){
 				int id = Player.bagPlayer[i].idInv;//Ид предмета,лежашего в инвертаре
 				g2d.drawImage(InventList.inventory.get(id).icon, x, y, null);
+				if (Player.bagPlayer[i].stack > 1) {
+					//Цифра - количество предметов в стаке
+					g2d.setColor(Color.black);
+					g2d.setFont(InitFont.determ.deriveFont(14F));
+					if (Player.bagPlayer[i].stack >= 10) {
+						g2d.drawString(Player.bagPlayer[i].stack + "", x+27, y+35);
+					} else {
+						g2d.drawString(Player.bagPlayer[i].stack + "", x+30, y+35);
+					}
+				}
 			}
 			
 			x+=44;

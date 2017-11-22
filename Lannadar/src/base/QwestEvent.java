@@ -32,13 +32,13 @@ public class QwestEvent {
 		if (id == 10) {
 			portalOpen(0);
 		}
+		if (id == 11) {
+			portalOpen(0);
+		}
 	}
 	
 	//Ивенты при сдаче квеста
 	protected static void passEvent(int id) {
-		/*if (id == 6) {
-			portalOpen(0);
-		}*/
 	}
 	
 	private static void portalOpen(int portal) {

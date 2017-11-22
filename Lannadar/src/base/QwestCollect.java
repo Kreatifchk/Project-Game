@@ -39,6 +39,7 @@ public class QwestCollect extends Qwest {
 			for (int j = 0; j < Player.bagPlayer.length; j++) {
 				if (Player.bagPlayer[j].idInv == idInvent[i]) {
 					Player.bagPlayer[j].idInv = -1;
+					Player.bagPlayer[j].stack = 0;
 				}
 			}
 		}
