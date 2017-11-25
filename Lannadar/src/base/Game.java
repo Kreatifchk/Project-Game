@@ -45,10 +45,8 @@ public class Game extends JFrame implements Runnable {
 	Image icon = new ImageIcon(getClass().getResource("res/Image/icon.png")).getImage();
 	ImageIcon inf = new ImageIcon(getClass().getResource("res/inf.png"));
 	static ImageIcon inf2 = new ImageIcon(Main.class.getResource("res/inf2.png"));
-	ImageIcon end = new ImageIcon(getClass().getResource("res/end.png"));
 	static ImageIcon qwI, qwSI;
 	static Image player;
-	static ImageIcon portalI;
 	
 	static paint p; //Панель с персонажем
 	
@@ -74,7 +72,7 @@ public class Game extends JFrame implements Runnable {
 	
 	static int[][] map = new int[15][12]; //Массив с данными уровня из файла
 	static Tiles[][] mapx = new Tiles[15][12]; //Массив непосредственнно самих тайлов
-	static Portals[] portal = new Portals[10]; //Массив хранящий данные о порталах
+	static Portal[] portal = new Portal[5]; //Массив хранящий данные о порталах
 	static ArrayList<Monsters> monster = new ArrayList<Monsters>();
 	public static ArrayList<Item> item = new ArrayList<Item>();
 	static NPC[] npc = new NPC[8]; //Массив с NPC
@@ -172,7 +170,7 @@ public class Game extends JFrame implements Runnable {
 		
 		imageInit();
 		ms.massiv(); //Располагает тайлы на фрейме
-		Portals.addPortal();
+		Portal.addPortal(currentLocation);
 		
 		player = Player.playerD[0];
 		
@@ -211,7 +209,6 @@ public class Game extends JFrame implements Runnable {
 			qwI = new ImageIcon(getClass().getResource("res/qw.png"));
 			qwSI = new ImageIcon(getClass().getResource("res/qs.png"));
 		}
-		portalI = new ImageIcon(getClass().getResource("res/Image/Tiles/portal.png"));;
 	}
 	
 	//Делает массив взятых квестов пустым
@@ -263,7 +260,6 @@ public class Game extends JFrame implements Runnable {
 	
 	// Добавляет на карту NPC
 	protected void addNPC() {
-		//boolean exit = false; //Если npc с текущей лок. кончились, закончить цикл
 		for (int i = 0; i < npc.length; i++) {
 			if (npc[i].location == currentLocation) {
 				npc[i].setBounds(npc[i].x*Game.TILE, npc[i].y*Game.TILE+48, Game.TILE, Game.TILE);
@@ -329,37 +325,6 @@ public class Game extends JFrame implements Runnable {
 		}
 	}
 	
-	//Если игрок вошел в портал
-	private void verifyPortal() {
-		int nextLevel = 0, nextX = 0, nextY = 0;
-		try {
-			for (int i = 0; i <= portal.length; i++) {
-				if (pl.mX == portal[i].portalX & pl.mY == portal[i].portalY
-						& portal[i].dostyp == true) {
-					if (currentLocation != 5) {
-						nextLevel = portal[i].nextLevel;
-						nextX = portal[i].startX;
-						nextY = portal[i].startY;
-						crossing(nextLevel, nextX, nextY);
-					} else {
-						for (int z = 0; z <= mapx[0].length - 1; z++) {
-							for (int j = 0; j <= mapx.length - 1; j++) {
-								remove(mapx[j][z]);
-								remove(p);
-								remove(npc[7]);
-								JLabel endInf = new JLabel();
-								endInf.setBounds(-5, 48, end.getIconWidth(), end.getIconHeight());
-								endInf.setIcon(end);
-								mainPane.add(endInf, new Integer(400));
-							}
-						}
-					}
-				}
-			}
-		} catch (NullPointerException e) {
-		}
-	}
-	
 	//Загрузка другой локации
 	protected void loadLocation(int location) {
 		deleteTile();
@@ -373,14 +338,12 @@ public class Game extends JFrame implements Runnable {
 		
 		deleteMonster();
 		deleteNPC();
-		Animation.sleep(500);
+		Animation.sleep(400);
 		addMonster();
 		addNPC();
 		addItem();
 		
-		Portals.removePortal();
-		Portals.portals();
-		Portals.addPortal();
+		Portal.addPortal(currentLocation);
 		
 		MusicLocation.music(location);
 		
@@ -388,7 +351,7 @@ public class Game extends JFrame implements Runnable {
 	}
 	
 	//Переход на другую локацию
-	public void crossing(int nextLocation, int nextX, int nextY) {
+	protected void crossing(int nextLocation, int nextX, int nextY) {
 		oldLocation = currentLocation; //Запоминаем локацию с которой ушли
 		currentLocation = nextLocation;
 		loadLocation(nextLocation);
@@ -508,25 +471,25 @@ public class Game extends JFrame implements Runnable {
 				pl.mY++;
 				Player.moveAnimation(1);
 				move = false;
-				verifyPortal();
+				Portal.verifyPortal();
 			}
 			if (move == true & direction == 2) {
 				pl.mY--;
 				Player.moveAnimation(2);
 				move = false;
-				verifyPortal();
+				Portal.verifyPortal();
 			}
 			if (move == true & direction == 3) {
 				pl.mX--;
 				Player.moveAnimation(3);
 				move = false;
-				verifyPortal();
+				Portal.verifyPortal();
 			}
 			if (move == true & direction == 4) {
 				pl.mX++;
 				Player.moveAnimation(4);
 				move = false;
-				verifyPortal();
+				Portal.verifyPortal();
 			}
 		}
 	}

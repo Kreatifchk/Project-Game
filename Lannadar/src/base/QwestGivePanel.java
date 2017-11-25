@@ -167,6 +167,12 @@ MouseListener {
 				Game.qwest[id].status = 4;
 				Game.pl.exp += Game.qwest[id].exp;
 				LevelUp.levelUp();
+				//Забирает предметы из инвертаря, если квест собирательный
+				if (Game.qwest[id].idItem != null) {
+					for (int i = 0; i < Game.qwest[id].idItem.length; i++) {
+						QwestCollect.clearBag(Game.qwest[id].idItem);
+					}
+				}
 			}
 			for (int i = 0; i <= Game.takeQwests.length - 1; i++) {
 				if (Game.takeQwests[i] == id) {

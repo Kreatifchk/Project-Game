@@ -4,7 +4,7 @@ import base.Game;
 import base.ItemList;
 import base.MonsterList;
 import base.NPCList;
-import base.Portals;
+import base.PortalList;
 import base.QwestList;
 import inventory.InventList;
 
@@ -14,7 +14,7 @@ public class InitFunc {
 		new InventList();
 		new QwestList();
 		activeQwests();
-		Portals.portals();
+		new PortalList();
 		new MonsterList(); //Массив с монстрами
 		new NPCList(); //Массив с NPC
 		new ItemList();

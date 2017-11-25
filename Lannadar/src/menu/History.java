@@ -72,6 +72,7 @@ public class History extends JFrame{
 	JLabel t25 = new JLabel("0.5.0 - добавлен инвертарь, без взаимодействия с ним");
 	JLabel t26 = new JLabel("0.5.2 - добавлено взаимодействие с инвертарем, ");
 	JLabel t27 = new JLabel("0.5.3 - улучшения верхней панели, респаун монстров");
+	JLabel t28 = new JLabel("0.5.5 - добавлены собирательные квесты, большой рефакторинг кода");
 	
 	JTabbedPane jtp;
 	
@@ -153,6 +154,8 @@ public class History extends JFrame{
 		t26.setFont(f);
 		t27.setBounds(10, 260, 600, 30);
 		t27.setFont(f);
+		t28.setBounds(10, 300, 600, 30);
+		t28.setFont(f);
 		
 		p1.add(t);
 		p1.add(t2);
@@ -187,6 +190,7 @@ public class History extends JFrame{
 		p3.add(t25);
 		p3.add(t26);
 		p3.add(t27);
+		p3.add(t28);
 		jtp = new JTabbedPane();
 		jtp.setBounds(0, 0, 600, 541);
 		add(jtp);

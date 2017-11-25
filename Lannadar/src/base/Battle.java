@@ -13,8 +13,6 @@ public class Battle implements Runnable{
 	static int hpMax, hpCurrent;
 	static String name;
 	
-	Dead d = new Dead();
-	
 	static int id; //id монстра
 	
 	@Override
@@ -73,7 +71,10 @@ public class Battle implements Runnable{
 					}
 				}
 				Animation.sleep(1000);
-				d.dead(Game.currentLocation);
+				
+				if (Game.pl.hpThis <= 0) {
+					new Dead(2);
+				}
 			}
 		}
 	}

@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -23,7 +24,8 @@ import inventory.InventList;
 public class Item extends JLabel implements MouseListener {
 	
 	int id, location, count;
-	public int idInvent[];
+	public int idInvent[]; //Номера предметов (из InventList) находящиеся в итеме
+	private int idInvent2[]; //Сохраняет значения для респавна
 	int mX, mY;
 	String icon;
 	
@@ -40,6 +42,7 @@ public class Item extends JLabel implements MouseListener {
 		this.count = count;
 		this.icon = icon;
 		this.idInvent = idInvent;
+		idInvent2 = CopyArray.copyInt(idInvent);
 		addMouseListener(this);
 	}
 	
@@ -47,6 +50,25 @@ public class Item extends JLabel implements MouseListener {
 	boolean lock; //Сбор предмета не произойдет пока окно не закрыто
 	//Сбор предмета
 	private void collect() {
+		//Проверяет все предметы в итеме, все для которых не взят соответствующий квест
+		//будут удалены
+		boolean x = false;
+		for (int i = 0; i < idInvent.length; i++) {
+			for (int j = 0; j < Game.takeQwests.length; j++) {
+				int qw = Game.takeQwests[j];
+				if (qw != -1 && Game.qwest[qw].idItem != null) {
+					for (int z = 0; z < Game.qwest[qw].idItem.length; z++) {
+						if (Game.qwest[qw].idItem[z] == idInvent[i]) {
+							x = true;
+						}
+					}
+				}
+			}
+			if (x == false) {
+				idInvent[i] = -2;
+			}
+		}
+		
 		if (lock != true) {
 			Game.lock = true;
 			lock = true;
@@ -79,17 +101,17 @@ public class Item extends JLabel implements MouseListener {
 		}
 	}
 	
-	private void qwestTest() {
+	private void qwestTest(int idInvent) {
 		int take;
 		for (int i = 0; i < Game.takeQwests.length; i++) {
 			if (Game.takeQwests[i] != -1) {
 				//Если есть взятый квест
 				take = Game.takeQwests[i];
 				if (Game.qwest[take].idItem != null) {
-					//Если квест не собирательный
+					//Если квест собирательный
 					for (int j = 0; j < Game.qwest[take].idItem.length; j++) {
 						//Пробегает по всем целям квеста (даже если одна)
-						if (Game.qwest[take].idItem[j] == id) {
+						if (Game.qwest[take].idItem[j] == idInvent) {
 							//Если подобранный предмет сопадает с целью
 							progressUp(take, j);
 						}
@@ -107,7 +129,6 @@ public class Item extends JLabel implements MouseListener {
 				//И еще раз проверяешь и если это максимум то поменять статус
 				Game.qwest[take].status = 3;
 				sign(Game.qwest[take].id);
-				QwestCollect.clearBag(idInvent);//Уберет итемы из инвертаря
 			}
 		}
 	}
@@ -122,6 +143,34 @@ public class Item extends JLabel implements MouseListener {
 					}
 				}
 			}
+		}
+	}
+	
+	//Процесс респауна
+	boolean stop; //Не даст потоку респавна запуститься несколько раз
+	private void respawn() {
+		if (stop != true) {
+			stop = true;
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					boolean gen = false;
+					Animation.sleep(30000);
+					Random r = new Random();
+					while (gen != true) {
+						mX = r.nextInt(Game.map.length);
+						mY = r.nextInt(Game.map[0].length);
+						if (Game.map[mX][mY] == 24 & Game.mapx[mX][mY].busy != true
+								&& Game.mapx[mX][mY].item != true) {
+							gen = true;
+						}
+					}
+					Game.mapx[mX][mY].add(Item.this);
+					Game.mapx[mX][mY].item = true;
+					idInvent = idInvent2;
+				}
+			}).start();
+			stop = false;
 		}
 	}
 
@@ -159,13 +208,16 @@ public class Item extends JLabel implements MouseListener {
 					if (idInvent[numberP] > -1 
 							&& HeroPanelBag.take(idInvent[numberP], 1) == true) {
 						Game.mapx[mX][mY].remove(Item.this);
-						qwestTest();
+						Game.mapx[mX][mY].item = false;
+						respawn();
+						qwestTest(idInvent[numberP]);
 						idInvent[numberP] = -2;
 					} 
 				}
 			}
 		}
 	}
+	
 	@Override
 	public void mouseReleased(MouseEvent a) {
 		try {
@@ -174,7 +226,7 @@ public class Item extends JLabel implements MouseListener {
 				boolean succes = true;
 				for (int i = 0; i < idInvent.length; i++) {
 					if (idInvent[i] > -1 && HeroPanelBag.take(idInvent[i], 1) == true) {
-						qwestTest();
+						qwestTest(idInvent[i]);
 						idInvent[i] = -2;
 					} else {
 						//Если не может собрать предмет
@@ -189,6 +241,8 @@ public class Item extends JLabel implements MouseListener {
 					Game.lock = false;
 				}
 				Game.mapx[mX][mY].remove(Item.this);
+				Game.mapx[mX][mY].item = false;
+				respawn();
 			}
 			
 			if (ip.exitP == true) {
@@ -196,6 +250,7 @@ public class Item extends JLabel implements MouseListener {
 				ip = null;
 				lock = false;
 				Game.lock = false;
+				idInvent = CopyArray.copyInt(idInvent2);
 			}
 			ip.getP = false;
 			ip.exitP = false;

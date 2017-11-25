@@ -15,40 +15,39 @@ public class Dead {
 	
 	Game gm = new Game();//true, false
 	
-	int oldLocation;
-	
 	//respawnLoc - локация на которой умер
-	public void dead(int respawnLoc) {
-		if (Game.pl.hpThis <= 0) {
-			Battle.battle = false;
-			Music.stop();
-			if (respawnLoc == 2) {
-				JOptionPane.showMessageDialog(null, "Вы умерли");
-				Game.pl.mX = 1;
-				Game.pl.mY = 6;
-				Game.pl.x = Game.pl.mX * 48;
-				Game.pl.y = Game.pl.mY * 48 + 49;
-				Game.pl.hpThis = Game.pl.hpMax;
-				Menu.g.upPanel.hpM.setVisible(false);
-			} else {
-				JOptionPane.showMessageDialog(null, "Вы умерли");
-				
-				oldLocation = Game.currentLocation;
-				
-				Game.currentLocation = 2;
-				Game.pl.hpThis = Game.pl.hpMax;
-				
-				Game.oldLocation = oldLocation;
-				Menu.g.loadLocation(2);
-				Menu.g.upPanel.hpM.setVisible(false);
-				
-				Game.pl.mX = 1;
-				Game.pl.mY = 6;
-				Game.pl.x = Game.pl.mX * 48;
-				Game.pl.y = Game.pl.mY * 48 + 49;
-			}
+	public Dead(int respawnLoc) {
+		Battle.battle = false;
+		Music.stop();
+		if (Game.currentLocation == respawnLoc) {
+			JOptionPane.showMessageDialog(null, "Вы умерли");
+			Game.pl.mX = 1;
+			Game.pl.mY = 6;
+			Game.pl.x = Game.pl.mX * 48;
+			Game.pl.y = Game.pl.mY * 48 + 49;
+			Game.pl.hpThis = Game.pl.hpMax;
+			hidePanels();
+		} else {
+			JOptionPane.showMessageDialog(null, "Вы умерли");
+			Game.oldLocation = Game.currentLocation;
+			Game.currentLocation = respawnLoc;
+			Game.pl.hpThis = Game.pl.hpMax;
+			Menu.g.loadLocation(2);
+			
+			Game.pl.mX = 1;
+			Game.pl.mY = 6;
+			Game.pl.x = Game.pl.mX * 48;
+			Game.pl.y = Game.pl.mY * 48 + 49;
+			
+			hidePanels();
 		}
 	}
 	
+	private void hidePanels() {
+		Menu.g.upPanel.nameM.setVisible(false);
+		Menu.g.upPanel.hpM.setVisible(false);
+		Menu.g.upPanel.mpM.setVisible(false);
+		Menu.g.upPanel.lvlM.setVisible(false);
+	}
 	
 }

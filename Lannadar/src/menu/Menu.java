@@ -55,7 +55,7 @@ public class Menu extends JFrame {
 	
 	public static BasicPlayer player = new BasicPlayer();
 	
-	final static JLabel VERSION = new JLabel("Версия: 0.5.3");
+	final static JLabel VERSION = new JLabel("Версия: 0.5.5");
 	static JLabel logo = new LogoLabel();
 	//JLabel beta = new BetaLabel();
 	//JLabel alpha = new AlphaLabel();

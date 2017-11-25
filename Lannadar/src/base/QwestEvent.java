@@ -1,8 +1,6 @@
 package base;
 
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-
 import menu.Menu;
 
 public class QwestEvent {
@@ -10,10 +8,10 @@ public class QwestEvent {
 	//Ивенты при получении квеста, id - номер квеста
 	protected static void giveEvent(int id) {
 		if (id == 0) {
-			portalOpen(0);
+			Portal.open(0);
 		}
 		if (id == 4) {
-			portalOpen(0);
+			Portal.open(1);
 		}
 		if (id == 7) {
 			Game.monster.add(new Monsters(3, 3, 14, 5, "skelet", 70, 0, 9, 3, 12, "Скелет"));
@@ -27,26 +25,18 @@ public class QwestEvent {
 			}
 		}
 		if (id == 8) {
-			portalOpen(0);
+			Portal.open(2);
 		}
 		if (id == 10) {
-			portalOpen(0);
+			Portal.open(3);
 		}
 		if (id == 11) {
-			portalOpen(0);
+			Portal.open(4);
 		}
 	}
 	
 	//Ивенты при сдаче квеста
 	protected static void passEvent(int id) {
-	}
-	
-	private static void portalOpen(int portal) {
-		JLabel port = new JLabel();
-		port.setIcon(Game.portalI);
-		port.setBounds(0, 0, 48, 48);
-		Game.portal[portal].dostyp = true;
-		Game.mapx[Game.portal[portal].portalX][Game.portal[portal].portalY].add(port);
 	}
 	
 }

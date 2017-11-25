@@ -229,7 +229,7 @@ public class HeroPanelQwests extends MouseAdapter implements ActionListener, Adj
 				g2d.drawString("Собрано: ", 5, y);
 				y += 35;
 				for (int i = 0; i < idItem.length; i++) {
-					String prog = InventList.inventory.get(Game.item.get(idItem[i]).idInvent[i]).name + "  " + progress[i] + " / " + count[i];
+					String prog = InventList.inventory.get(idItem[i]).name + "  " + progress[i] + " / " + count[i];
 					g2d.drawString(prog, 5, y);
 					y += 35;
 				}

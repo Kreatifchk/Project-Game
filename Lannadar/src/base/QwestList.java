@@ -14,7 +14,7 @@ public class QwestList {
 		Game.qwest[2] = new QwestTalk(1, 2, 10, 1);
 		Game.qwest[3] = new QwestKilling(new String[] {"Зомби"}, new int[] {3}, 3, 20, 2);
 		Game.qwest[4] = new QwestTalk(3, 4, 14, 3);
-		Game.qwest[5] = new QwestCollect(new int[] {0}, new int[] {3}, 5, 20, 4);
+		Game.qwest[5] = new QwestCollect(new int[] {100}, new int[] {3}, 5, 20, 4);
 		Game.qwest[6] = new QwestKilling(new String[] {"Зомби"}, new int[] {2}, 6, 25, 4);
 		Game.qwest[7] = new QwestKilling(new String[] {"Скелет"}, new int[] {3}, 7, 35, 5);
 		Game.qwest[8] = new QwestTalk(5, 8, 40, 7);
