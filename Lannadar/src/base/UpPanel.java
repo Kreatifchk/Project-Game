@@ -49,16 +49,16 @@ public class UpPanel extends JLabel {
 		lvl.setBounds(114, 2, 47, 47);//228, 9, 30, 30
 		
 		//Показатели мобов
-		nameM.setBounds(560, 2, 151, 16);
+		nameM.setBounds(656, 2, 151, 16);//560
 		nameM.setBorder(border);
 		nameM.setVisible(false);
-		hpM.setBounds(607, 18, 104, 16);
+		hpM.setBounds(703, 18, 104, 16);//607
 		hpM.setBorder(border);
 		hpM.setVisible(false);
-		mpM.setBounds(607, 34, 104, 16);
+		mpM.setBounds(703, 34, 104, 16);//607
 		mpM.setBorder(border);
 		mpM.setVisible(false);
-		lvlM.setBounds(560, 18, 47, 31);
+		lvlM.setBounds(656, 18, 47, 31);//560
 		lvlM.setVisible(false);
 		
 		this.add(hp);

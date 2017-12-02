@@ -22,6 +22,7 @@ public class Loading extends JFrame {
 		setSize(600, 561);
 		setVisible(true);
 		setLocationRelativeTo(null);
+		setLayout(null);
 		
 		//getContentPane().setLayout(null);
 		
@@ -32,8 +33,8 @@ public class Loading extends JFrame {
 		jpb.setBounds(200, 300, 200, 29);
 		
 		getContentPane().setBackground(Color.BLACK);
-		getContentPane().add(logo);
 		getContentPane().add(jpb);
+		getContentPane().add(logo);
 		
 		new Initialize(); //Инициализация всего
 		dispose();

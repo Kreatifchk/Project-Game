@@ -1,6 +1,7 @@
 ﻿package base;
 
 import java.awt.Color;
+import java.awt.FileDialog;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -10,14 +11,16 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Random;
-
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -27,7 +30,6 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.border.Border;
-
 import heroPanel.HeroPanel;
 import heroPanel.PersButton;
 import menu.Menu;
@@ -48,7 +50,7 @@ public class Game extends JFrame implements Runnable {
 	static ImageIcon qwI, qwSI;
 	static Image player;
 	
-	static paint p; //Панель с персонажем
+	public static paint p; //Панель с персонажем
 	
 	public static Player pl;
 	Massiv ms = new Massiv(); //Заполняет тайлы
@@ -70,8 +72,9 @@ public class Game extends JFrame implements Runnable {
 
 	final static int TILE = 48; //Размер тайла
 	
-	static int[][] map = new int[15][12]; //Массив с данными уровня из файла
-	static Tiles[][] mapx = new Tiles[15][12]; //Массив непосредственнно самих тайлов
+	static Tiles[][] mapx = new Tiles[17][12]; //Массив непосредственнно самих тайлов
+	static int[][] map = new int[mapx.length][mapx[0].length];
+	//Массив с данными уровня из файла
 	static Portal[] portal = new Portal[5]; //Массив хранящий данные о порталах
 	static ArrayList<Monsters> monster = new ArrayList<Monsters>();
 	public static ArrayList<Item> item = new ArrayList<Item>();
@@ -125,17 +128,17 @@ public class Game extends JFrame implements Runnable {
 			Color BROWN = new Color(185, 122, 87);
 			
 			upPanel = new UpPanel();
-			upPanel.setBounds(0, 0, 721, 51);
+			upPanel.setBounds(0, 0, 817, 51);//721, 51
 			
-			downPanel.setBounds(0, 627, 721, 48);
+			downPanel.setBounds(0, 627, 817, 48);//721, 51
 			downPanel.setBorder(border);
 			downPanel.setOpaque(true);
 			downPanel.setBackground(BROWN);
 			
-			menuB.setBounds(604, 2, 115, 44);
+			menuB.setBounds(700, 2, 115, 44);//604
 			menuB.addMouseListener(new NpcListener());
 			
-			p.setBounds(0, 0, 726, 704);
+			p.setBounds(0, 0, 822, 704);//726, 704
 			p.setLayout(null);
 			p.setFocusable(true);
 			
@@ -155,7 +158,7 @@ public class Game extends JFrame implements Runnable {
 
 	//Инициализация
 	private void init() {
-		mainPane.setBounds(0, 0, 726, 704);
+		mainPane.setBounds(0, 0, 822, 704);//726, 704
 		add(mainPane);
 		
 		setIconImage(icon);
@@ -364,8 +367,8 @@ public class Game extends JFrame implements Runnable {
 	
 	//Метод добавляющий тайлы на фрейм
 	protected void addTile() {
-		for (int i = 0; i <= 11; i++) {
-			for (int j = 0; j <= 14; j++) {
+		for (int i = 0; i < mapx[0].length; i++) {
+			for (int j = 0; j < mapx.length; j++) {
 				mainPane.add(mapx[j][i], new Integer(0));
 			}
 		}
@@ -373,8 +376,8 @@ public class Game extends JFrame implements Runnable {
 	
 	//Метод удаляющий все тайлы с фрейма
 	protected void deleteTile() {
-		for (int i = 0; i <= 11; i++) {
-			for (int j = 0; j <= 14; j++) {
+		for (int i = 0; i < mapx[0].length; i++) {
+			for (int j = 0; j < mapx.length; j++) {
 				mapx[j][i].busy = false;
 				mapx[j][i].item = false;
 				mainPane.remove(mapx[j][i]);
@@ -541,7 +544,7 @@ public class Game extends JFrame implements Runnable {
 							int id = npc[i].id;
 							QwestGivePanel.nameNPC = npc[i].name;
 							qGP = new QwestGivePanel(id); //Панель со списоком квестов
-							qGP.setBounds(140, 70, 440, 540); //530
+							qGP.setBounds((Menu.g.getWidth()-440)/2, 70, 440, 540); //140, 70
 							mainPane.add(qGP, new Integer(10));
 							lock = true;
 							break;
@@ -567,8 +570,8 @@ public class Game extends JFrame implements Runnable {
 				//0.2 сек
 				if (sl%200 == 0) {
 					//Анимация тайлов
-					for (int i = 0; i <= 11; i++) {
-						for (int j = 0; j <= 14; j++) {
+					for (int i = 0; i < mapx[0].length; i++) {
+						for (int j = 0; j < mapx.length; j++) {
 							if (mapx[j][i].anim == true) {
 								int number = mapx[j][i].number;
 								int colum = Massiv.animIcon[number].length-1;

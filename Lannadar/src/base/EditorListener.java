@@ -4,8 +4,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-public class EditorListener implements MouseListener, MouseMotionListener {
+import javax.swing.ImageIcon;
 
+import menu.Menu;
+
+public class EditorListener implements MouseListener, MouseMotionListener {
+	
+	boolean openedList;
+	
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 	}
@@ -17,128 +23,71 @@ public class EditorListener implements MouseListener, MouseMotionListener {
 	@Override
 	public void mouseExited(MouseEvent arg0) {
 	}
-
+	
 	@Override
 	public void mousePressed(MouseEvent a) {
-		if (a.getComponent() == Editor.grass) {
-			Editor.block = 2;
-		}
-		else if (a.getComponent() == Editor.path) {
-			Editor.block = 1;
-		}
-		else if (a.getComponent() == Editor.three) {
-			Editor.block = 4;
-		}
-		else if (a.getComponent() == Editor.water) {
-			Editor.block = 5;
-		}
-		else if (a.getComponent() == Editor.mount) {
-			Editor.block = 6;
-		}
-		else if (a.getComponent() == Editor.home01) {
-			Editor.block = 7;
-		}
-		else if (a.getComponent() == Editor.brickPath) {
-			Editor.block = 8;
-		}
-		else if (a.getComponent() == Editor.brickWallP) {
-			Editor.block = 9;
-		}
-		else if (a.getComponent() == Editor.brickWall) {
-			Editor.block = 10;
-		}
-		else if (a.getComponent() == Editor.brickPathG) {
-			Editor.block = 11;
-		}
-		else if (a.getComponent() == Editor.bridge) {
-			Editor.block = 12;
-		}
-		else if (a.getComponent() == Editor.three2) {
-			Editor.block = 13;
-		}
-		else if (a.getComponent() == Editor.water1) {
-			Editor.block = 14;
-		}
-		else if (a.getComponent() == Editor.home02) {
-			Editor.block = 15;
-		}
-		else if (a.getComponent() == Editor.home03) {
-			Editor.block = 16;
-		}
-		else if (a.getComponent() == Editor.homeFire){
-			Editor.block = 17;
-		}
-		else if (a.getComponent() == Editor.flooring){
-			Editor.block = 18;
-		}
-		else if (a.getComponent() == Editor.homeWall){
-			Editor.block = 19;
-		}
-		else if (a.getComponent() == Editor.homeWallRigth){
-			Editor.block = 20;
-		}
-		else if (a.getComponent() == Editor.flooringRigth){
-			Editor.block = 21;
-		}
-		else if (a.getComponent() == Editor.homeWallLeft){
-			Editor.block = 22;
-		}
-		else if (a.getComponent() == Editor.flooringLeft){
-			Editor.block = 23;
-		}
-		else if (a.getComponent() == Editor.voidT){
-			Editor.block = 24;
-		}
-		else if (a.getComponent() == Editor.window){
-			Editor.block = 25;
-		}
-		else if (a.getComponent() == Editor.grassDark){
-			Editor.block = 26;
-		}
-		else if (a.getComponent() == Editor.threeDark){
-			Editor.block = 27;
-		}
-		else if (a.getComponent() == Editor.threeDark2){
-			Editor.block = 28;
-		}
-		else if (a.getComponent() == Editor.grassFire){
-			Editor.block = 29;
-		}
-		else if (a.getComponent() == Editor.well) {
-			Editor.block = 30;
+		boolean v = false;
+		for (int i = 0; i < Editor.allTiles.length; i++) {
+			if (a.getComponent() == Editor.allTiles[i]) {
+				Editor.block = i;
+				v = true;
+				//Устанавливает инструмент для заливки
+				Editor.lastTool = (ImageIcon) Editor.allTiles[i].getIcon();
+				Editor.lastToolN = i;
+				//Закрывает окно
+				openedList = false;
+				Menu.ed.basicPane.remove(Editor.tilesList);
+				Editor.tilesList = null;
+				Editor.inList = null;
+			}
 		}
 		
-		
-		else if (a.getComponent() == Editor.fill) {
-			Editor.block = 96;
-		}
-		else if (a.getComponent() == Editor.empty) {
-			Editor.block = 97;
-		}
-		else if (a.getComponent() == Editor.portal) {
-			Editor.block = 98;
-		}
-		else if (a.getComponent() == Editor.save) {
-			Editor.saveLevel();
-		}
-		else if (a.getComponent() == Editor.open) {
-			Editor.eo.fillMap();
-		}
-		else if (a.getComponent() == Editor.define) {
-			Editor.block = 99;
-		}
-		else {
-			Editor.xClick = a.getX();
-			Editor.yClick = a.getY();
-			Editor.click(Editor.xClick, Editor.yClick);
+		if (v != true) {
+			if (a.getComponent() == Editor.fill) {
+				Editor.block = 96;
+			}
+			else if (a.getComponent() == Editor.empty) {
+				Editor.block = 97;
+			}
+			else if (a.getComponent() == Editor.save) {
+				Editor.saveLevel();
+			}
+			else if (a.getComponent() == Editor.open) {
+				Editor.eo.fillMap();
+			}
+			else if (a.getComponent() == Editor.define) {
+				Editor.block = 99;
+			}
+			else if (a.getComponent() == Editor.tilesB) {
+				//Если лист тайлов не открыт - открыть, иначе закрыть
+				if (openedList != true) {
+					Editor.tilesList();
+					new EditorTile();
+					openedList = true;
+				} else {
+					openedList = false;
+					Menu.ed.basicPane.remove(Editor.tilesList);
+					Editor.tilesList = null;
+					Editor.inList = null;
+				}
+			}
+			else {
+				if (openedList == true) {
+					openedList = false;
+					Menu.ed.basicPane.remove(Editor.tilesList);
+					Editor.tilesList = null;
+					Editor.inList = null;
+				}
+				Editor.xClick = a.getX();
+				Editor.yClick = a.getY();
+				Editor.click(Editor.xClick, Editor.yClick);
+			}
 		}
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 	}
-	
-	//MouseMotionListener
 	
 	//Вызывается когда мышь была нажата и передвинута
 	@Override

@@ -4,13 +4,14 @@ import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
@@ -19,8 +20,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JTabbedPane;
 import javax.swing.Timer;
 import javax.swing.border.Border;
@@ -29,13 +32,13 @@ import initialize.TilesImage;
 import menu.Menu;
 
 @SuppressWarnings("serial")
-public class Editor extends JFrame implements ActionListener {
+public class Editor extends JFrame implements ActionListener, AdjustmentListener {
 
 	static ImageIcon whiteOpaque, delete, fillI, saveImage, portalI,
-	openI, defineI;
+	openI, defineI, tilesI;
 	static ImageIcon lastTool;
 	
-	Image icon = new ImageIcon(getClass().getResource("res/icon.png")).getImage();
+	Image icon = new ImageIcon(getClass().getResource("res/Image/icon.png")).getImage();
 	
 	static File portalNumber; //Файл с порталами и уровнями
 	static PrintWriter pw, portalW;
@@ -43,9 +46,7 @@ public class Editor extends JFrame implements ActionListener {
 	EditorListener m = new EditorListener();
 	static EditorOpen eo = new EditorOpen();
 	
-	static JPanel p = new JPanel();
-	
-	static int block; //
+	static int block = 97; //Выбранный инструмент
 	static int xClick, yClick;
 	//Координаты клика
 	static int xFill, yFill; //Номер тайла который будет заменен/установлен
@@ -60,85 +61,51 @@ public class Editor extends JFrame implements ActionListener {
 	static String numberLevel; //В нее записывается номер уровня при сохранении
 	static String[] portalConf = new String[32];
 	
-	static JLabel[][] map = new JLabel[15][12]; //Массив для отрисовки
-	static int[][] mapFile = new int[15][12]; //Массив для сохранения данных
+	static JLabel[][] map = new JLabel[17][12]; //Массив для отрисовки
+	static int[][] mapFile = new int[map.length][map[0].length];
+	//Массив для сохранения данных
 	
+	JLayeredPane basicPane = new JLayeredPane();
 	static JPanel menu = new JPanel();
 	static JButton back = new JButton("Обратно в меню");
-	
-	JLabel tiles = new JLabel();
-	JLabel tiles2 = new JLabel();
-	JLabel tiles3 = new JLabel();
-	JLabel paths = new JLabel();
-	JLabel buildings = new JLabel();
-	JLabel tools = new JLabel();
-	JLabel extra = new JLabel();
-	
-	static JButton grass = new JButton("");
-	static JButton grassFire = new JButton("");
-	static JButton three = new JButton("");
-	static JButton water = new JButton("");
-	static JButton mount = new JButton("");
-	static JButton brickWallP = new JButton();
-	static JButton brickWall = new JButton();
-	static JButton three2 = new JButton();
-	static JButton water1 = new JButton();
-	static JButton flooring = new JButton();
-	static JButton homeWall = new JButton();
-	static JButton homeWallRigth = new JButton();
-	static JButton flooringRigth = new JButton();
-	static JButton homeWallLeft = new JButton();
-	static JButton flooringLeft = new JButton();
-	static JButton voidT = new JButton();
-	static JButton window = new JButton();
-	static JButton grassDark = new JButton();
-	static JButton threeDark = new JButton();
-	static JButton threeDark2 = new JButton();
-	static JButton well = new JButton();
-	
-	static JButton brickPath = new JButton();
-	static JButton brickPathG = new JButton();
-	static JButton bridge = new JButton();
-	static JButton path = new JButton("");
-	
-	static JButton home01 = new JButton();
-	static JButton home02 = new JButton();
-	static JButton home03 = new JButton();
-	static JButton homeFire = new JButton();
+
+	JLabel main = new JLabel();
 	
 	static JButton fill = new JButton("");
 	static JButton save = new JButton("");
 	static JButton empty  = new JButton("");
 	static JButton open = new JButton();
 	static JButton define = new JButton();
+	static JButton tilesB = new JButton();
 	
-	static JButton portal  = new JButton();
+	static JButton[] allTiles = new JButton[30];
 	
 	static JTabbedPane jtp;
 	
 	Timer t = new Timer(20, this);
 	
+	String pathF = "res/Image/Editor/";
+	
+	static JLabel tilesList;
+	
 	public Editor() {
 		super("RPG");
 		setLayout(null);
 		setIconImage(icon);
-		p.setBounds(0, 0, 726, 721);
-		p.setLayout(null);
-		add(p);
+		basicPane.setBounds(0, 0, 822, 695);//726
+		add(basicPane);
 		addKeyListener(new Keypad());
 		setFocusable(true);
+
+		new TilesImage();
 		
-		@SuppressWarnings("unused")
-		TilesImage ti = new TilesImage();
-		
-		delete = new ImageIcon(getClass().getResource("res/Editor/delete.png"));
-		fillI  = new ImageIcon(getClass().getResource("res/Editor/fill.png"));
-		saveImage = new ImageIcon(getClass().getResource("res/Editor/levelSave.png"));
-		whiteOpaque = new ImageIcon(getClass().getResource("res/Editor/whiteOpaque.png"));
-		openI = new ImageIcon(getClass().getResource("res/Editor/levelOpen.png"));
-		defineI = new ImageIcon(getClass().getResource("res/Editor/define.png"));
-		
-		portalI = new ImageIcon(getClass().getResource("res/Tiles/portal.png"));
+		delete = new ImageIcon(getClass().getResource(pathF + "delete.png"));
+		fillI  = new ImageIcon(getClass().getResource(pathF + "fill.png"));
+		saveImage = new ImageIcon(getClass().getResource(pathF + "levelSave.png"));
+		whiteOpaque = new ImageIcon(getClass().getResource(pathF + "whiteOpaque.png"));
+		openI = new ImageIcon(getClass().getResource(pathF + "levelOpen.png"));
+		defineI = new ImageIcon(getClass().getResource(pathF + "/define.png"));
+		tilesI = new ImageIcon(getClass().getResource(pathF + "/tiles.png"));
 		
 		massiv();
 		t.start();
@@ -154,7 +121,11 @@ public class Editor extends JFrame implements ActionListener {
 		back.addMouseListener(new MenuMouse());
 		
 		Border solidBorder = BorderFactory.createLineBorder(Color.BLACK, 2);
-		tiles.setBounds(0, 0, 720, 91);
+		main.setBounds(0, 0, 720, 91);
+		main.setOpaque(true);
+		main.setBackground(Color.gray);
+		main.setBorder(solidBorder);
+		/*tiles.setBounds(0, 0, 720, 91);
 		tiles.setOpaque(true);
 		tiles.setBackground(Color.GRAY);
 		tiles.setBorder(solidBorder);
@@ -181,102 +152,9 @@ public class Editor extends JFrame implements ActionListener {
 		
 		extra.setOpaque(true);
 		extra.setBackground(Color.GRAY);
-		extra.setBorder(solidBorder);
+		extra.setBorder(solidBorder);*/
 		
 		int y = 6;
-		
-		//Тайлы
-		grass.setBounds(20, y, 48, 48);
-		grass.setIcon(TilesImage.grass);
-		grass.addMouseListener(m);
-		grassFire.setBounds(80, y, 48, 48);
-		grassFire.setIcon(TilesImage.grassFire);
-		grassFire.addMouseListener(m);
-		three.setBounds(140, y, 48, 48);
-		three.setIcon(TilesImage.three);
-		three.addMouseListener(m);
-		water.setBounds(200, y, 48, 48);
-		water.setIcon(TilesImage.water);
-		water.addMouseListener(m);
-		mount.setBounds(260, y, 48, 48);
-		mount.setIcon(TilesImage.mount);
-		mount.addMouseListener(m);
-		brickWallP.setBounds(320, y, 48, 48);
-		brickWallP.setIcon(TilesImage.brickWallP);
-		brickWallP.addMouseListener(m);
-		brickWall.setBounds(380, y, 48, 48);
-		brickWall.setIcon(TilesImage.brickWall);
-		brickWall.addMouseListener(m);
-		three2.setBounds(440, y, 48, 48);
-		three2.setIcon(TilesImage.three2);
-		three2.addMouseListener(m);
-		water1.setBounds(500, y, 48, 48);
-		water1.setIcon(TilesImage.water1);
-		water1.addMouseListener(m);
-		flooring.setBounds(560, y, 48, 48);
-		flooring.setIcon(TilesImage.flooring);
-		flooring.addMouseListener(m);
-		homeWall.setBounds(620, y, 48, 48);
-		homeWall.setIcon(TilesImage.homeWall);
-		homeWall.addMouseListener(m);
-		homeWallRigth.setBounds(20, y, 48, 48);
-		homeWallRigth.setIcon(TilesImage.homeWallRigth);
-		homeWallRigth.addMouseListener(m);
-		flooringRigth.setBounds(80, y, 48, 48);
-		flooringRigth.setIcon(TilesImage.flooringRigth);
-		flooringRigth.addMouseListener(m);
-		homeWallLeft.setBounds(140, y, 48, 48);
-		homeWallLeft.setIcon(TilesImage.homeWallLeft);
-		homeWallLeft.addMouseListener(m);
-		flooringLeft.setBounds(200, y, 48, 48);
-		flooringLeft.setIcon(TilesImage.flooringLeft);
-		flooringLeft.addMouseListener(m);
-		voidT.setBounds(260, y, 48, 48);
-		voidT.setIcon(TilesImage.voidI);
-		voidT.addMouseListener(m);
-		window.setBounds(320, y, 48, 48);
-		window.setIcon(TilesImage.window);
-		window.addMouseListener(m);
-		grassDark.setBounds(380, y, 48, 48);
-		grassDark.setIcon(TilesImage.grassDark);
-		grassDark.addMouseListener(m);
-		threeDark.setBounds(440, y, 48, 48);
-		threeDark.setIcon(TilesImage.threeDark);
-		threeDark.addMouseListener(m);
-		threeDark2.setBounds(500, y, 48, 48);
-		threeDark2.setIcon(TilesImage.threeDark2);
-		threeDark2.addMouseListener(m);
-		well.setBounds(560, y, 48, 48);
-		well.setIcon(TilesImage.well);
-		well.addMouseListener(m);
-		
-		//Дороги
-		brickPath.setBounds(20, y, 48, 48);
-		brickPath.setIcon(TilesImage.brickPath);
-		brickPath.addMouseListener(m);
-		brickPathG.setBounds(100, y, 48, 48);
-		brickPathG.setIcon(TilesImage.brickPathG);
-		brickPathG.addMouseListener(m);
-		bridge.setBounds(180, y, 48, 48);
-		bridge.setIcon(TilesImage.bridge);
-		bridge.addMouseListener(m);
-		path.setBounds(260, y, 48, 48);
-		path.setIcon(TilesImage.path);
-		path.addMouseListener(m);
-		
-		//Постройки
-		home01.setBounds(20, y, 48, 48);
-		home01.setIcon(TilesImage.home01);
-		home01.addMouseListener(m);
-		home02.setBounds(100, y, 48, 48);
-		home02.setIcon(TilesImage.home02);
-		home02.addMouseListener(m);
-		home03.setBounds(180, y, 48, 48);
-		home03.setIcon(TilesImage.home03);
-		home03.addMouseListener(m);
-		homeFire.setBounds(260, y, 48, 48);
-		homeFire.setIcon(TilesImage.homeFire);
-		homeFire.addMouseListener(m);
 		
 		//Инструменты
 		empty.setBounds(20, y, 48, 48);
@@ -288,90 +166,79 @@ public class Editor extends JFrame implements ActionListener {
 		save.setBounds(180, y, 50, 50);
 		save.setIcon(saveImage);
 		save.addMouseListener(m);
-		open.setBounds(240, y, 50, 50);
+		open.setBounds(260, y, 50, 50);
 		open.setIcon(openI);
 		open.addMouseListener(m);
-		define.setBounds(320, y, 50, 50);
+		define.setBounds(340, y, 50, 50);
 		define.setIcon(defineI);
 		define.addMouseListener(m);
+		tilesB.setBounds(420, y, 48, 48);
+		tilesB.setIcon(tilesI);
+		tilesB.addMouseListener(m);
 		
-		//extra
-		portal.setBounds(20, y, 50, 50);
-		portal.setIcon(portalI);
-		portal.addMouseListener(m);
+		basicPane.addMouseListener(m);
+		basicPane.addMouseMotionListener(m);
 		
-		p.addMouseListener(m);
-		p.addMouseMotionListener(m);
-		
-		tiles.add(grass);
-		tiles.add(grassFire);
-		tiles.add(three);
-		tiles.add(water);
-		tiles.add(mount);
-		tiles.add(brickWallP);
-		tiles.add(brickWall);
-		tiles.add(three2);
-		tiles.add(water1);
-		tiles.add(flooring);
-		tiles.add(homeWall);
-		
-		tiles2.add(homeWallRigth);
-		tiles2.add(flooringRigth);
-		tiles2.add(homeWallLeft);
-		tiles2.add(flooringLeft);
-		tiles2.add(voidT);
-		tiles2.add(window);
-		tiles2.add(grassDark);
-		tiles2.add(threeDark);
-		tiles2.add(threeDark2);
-		tiles2.add(well);
-		
-		paths.add(brickPath);
-		paths.add(brickPathG);
-		paths.add(bridge);
-		paths.add(path);
-		
-		buildings.add(home01);
-		buildings.add(home02);
-		buildings.add(home03);
-		buildings.add(homeFire);
-		
-		tools.add(empty);
-		tools.add(fill);
-		tools.add(save);
-		tools.add(open);
-		tools.add(define);
-		
-		extra.add(portal);
+		main.add(empty);
+		main.add(fill);
+		main.add(save);
+		main.add(open);
+		main.add(define);
+		main.add(tilesB);
 		
 		jtp = new JTabbedPane();
-		jtp.addTab("Tiles", tiles);
-		jtp.addTab("Tiles 2", tiles2);
-		jtp.addTab("Tiles 3", tiles3);
-		jtp.addTab("Paths", paths);
-		jtp.addTab("Build", buildings);
-		jtp.addTab("Tools", tools);
-		jtp.addTab("Extra", extra);
-		jtp.setBounds(0, 576, 720, 91);
-		p.add(jtp);
+		//jtp.addTab("Tiles", tiles);
+		//jtp.addTab("Tiles 2", tiles2);
+		//jtp.addTab("Tiles 3", tiles3);
+		//jtp.addTab("Paths", paths);
+		//jtp.addTab("Build", buildings);
+		//jtp.addTab("Tools", tools);
+		//jtp.addTab("Extra", extra);
+		jtp.addTab("Main", main);
+		jtp.setBounds(0, 576, 816, 91); //720, 91
+		basicPane.add(jtp, new Integer(1));
 	}
 
 	private void massiv() {
 		//Стартовое заполнение
 		int x = 0;
 		int y = 0;
-		for (int i = 0; i <= 11; i++) {
-			for (int j = 0; j <= 14; j++) {
+		for (int i = 0; i < map[0].length; i++) {
+			for (int j = 0; j < map.length; j++) {
 				mapFile[j][i] = 0;
 				map[j][i] = new JLabel();
 				map[j][i].setIcon(whiteOpaque);
 				map[j][i].setBounds(x, y, 48, 48);
-				p.add(map[j][i]);
+				basicPane.add(map[j][i], new Integer(1));
 				x += 48;
 			}
 			y += 48;
 			x = 0;
 		}
+	}
+	
+	static JLabel inList;
+	static JScrollBar scroll;
+	protected static void tilesList() {
+		tilesList = new JLabel();
+		tilesList.setBounds((Menu.ed.getWidth() - 326)/2, (Menu.ed.getHeight() - 358)/2-40, 328, 358);
+		tilesList.setBackground(new Color(100, 90, 110));
+		tilesList.setOpaque(true);
+		tilesList.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
+		Menu.ed.basicPane.add(tilesList, new Integer(9));
+		
+		inList = new JLabel();
+		inList.setBounds(0, 0, 300, 716);
+		tilesList.add(inList);
+		
+		scroll = new JScrollBar();
+		scroll.setUI(new QwestScrollUI());
+		scroll.setMinimum(0);
+		scroll.setMaximum(358);
+		scroll.setBounds(304, 10, 20, tilesList.getHeight() - 20);
+		scroll.addAdjustmentListener(Menu.ed);
+		tilesList.add(scroll);
+		Menu.ed.revalidate();
 	}
 	
 	public static void click(int x, int y) {
@@ -386,177 +253,15 @@ public class Editor extends JFrame implements ActionListener {
 		} else {
 			yFill = y / 48;
 		}
-		//System.out.println(xFill + " " + yFill);
-		
-		//System.out.println("x = " + xFill + " y = " + yFill);
-		if (block == 1) {
-			map[xFill][yFill].setIcon(TilesImage.path);
-			mapFile[xFill][yFill] = 1;
-			lastTool = TilesImage.path;
-			lastToolN = 1;
-		}
-		if (block == 2) {
-			map[xFill][yFill].setIcon(TilesImage.grass);
-			mapFile[xFill][yFill] = 0;
-			lastTool = TilesImage.grass;
-			lastToolN = 0;
-		}
-		if (block == 4) {
-			map[xFill][yFill].setIcon(TilesImage.three);
-			mapFile[xFill][yFill] = 2;
-		}
-		if (block == 5) {
-			map[xFill][yFill].setIcon(TilesImage.water);
-			mapFile[xFill][yFill] = 3;
-			lastTool = TilesImage.water;
-			lastToolN = 3;
-		}
-		if (block == 6) {
-			map[xFill][yFill].setIcon(TilesImage.mount);
-			mapFile[xFill][yFill] = 4;
-		}
-		if (block == 7) {
-			map[xFill][yFill].setIcon(TilesImage.home01);
-			mapFile[xFill][yFill] = 5;
-			lastTool = TilesImage.home01;
-			lastToolN = 5;
-		}
-		if (block == 8) {
-			map[xFill][yFill].setIcon(TilesImage.brickPath);
-			mapFile[xFill][yFill] = 6;
-			lastTool = TilesImage.brickPath;
-			lastToolN = 6;
-		}
-		if (block == 9) {
-			map[xFill][yFill].setIcon(TilesImage.brickWallP);
-			mapFile[xFill][yFill] = 7;
-			lastTool = TilesImage.brickWallP;
-			lastToolN = 7;
-		}
-		if (block == 10) {
-			map[xFill][yFill].setIcon(TilesImage.brickWall);
-			mapFile[xFill][yFill] = 8;
-			lastTool = TilesImage.brickWall;
-			lastToolN = 8;
-		}
-		if (block == 11) {
-			map[xFill][yFill].setIcon(TilesImage.brickPathG);
-			mapFile[xFill][yFill] = 9;
-			lastTool = TilesImage.brickPathG;
-			lastToolN = 9;
-		}
-		if (block == 12) {
-			map[xFill][yFill].setIcon(TilesImage.bridge);
-			mapFile[xFill][yFill] = 10;
-			lastTool = TilesImage.bridge;
-			lastToolN = 10;
-		}
-		if (block == 13) {
-			map[xFill][yFill].setIcon(TilesImage.three2);
-			mapFile[xFill][yFill] = 11;
-		}
-		if (block == 14) {
-			map[xFill][yFill].setIcon(TilesImage.water1);
-			mapFile[xFill][yFill] = 12;
-			lastTool = TilesImage.water1;
-			lastToolN = 12;
-		}
-		if (block == 15) {
-			map[xFill][yFill].setIcon(TilesImage.home02);
-			mapFile[xFill][yFill] = 13;
-		}
-		if (block == 16) {
-			map[xFill][yFill].setIcon(TilesImage.home03);
-			mapFile[xFill][yFill] = 14;
-		}
-		if (block == 17) {
-			//Горящий дом
-			map[xFill][yFill].setIcon(TilesImage.homeFire);
-			mapFile[xFill][yFill] = 15;
-		}
-		if (block == 18) {
-			map[xFill][yFill].setIcon(TilesImage.flooring);
-			mapFile[xFill][yFill] = 16;
-			lastTool = TilesImage.flooring;
-			lastToolN = 16;
-		}
-		if (block == 19) {
-			map[xFill][yFill].setIcon(TilesImage.homeWall);
-			mapFile[xFill][yFill] = 17;
-			lastTool = TilesImage.homeWall;
-			lastToolN = 17;
-		}
-		if (block == 20) {
-			map[xFill][yFill].setIcon(TilesImage.homeWallRigth);
-			mapFile[xFill][yFill] = 18;
-			lastTool = TilesImage.homeWallRigth;
-			lastToolN = 18;
-		}
-		if (block == 21) {
-			map[xFill][yFill].setIcon(TilesImage.flooringRigth);
-			mapFile[xFill][yFill] = 19;
-			lastTool = TilesImage.flooringRigth;
-			lastToolN = 19;
-		}
-		if (block == 22) {
-			map[xFill][yFill].setIcon(TilesImage.homeWallLeft);
-			mapFile[xFill][yFill] = 20;
-			lastTool = TilesImage.homeWallLeft;
-			lastToolN = 20;
-		}
-		if (block == 23) {
-			map[xFill][yFill].setIcon(TilesImage.flooringLeft);
-			mapFile[xFill][yFill] = 21;
-			lastTool = TilesImage.flooringLeft;
-			lastToolN = 21;
-		}
-		if (block == 24) {
-			map[xFill][yFill].setIcon(TilesImage.voidI);
-			mapFile[xFill][yFill] = 22;
-			lastTool = TilesImage.voidI;
-			lastToolN = 22;
-		}
-		if (block == 25) {
-			map[xFill][yFill].setIcon(TilesImage.window);
-			mapFile[xFill][yFill] = 23;
-			lastTool = TilesImage.window;
-			lastToolN = 23;
-		}
-		if (block == 26) {
-			map[xFill][yFill].setIcon(TilesImage.grassDark);
-			mapFile[xFill][yFill] = 24;
-			lastTool = TilesImage.grassDark;
-			lastToolN = 24;
-		}
-		if (block == 27) {
-			map[xFill][yFill].setIcon(TilesImage.threeDark);
-			mapFile[xFill][yFill] = 25;
-			lastTool = TilesImage.threeDark;
-			lastToolN = 25;
-		}
-		if (block == 28) {
-			map[xFill][yFill].setIcon(TilesImage.threeDark2);
-			mapFile[xFill][yFill] = 26;
-			lastTool = TilesImage.threeDark2;
-			lastToolN = 26;
-		}
-		if (block == 29) {
-			map[xFill][yFill].setIcon(TilesImage.grassFire);
-			mapFile[xFill][yFill] = 27;
-			lastTool = TilesImage.grassFire;
-			lastToolN = 27;
-		}
-		if (block == 30) {
-			map[xFill][yFill].setIcon(TilesImage.well);
-			mapFile[xFill][yFill] = 28;
-			lastTool = TilesImage.well;
-			lastToolN = 28;
-		}
-		
+
+		if (block >= 0 & block <= 29) {
+			map[xFill][yFill].setIcon(allTiles[block].getIcon());
+			mapFile[xFill][yFill] = block;
+		}	
 		
 		if (block == 96) {
-			for (int i = 0; i <= 11; i++) {
-				for (int j = 0; j <= 14; j++) {
+			for (int i = 0; i < map[0].length; i++) {
+				for (int j = 0; j < map.length; j++) {
 					map[j][i].setIcon(lastTool);
 					mapFile[j][i] = lastToolN;
 				}
@@ -565,103 +270,23 @@ public class Editor extends JFrame implements ActionListener {
 		if (block == 97) {
 			map[xFill][yFill].setIcon(whiteOpaque);
 		}
-		if (block == 98) {
-			//map[xFill][yFill].setIcon(portalI);
-			//mapFile[xFill][yFill] = 99;
-			portalClick = true;
-			if (warning == false) {
-				JOptionPane.showMessageDialog(null, "На один уровень можно поставить не более 4 порталов");
-				warning = true;
-			}
-			readFile();
-			for (int i = 0; i <= portalConf.length - 1; i++) {
-				//System.out.println(portalConf[i]);
-			}
-			if (length > 23) {
-				JOptionPane.showMessageDialog(null, "У вас уже есть 4 портала");
-				map[xFill][yFill].setIcon(whiteOpaque);
-				mapFile[xFill][yFill] = 0;
-			} else {
-			portalFill();
-			}
-		}
 		if (block == 99) {
 			JOptionPane.showMessageDialog(null, xFill + " " + yFill);
 		}
 	}
 	
-	private static void readFile() {
-		int count = 1;
-		String aa = JOptionPane.showInputDialog("Введите номер уровеня к которому прикрепляете портал", "");
-		levelNumber = Integer.parseInt(aa);
-		portalNumber = new File("res/portals/" + levelNumber + ".txt");
-		if (!portalNumber.exists()) {
-			try {
-				portalNumber.createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		try {
-			s = new Scanner(portalNumber);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		while (s.hasNext()) {
-			portalConf[count] = s.next();
-			count++;
-		}
-		for (int i = 1; i <= portalConf.length - 1; i++) {
-			if (portalConf[i] != null) {
-				length++;
-			}
-		}
-	}
-
-	private static void portalFill() {
-		//Заполняет файл с конфигурациями порталов
-		if (portalClick == true) {
-			String idPortalS = "" + idPortal;
-			portalConf[length + 1] = idPortalS;
-			String ab = JOptionPane.showInputDialog("Введите уровень в который ведет портал", "");
-			portalConf[length + 2] = ab;
-			String ac = JOptionPane.showInputDialog("Введите стартовую координату x", "");
-			portalConf[length + 3] = ac;
-			String ad = JOptionPane.showInputDialog("Введите стартовую координату y", "");
-			portalConf[length + 4] = ad;
-			String xFillM = "" + xFill;
-			String yFillM = "" + yFill;
-			portalConf[length + 5] = xFillM;
-			portalConf[length + 6] = yFillM;
-			try {
-				portalW = new PrintWriter("res/portals/" + levelNumber + ".txt");
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
-			
-			for (int i = 1; i <= length+7; i++) {
-				if (portalConf[i] != null) {
-					portalW.println(portalConf[i]);
-				}
-			}
-			portalClick = false;
-			portalW.close();
-		}
-	}
-	
 	public static void saveLevel() {
 		numberLevel = JOptionPane.showInputDialog("Введите номер уровня", "");
-		int number;
-		number = Integer.parseInt(numberLevel);
+		int number = Integer.parseInt(numberLevel);
 		try {
+			//pw = new PrintWriter("src/base/res/levels/" + number + ".txt");
 			pw = new PrintWriter("res/levels/" + number + ".txt");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 		
-		for (int i = 0; i <= 11; i++) {
-			for (int j = 0; j <= 14; j++) {
+		for (int i = 0; i < map[0].length; i++) {
+			for (int j = 0; j < map.length; j++) {
 				pw.print(mapFile[j][i] + " ");
 			}
 			pw.print("\n");
@@ -676,10 +301,10 @@ public class Editor extends JFrame implements ActionListener {
 			int key = a.getExtendedKeyCode();
 			if (key == KeyEvent.VK_ESCAPE) {
 				if (x == false) {
-					p.add(menu);
+					Menu.ed.basicPane.add(menu, new Integer(10));
 					x = true;
 				} else {
-					p.remove(menu);
+					Menu.ed.basicPane.remove(menu);
 					x = false;
 				}
 			}
@@ -713,7 +338,7 @@ public class Editor extends JFrame implements ActionListener {
 				m.setSize(600, 561);
 				m.setResizable(false);
 				m.setLocationRelativeTo(null);
-				p.remove(menu);
+				//p.remove(menu);
 				Keypad.x = false;
 			}
 		}
@@ -725,6 +350,13 @@ public class Editor extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		repaint();
+	}
+
+	@Override
+	public void adjustmentValueChanged(AdjustmentEvent a) {
+		if (a.getSource() == scroll) {
+			inList.setLocation(inList.getX(), inList.getX() - a.getValue());
+		}
 	}
 	
 }

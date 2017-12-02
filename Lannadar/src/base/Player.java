@@ -25,7 +25,7 @@ public class Player implements Serializable {
 	 * hpThis - hp в данный момент
 	 */
 	
-	int mX = 2, mY = 7; //Тайл на котором находится персонаж
+	int mX = 3, mY = 7; //Тайл на котором находится персонаж
 	int x = mX * 48, y = 48 * mY + 48; //Координаты реальные
 	
 	public int level = 1;

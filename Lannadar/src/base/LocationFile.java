@@ -9,8 +9,8 @@ public class LocationFile {
 	
 	public static void readFile() {
 		while(s.hasNext()) {
-			for (int i = 0; i <= 11; i++) {
-				for (int j = 0; j <= 14; j++) {
+			for (int i = 0; i < Game.mapx[0].length; i++) {
+				for (int j = 0; j < Game.mapx.length; j++) {
 					Game.map[j][i] = s.nextInt(); 
 				}
 			}

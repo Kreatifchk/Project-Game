@@ -66,7 +66,8 @@ public class Portal extends JLabel {
 		for (int i = 0; i < Game.portal.length; i++) {
 			Portal port = Game.portal[i];
 			int portX = Game.portal[i].mX, portY = Game.portal[i].mY;
-			if (Game.pl.mX == portX & Game.pl.mY == portY & Game.portal[i].access == true) {
+			if (Game.pl.mX == portX & Game.pl.mY == portY & Game.portal[i].access == true
+					& Game.currentLocation == port.location) {
 				if (Game.currentLocation != 5) {
 					Menu.g.crossing(port.newLoc, port.startX, port.startY);
 				} else {
@@ -75,7 +76,7 @@ public class Portal extends JLabel {
 					Menu.g.deleteNPC();
 					Menu.g.remove(Game.p);
 					JLabel endInf = new JLabel();
-					endInf.setBounds(-5, 48, end.getIconWidth(), end.getIconHeight());
+					endInf.setBounds(50, 48, end.getIconWidth(), end.getIconHeight());//-5
 					endInf.setIcon(end);
 					Game.mainPane.add(endInf, new Integer(400));
 				}

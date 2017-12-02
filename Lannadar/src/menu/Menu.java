@@ -63,6 +63,7 @@ public class Menu extends JFrame {
 	
 	//static JFrame g;
 	public static Game g;
+	public static Editor ed;
 	
 	static boolean restartMusic = false;
 	
@@ -215,7 +216,7 @@ public class Menu extends JFrame {
 				//Game g = new Game();
 				g.setVisible(true);
 				g.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				g.setSize(726, 704); //726, 701
+				g.setSize(822, 704); //726, 701
 				g.setResizable(false);
 				g.setLocationRelativeTo(null);
 			}
@@ -225,6 +226,7 @@ public class Menu extends JFrame {
 	public class MenuListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			System.out.println(e.getSource());
 			if (e.getSource() == start) {
 				g = new Game(false, false);
 				
@@ -237,7 +239,7 @@ public class Menu extends JFrame {
 				//Game g = new Game();
 				g.setVisible(true);
 				g.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				g.setSize(726, 701);//726, 701
+				g.setSize(822, 701);//726, 701
 				g.setResizable(false);
 				g.setLocationRelativeTo(null);
 			}
@@ -248,7 +250,7 @@ public class Menu extends JFrame {
 					dispose();
 					g.setVisible(true);
 					g.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-					g.setSize(726, 704);//726, 701
+					g.setSize(822, 704);//726, 701
 					g.setResizable(false);
 					g.setLocationRelativeTo(null);
 				} catch (NoSuchElementException ex) {
@@ -264,9 +266,9 @@ public class Menu extends JFrame {
 				} catch (BasicPlayerException e1) {
 					e1.printStackTrace();
 				}
-				Editor ed = new Editor();
+				ed = new Editor();
 				ed.setVisible(true);
-				ed.setSize(726, 695); //675
+				ed.setSize(822, 695); //726, 695(675)
 				ed.setDefaultCloseOperation(EXIT_ON_CLOSE);
 				ed.setResizable(false);
 				ed.setLocationRelativeTo(null);
@@ -322,23 +324,5 @@ public class Menu extends JFrame {
 			g2d.drawImage(logoI, 0, 0, null);
 		}
 	}
-	
-	/*private static class BetaLabel extends JLabel{
-		public void paintComponent(Graphics g) {
-			betaI = new ImageIcon(getClass().getResource("res/Beta.png")).getImage();
-			super.paintComponents(g);
-			Graphics2D g2d = (Graphics2D)g;
-			g2d.drawImage(betaI, 0, 0, null);
-		}
-	}*/
-	
-	/*private static class AlphaLabel extends JLabel{
-		public void paintComponent(Graphics g) {
-			alphaI = new ImageIcon(getClass().getResource("res/alpha.png")).getImage();
-			super.paintComponents(g);
-			Graphics2D g2d = (Graphics2D)g;
-			g2d.drawImage(alphaI, 0, 0, null);
-		}
-	}*/
 	
 }

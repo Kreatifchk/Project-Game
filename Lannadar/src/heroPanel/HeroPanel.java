@@ -144,21 +144,9 @@ public class HeroPanel extends JLabel implements ActionListener {
 			x = infoP;
 			add(infoP);
 			Game.mainPane.remove(this);
+			Game.p.requestFocus();
 			
 			qwestsP = null;
-			/*textQwest.remove(jsb);
-			textQwest.remove(jsb2);
-			if (textRequest != null & textQwestDop != null) {
-				textQwest.remove(textQwestDop);
-				reqBase.remove(textRequest);
-			}*/
-			
-			//Стереть кнопки квесты
-			/*for (int i = 0; i <= qwestsM.length - 1; i++) {
-				if (qwestsM[i] != null) {
-					qwestsP.remove(qwestsM[i]);
-				}
-			}*/
 		}
 	}
 	
