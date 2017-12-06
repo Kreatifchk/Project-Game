@@ -1,6 +1,7 @@
 package initialize;
 
 import base.Game;
+import base.HashList;
 import base.ItemList;
 import base.MonsterList;
 import base.NPCList;
@@ -11,6 +12,7 @@ import inventory.InventList;
 public class InitFunc {
 	
 	public InitFunc() {
+		new HashList();
 		new InventList();
 		new QwestList();
 		activeQwests();

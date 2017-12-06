@@ -7,8 +7,6 @@ import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 
-import initialize.TilesImage;
-
 public class EditorOpen {
 	
 	static File levelOpen; //Файл с уровнем для открытия
@@ -60,96 +58,7 @@ public class EditorOpen {
 		int x = 0, y = 0;
 		for (int i = 0; i < Editor.map[0].length; i++) {
 			for (int j = 0; j < Editor.map.length; j++) {
-				if (Editor.mapFile[j][i] == 0) {
-					Editor.map[j][i].setIcon(TilesImage.grass);
-				}
-				if (Editor.mapFile[j][i] == 1) {
-					Editor.map[j][i].setIcon(TilesImage.path);
-				}
-				if (Editor.mapFile[j][i] == 2) {
-					Editor.map[j][i].setIcon(TilesImage.three);
-				}
-				if (Editor.mapFile[j][i] == 3) {
-					Editor.map[j][i].setIcon(TilesImage.water);
-				}
-				if (Editor.mapFile[j][i] == 4) {
-					Editor.map[j][i].setIcon(TilesImage.mount);
-				}
-				if (Editor.mapFile[j][i] == 5) {
-					Editor.map[j][i].setIcon(TilesImage.home01);
-				}
-				if (Editor.mapFile[j][i] == 6) {
-					Editor.map[j][i].setIcon(TilesImage.brickPath);
-				}
-				if (Editor.mapFile[j][i] == 7) {
-					Editor.map[j][i].setIcon(TilesImage.brickWallP);
-				}
-				if (Editor.mapFile[j][i] == 8) {
-					Editor.map[j][i].setIcon(TilesImage.brickWall);
-				}
-				if (Editor.mapFile[j][i] == 9) {
-					Editor.map[j][i].setIcon(TilesImage.brickPathG);
-				}
-				if (Editor.mapFile[j][i] == 10) {
-					Editor.map[j][i].setIcon(TilesImage.bridge);
-				}
-				if (Editor.mapFile[j][i] == 11) {
-					Editor.map[j][i].setIcon(TilesImage.three2);
-				}
-				if (Editor.mapFile[j][i] == 12) {
-					Editor.map[j][i].setIcon(TilesImage.water1);
-				}
-				if (Editor.mapFile[j][i] == 13) {
-					Editor.map[j][i].setIcon(TilesImage.home02);
-				}
-				if (Editor.mapFile[j][i] == 14) {
-					Editor.map[j][i].setIcon(TilesImage.home03);
-				}
-				if (Editor.mapFile[j][i] == 15) {
-					Editor.map[j][i].setIcon(TilesImage.homeFire);
-				}
-				if (Editor.mapFile[j][i] == 16) {
-					Editor.map[j][i].setIcon(TilesImage.flooring);
-				}
-				if (Editor.mapFile[j][i] == 17) {
-					Editor.map[j][i].setIcon(TilesImage.homeWall);
-				}
-				if (Editor.mapFile[j][i] == 18) {
-					Editor.map[j][i].setIcon(TilesImage.homeWallRigth);
-				}
-				if (Editor.mapFile[j][i] == 19) {
-					Editor.map[j][i].setIcon(TilesImage.flooringRigth);
-				}
-				if (Editor.mapFile[j][i] == 20) {
-					Editor.map[j][i].setIcon(TilesImage.homeWall);
-				}
-				if (Editor.mapFile[j][i] == 21) {
-					Editor.map[j][i].setIcon(TilesImage.flooringLeft);
-				}
-				if (Editor.mapFile[j][i] == 22) {
-					Editor.map[j][i].setIcon(TilesImage.voidI);
-				}
-				if (Editor.mapFile[j][i] == 23) {
-					Editor.map[j][i].setIcon(TilesImage.window);
-				}
-				if (Editor.mapFile[j][i] == 24) {
-					Editor.map[j][i].setIcon(TilesImage.grassDark);
-				}
-				if (Editor.mapFile[j][i] == 25) {
-					Editor.map[j][i].setIcon(TilesImage.threeDark);
-				}
-				if (Editor.mapFile[j][i] == 26) {
-					Editor.map[j][i].setIcon(TilesImage.threeDark2);
-				}
-				if (Editor.mapFile[j][i] == 27) {
-					Editor.map[j][i].setIcon(TilesImage.grassFire);
-				}
-				if (Editor.mapFile[j][i] == 28) {
-					Editor.map[j][i].setIcon(TilesImage.well);
-				}
-				if (Editor.mapFile[j][i] == 29) {
-					Editor.map[j][i].setIcon(TilesImage.townRoad);
-				}
+				Editor.map[j][i].setIcon(TileList.tiles[Editor.mapFile[j][i]].ic);
 				Editor.map[j][i].setBounds(x, y, Game.TILE, Game.TILE);
 				x += Game.TILE;
 			}

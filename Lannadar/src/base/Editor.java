@@ -78,7 +78,8 @@ public class Editor extends JFrame implements ActionListener, AdjustmentListener
 	static JButton define = new JButton();
 	static JButton tilesB = new JButton();
 	
-	static JButton[] allTiles = new JButton[30];
+	static JButton[] allTiles = new JButton[TileList.tiles.length];
+	//Массив конопок - тайлов
 	
 	static JTabbedPane jtp;
 	
@@ -104,8 +105,8 @@ public class Editor extends JFrame implements ActionListener, AdjustmentListener
 		saveImage = new ImageIcon(getClass().getResource(pathF + "levelSave.png"));
 		whiteOpaque = new ImageIcon(getClass().getResource(pathF + "whiteOpaque.png"));
 		openI = new ImageIcon(getClass().getResource(pathF + "levelOpen.png"));
-		defineI = new ImageIcon(getClass().getResource(pathF + "/define.png"));
-		tilesI = new ImageIcon(getClass().getResource(pathF + "/tiles.png"));
+		defineI = new ImageIcon(getClass().getResource(pathF + "define.png"));
+		tilesI = new ImageIcon(getClass().getResource(pathF + "tiles.png"));
 		
 		massiv();
 		t.start();
@@ -254,7 +255,7 @@ public class Editor extends JFrame implements ActionListener, AdjustmentListener
 			yFill = y / 48;
 		}
 
-		if (block >= 0 & block <= 29) {
+		if (block >= 0 & block < allTiles.length) {
 			map[xFill][yFill].setIcon(allTiles[block].getIcon());
 			mapFile[xFill][yFill] = block;
 		}	
@@ -279,8 +280,8 @@ public class Editor extends JFrame implements ActionListener, AdjustmentListener
 		numberLevel = JOptionPane.showInputDialog("Введите номер уровня", "");
 		int number = Integer.parseInt(numberLevel);
 		try {
-			//pw = new PrintWriter("src/base/res/levels/" + number + ".txt");
-			pw = new PrintWriter("res/levels/" + number + ".txt");
+			pw = new PrintWriter("src/base/res/levels/" + number + ".txt");
+			//pw = new PrintWriter("res/levels/" + number + ".txt");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}

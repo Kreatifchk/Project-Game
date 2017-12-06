@@ -7,6 +7,7 @@ import javax.swing.ImageIcon;
 import base.Game;
 import base.Player;
 import base.Resize;
+import base.TileList;
 
 public class InitImage {
 	
@@ -20,7 +21,8 @@ public class InitImage {
 	public InitImage() {
 		menuImage();
 		panelImage();
-		new TilesImage();
+		new TileList();
+		//new TilesImage();
 		new Player().init();
 		new inventory.InitImage();
 	}

@@ -168,11 +168,14 @@ public class Game extends JFrame implements Runnable {
 		
 		f2 = Game.class.getResourceAsStream("res/levels/" + currentLocation + ".txt");
 		
-		LocationFile.openFile(null);
-		LocationFile.readFile(); //Читает файл с локациями
+		if (LocationFile.openFile(null) == true) {
+			LocationFile.readFile(); //Читает файл с локациями
+			ms.massiv(); //Располагает тайлы на фрейме
+		} else {
+			JOptionPane.showMessageDialog(null, "Игровые файлы были изменены. Загрузка невозможна.");
+		}
 		
 		imageInit();
-		ms.massiv(); //Располагает тайлы на фрейме
 		Portal.addPortal(currentLocation);
 		
 		player = Player.playerD[0];
@@ -333,24 +336,25 @@ public class Game extends JFrame implements Runnable {
 		deleteTile();
 		
 		f2 = Game.class.getResourceAsStream("res/levels/" + location + ".txt");
-		//f2 = new File("res/levels/" + nextLocation + ".txt");
-		//LocationFile.openFile(null); //для file
-		LocationFile.openFile(f2); //для input stream
-		LocationFile.readFile();
-		ms.massiv();
-		
-		deleteMonster();
-		deleteNPC();
-		Animation.sleep(400);
-		addMonster();
-		addNPC();
-		addItem();
-		
-		Portal.addPortal(currentLocation);
-		
-		MusicLocation.music(location);
-		
-		addTile();
+		if (LocationFile.openFile(f2) == true) {
+			LocationFile.readFile();
+			ms.massiv();
+			
+			deleteMonster();
+			deleteNPC();
+			Animation.sleep(400);
+			addMonster();
+			addNPC();
+			addItem();
+			
+			Portal.addPortal(currentLocation);
+			
+			MusicLocation.music(location);
+			
+			addTile();
+		} else {
+			JOptionPane.showMessageDialog(null, "Игровые файлы были изменены. Загрузка невозможна.");
+		}
 	}
 	
 	//Переход на другую локацию

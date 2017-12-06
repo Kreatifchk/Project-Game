@@ -105,8 +105,11 @@ public class EditorListener implements MouseListener, MouseMotionListener {
 			y = a.getY() / 48;
 		}
 		
-		Editor.map[x][y].setIcon(Editor.lastTool);
-		Editor.mapFile[x][y] = Editor.lastToolN;
+		try {
+			Editor.map[x][y].setIcon(Editor.lastTool);
+			Editor.mapFile[x][y] = Editor.lastToolN;
+		} catch (ArrayIndexOutOfBoundsException e) {
+		}
 	}
 	
 	//Вызывается когда мышь не была нажата и передвинута

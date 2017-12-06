@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JScrollBar;
 
 import base.Game;
+import menu.Menu;
 
 /**
  * 
@@ -54,7 +55,7 @@ public class HeroPanel extends JLabel implements ActionListener {
 	//String nameQ;
 	
 	public HeroPanel() {
-		setBounds(0, 0, 726, 701);
+		setBounds((Menu.g.getWidth()-726)/2, 0, 726, 701);
 		
 		new HeroPanelButton();
 		
