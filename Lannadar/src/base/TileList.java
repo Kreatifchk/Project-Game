@@ -4,7 +4,7 @@ import javax.swing.ImageIcon;
 
 public class TileList {
 	
-	static Tiles[] tiles = new Tiles[55]; //Все тайлы
+	static Tiles[] tiles = new Tiles[78]; //Все тайлы
 	
 	public String file = "/base/res/Image/Tiles/";
 	
@@ -64,6 +64,29 @@ public class TileList {
 		tiles[52] = new Tiles("Дом 06", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home06.png")));
 		tiles[53] = new Tiles("Клумба", true, new ImageIcon(getClass().getResource(file + "flowerbedV.png")));
 		tiles[54] = new Tiles("Доска объявлений", true, new ImageIcon(getClass().getResource(file + "cityBoard.png")));
+		tiles[55] = new Tiles("Городская стена", true, new ImageIcon(getClass().getResource(file + "cityWallUp.png")));
+		tiles[56] = new Tiles("Городская стена", true, new ImageIcon(getClass().getResource(file + "cityWall.png")));
+		tiles[57] = new Tiles("Городская стена", true, new ImageIcon(getClass().getResource(file + "cityWallDown.png")));
+		tiles[58] = new Tiles("Городская стена (слева)", true, new ImageIcon(getClass().getResource(file + "wallLeftU.png")));
+		tiles[59] = new Tiles("Городская стена (слева)", true, new ImageIcon(getClass().getResource(file + "wallLeftS.png")));
+		tiles[60] = new Tiles("Городская стена (слева)", true, new ImageIcon(getClass().getResource(file + "wallLeftD.png")));
+		tiles[61] = new Tiles("Городская стена (слева)", true, new ImageIcon(getClass().getResource(file + "wallLeft.png")));
+		tiles[62] = new Tiles("Городская стена (слева)", true, new ImageIcon(getClass().getResource(file + "wallLeftD2.png")));
+		tiles[63] = new Tiles("Городская стена (слева)", true, new ImageIcon(getClass().getResource(file + "wallRigthU.png")));
+		tiles[64] = new Tiles("Городская стена (справа)", true, new ImageIcon(getClass().getResource(file + "wallRigthS.png")));
+		tiles[65] = new Tiles("Городская стена (справа)", true, new ImageIcon(getClass().getResource(file + "wallRigthD.png")));
+		tiles[66] = new Tiles("Городская стена (справа)", true, new ImageIcon(getClass().getResource(file + "wallRigth.png")));
+		tiles[67] = new Tiles("Городская стена (справа)", true, new ImageIcon(getClass().getResource(file + "wallRigthD2.png")));
+		tiles[68] = new Tiles("Башня городской стены", true, new ImageIcon(getClass().getResource(file + "wallTowerU.png")));
+		tiles[69] = new Tiles("Башня городской стены (левая)", true, new ImageIcon(getClass().getResource(file + "wallTower.png")));
+		tiles[70] = new Tiles("Башня городской стены (левая)", true, new ImageIcon(getClass().getResource(file + "wallTowerS.png")));
+		tiles[71] = new Tiles("Башня городской стены (левая)", true, new ImageIcon(getClass().getResource(file + "wallTowerD.png")));
+		tiles[72] = new Tiles("Башня городской стены (правая)", true, new ImageIcon(getClass().getResource(file + "wallTowerR.png")));
+		tiles[73] = new Tiles("Башня городской стены (правая)", true, new ImageIcon(getClass().getResource(file + "wallTowerRS.png")));
+		tiles[74] = new Tiles("Башня городской стены (правая)", true, new ImageIcon(getClass().getResource(file + "wallTowerRD.png")));
+		tiles[75] = new Tiles("Башня городской стены (двойная)", true, new ImageIcon(getClass().getResource(file + "wallTowerRL.png")));
+		tiles[76] = new Tiles("Башня городской стены (двойная)", true, new ImageIcon(getClass().getResource(file + "wallTowerRLS.png")));
+		tiles[77] = new Tiles("Башня городской стены (двойная)", true, new ImageIcon(getClass().getResource(file + "wallTowerRLD.png")));
 	}
 	
 }

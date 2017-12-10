@@ -90,7 +90,7 @@ public class Editor extends JFrame implements ActionListener, AdjustmentListener
 	static JLabel tilesList;
 	
 	public Editor() {
-		super("RPG");
+		super("Lannadar");
 		setLayout(null);
 		setIconImage(icon);
 		basicPane.setBounds(0, 0, 822, 695);//726
@@ -111,6 +111,12 @@ public class Editor extends JFrame implements ActionListener, AdjustmentListener
 		massiv();
 		t.start();
 		
+		for (int i = 0; i < mapFile.length; i++) {
+			for (int j = 0; j < mapFile[0].length; j++) {
+				mapFile[i][j] = -1;
+			}
+		}
+		
 		Border b = BorderFactory.createLineBorder(Color.BLUE, 3);
 		menu.setBounds(180, 60, 330, 450);
 		menu.setOpaque(true);
@@ -126,34 +132,6 @@ public class Editor extends JFrame implements ActionListener, AdjustmentListener
 		main.setOpaque(true);
 		main.setBackground(Color.gray);
 		main.setBorder(solidBorder);
-		/*tiles.setBounds(0, 0, 720, 91);
-		tiles.setOpaque(true);
-		tiles.setBackground(Color.GRAY);
-		tiles.setBorder(solidBorder);
-		
-		tiles2.setOpaque(true);
-		tiles2.setBackground(Color.GRAY);
-		tiles2.setBorder(solidBorder);
-		
-		tiles3.setOpaque(true);
-		tiles3.setBackground(Color.GRAY);
-		tiles3.setBorder(solidBorder);
-		
-		paths.setOpaque(true);
-		paths.setBackground(Color.GRAY);
-		paths.setBorder(solidBorder);
-		
-		buildings.setOpaque(true);
-		buildings.setBackground(Color.GRAY);
-		buildings.setBorder(solidBorder);
-		
-		tools.setOpaque(true);
-		tools.setBackground(Color.GRAY);
-		tools.setBorder(solidBorder);
-		
-		extra.setOpaque(true);
-		extra.setBackground(Color.GRAY);
-		extra.setBorder(solidBorder);*/
 		
 		int y = 6;
 		
@@ -179,6 +157,7 @@ public class Editor extends JFrame implements ActionListener, AdjustmentListener
 		
 		basicPane.addMouseListener(m);
 		basicPane.addMouseMotionListener(m);
+		basicPane.addMouseWheelListener(m);
 		
 		main.add(empty);
 		main.add(fill);
@@ -188,13 +167,6 @@ public class Editor extends JFrame implements ActionListener, AdjustmentListener
 		main.add(tilesB);
 		
 		jtp = new JTabbedPane();
-		//jtp.addTab("Tiles", tiles);
-		//jtp.addTab("Tiles 2", tiles2);
-		//jtp.addTab("Tiles 3", tiles3);
-		//jtp.addTab("Paths", paths);
-		//jtp.addTab("Build", buildings);
-		//jtp.addTab("Tools", tools);
-		//jtp.addTab("Extra", extra);
 		jtp.addTab("Main", main);
 		jtp.setBounds(0, 576, 816, 91); //720, 91
 		basicPane.add(jtp, new Integer(1));
@@ -229,13 +201,13 @@ public class Editor extends JFrame implements ActionListener, AdjustmentListener
 		Menu.ed.basicPane.add(tilesList, new Integer(9));
 		
 		inList = new JLabel();
-		inList.setBounds(0, 0, 300, 716);
+		inList.setBounds(0, 0, 300, 1074); //+358
 		tilesList.add(inList);
 		
 		scroll = new JScrollBar();
 		scroll.setUI(new QwestScrollUI());
 		scroll.setMinimum(0);
-		scroll.setMaximum(358);
+		scroll.setMaximum(716); //+358
 		scroll.setBounds(304, 10, 20, tilesList.getHeight() - 20);
 		scroll.addAdjustmentListener(Menu.ed);
 		tilesList.add(scroll);
@@ -270,6 +242,7 @@ public class Editor extends JFrame implements ActionListener, AdjustmentListener
 		}
 		if (block == 97) {
 			map[xFill][yFill].setIcon(whiteOpaque);
+			mapFile[xFill][yFill] = -1;
 		}
 		if (block == 99) {
 			JOptionPane.showMessageDialog(null, xFill + " " + yFill);
