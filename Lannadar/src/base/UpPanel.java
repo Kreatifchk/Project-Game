@@ -29,7 +29,10 @@ public class UpPanel extends JLabel {
 	MobMp mpM = new MobMp(); //Панель с манной моба
 	MobLevel lvlM = new MobLevel();
 	
+	NameLoc nameLocation = new NameLoc();
+	
 	Font smw = InitFont.smw.deriveFont(19F);
+	Font determ = InitFont.determ.deriveFont(26F);
 	
 	public UpPanel() {
 		Border border = BorderFactory.createLineBorder(Color.BLACK, 2);
@@ -61,6 +64,9 @@ public class UpPanel extends JLabel {
 		lvlM.setBounds(656, 18, 47, 31);//560
 		lvlM.setVisible(false);
 		
+		//Название локации
+		nameLocation.setBounds(171, 2, 475, 47);
+		
 		this.add(hp);
 		this.add(mp);
 		this.add(exp);
@@ -70,6 +76,8 @@ public class UpPanel extends JLabel {
 		this.add(hpM);
 		this.add(mpM);
 		this.add(lvlM);
+		
+		this.add(nameLocation);
 		
 		Game.pl.hpMax = Game.pl.endurance*2;
 		Game.pl.hpThis = Game.pl.hpMax;
@@ -182,6 +190,19 @@ public class UpPanel extends JLabel {
 			
 			int x = (getWidth() - pixW) / 2;
 			g2d.drawString("" + Battle.mobLevel, x, 26);
+		}
+	}
+	
+	class NameLoc extends JLabel {
+		public void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			Graphics2D g2d = (Graphics2D) g;
+			g2d.setFont(determ);
+			g2d.setColor(Color.BLACK);
+			int pixW = (int) determ.getStringBounds
+					(LocationList.locations[Game.currentLocation].name, new FontRenderContext(null, true, true)).getWidth();
+			g2d.drawString(LocationList.locations[Game.currentLocation].name,
+					(getWidth() - pixW) / 2, 30);
 		}
 	}
 	

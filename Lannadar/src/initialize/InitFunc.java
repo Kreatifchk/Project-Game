@@ -3,6 +3,7 @@ package initialize;
 import base.Game;
 import base.HashList;
 import base.ItemList;
+import base.LocationList;
 import base.MonsterList;
 import base.NPCList;
 import base.PortalList;
@@ -12,6 +13,7 @@ import inventory.InventList;
 public class InitFunc {
 	
 	public InitFunc() {
+		new LocationList();
 		new HashList();
 		new InventList();
 		new QwestList();

@@ -47,10 +47,10 @@ MouseWheelListener {
 		
 		if (v != true) {
 			if (a.getComponent() == Editor.fill) {
-				Editor.block = 96;
+				Editor.block = 996;
 			}
 			else if (a.getComponent() == Editor.empty) {
-				Editor.block = 97;
+				Editor.block = 997;
 			}
 			else if (a.getComponent() == Editor.save) {
 				Editor.saveLevel();
@@ -59,7 +59,7 @@ MouseWheelListener {
 				Editor.eo.fillMap();
 			}
 			else if (a.getComponent() == Editor.define) {
-				Editor.block = 99;
+				Editor.block = 999;
 			}
 			else if (a.getComponent() == Editor.tilesB) {
 				//Если лист тайлов не открыт - открыть, иначе закрыть
@@ -163,9 +163,9 @@ MouseWheelListener {
 		int rot = a.getWheelRotation();
 		if (openedList == true) {
 			if (rot < 0) {
-				Editor.scroll.setValue(Editor.scroll.getValue() - a.getScrollAmount() * 6);
+				Editor.scroll.setValue(Editor.scroll.getValue() - a.getScrollAmount() * 7);
 			} else {
-				Editor.scroll.setValue(Editor.scroll.getValue() + a.getScrollAmount() * 6);
+				Editor.scroll.setValue(Editor.scroll.getValue() + a.getScrollAmount() * 7);
 			}
 		}
 	}

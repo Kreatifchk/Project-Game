@@ -28,7 +28,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.Timer;
 import javax.swing.border.Border;
 
-import initialize.TilesImage;
 import menu.Menu;
 
 @SuppressWarnings("serial")
@@ -46,7 +45,7 @@ public class Editor extends JFrame implements ActionListener, AdjustmentListener
 	EditorListener m = new EditorListener();
 	static EditorOpen eo = new EditorOpen();
 	
-	static int block = 97; //Выбранный инструмент
+	static int block = 297; //Выбранный инструмент
 	static int xClick, yClick;
 	//Координаты клика
 	static int xFill, yFill; //Номер тайла который будет заменен/установлен
@@ -97,8 +96,6 @@ public class Editor extends JFrame implements ActionListener, AdjustmentListener
 		add(basicPane);
 		addKeyListener(new Keypad());
 		setFocusable(true);
-
-		new TilesImage();
 		
 		delete = new ImageIcon(getClass().getResource(pathF + "delete.png"));
 		fillI  = new ImageIcon(getClass().getResource(pathF + "fill.png"));
@@ -201,13 +198,13 @@ public class Editor extends JFrame implements ActionListener, AdjustmentListener
 		Menu.ed.basicPane.add(tilesList, new Integer(9));
 		
 		inList = new JLabel();
-		inList.setBounds(0, 0, 300, 1074); //+358
+		inList.setBounds(0, 0, 300, 1432); //+358
 		tilesList.add(inList);
 		
 		scroll = new JScrollBar();
 		scroll.setUI(new QwestScrollUI());
 		scroll.setMinimum(0);
-		scroll.setMaximum(716); //+358
+		scroll.setMaximum(1074); //+358
 		scroll.setBounds(304, 10, 20, tilesList.getHeight() - 20);
 		scroll.addAdjustmentListener(Menu.ed);
 		tilesList.add(scroll);
@@ -232,7 +229,7 @@ public class Editor extends JFrame implements ActionListener, AdjustmentListener
 			mapFile[xFill][yFill] = block;
 		}	
 		
-		if (block == 96) {
+		if (block == 996) {
 			for (int i = 0; i < map[0].length; i++) {
 				for (int j = 0; j < map.length; j++) {
 					map[j][i].setIcon(lastTool);
@@ -240,11 +237,11 @@ public class Editor extends JFrame implements ActionListener, AdjustmentListener
 				}
 			}
 		}
-		if (block == 97) {
+		if (block == 997) {
 			map[xFill][yFill].setIcon(whiteOpaque);
 			mapFile[xFill][yFill] = -1;
 		}
-		if (block == 99) {
+		if (block == 999) {
 			JOptionPane.showMessageDialog(null, xFill + " " + yFill);
 		}
 	}
