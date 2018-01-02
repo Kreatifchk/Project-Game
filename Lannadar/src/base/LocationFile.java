@@ -31,11 +31,12 @@ public class LocationFile {
 		}
 		
 		//Проверяет не изменен ли файл
-		if (!hash.equals(HashList.hashList[Game.currentLocation])) {
+		/*if (!hash.equals(HashList.hashList[Game.currentLocation])) {
 			return false;
 		} else {
 			return true;
-		}
+		}*/
+		return true;
 	}
 	
 	private static String getHash() {

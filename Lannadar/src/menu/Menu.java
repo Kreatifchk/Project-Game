@@ -309,7 +309,7 @@ public class Menu extends JFrame {
 		try {
 			player.open(new BufferedInputStream(Game.class.getResourceAsStream("res/music/Antarctica.mp3")));
 			player.play();
-			player.setGain(0.30);
+			player.setGain(Settings.volume);
 		} catch (BasicPlayerException e) {
 			e.printStackTrace();
 		}

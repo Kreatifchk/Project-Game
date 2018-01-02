@@ -1,10 +1,12 @@
 package base;
 
+import java.awt.Point;
+
 import javax.swing.ImageIcon;
 
 public class TileList {
 	
-	static Tiles[] tiles = new Tiles[99]; //Все тайлы
+	static Tiles[] tiles = new Tiles[139]; //Все тайлы
 	
 	String file = "/base/res/Image/Tiles/";
 	
@@ -14,7 +16,7 @@ public class TileList {
 		tiles[2] = new Tiles("Дерево 1", true, new ImageIcon(getClass().getResource(file + "three.png")));
 		tiles[3] = new Tiles("Вода", true, new ImageIcon(getClass().getResource(file + "water.png")));
 		tiles[4] = new Tiles("Горы", true, new ImageIcon(getClass().getResource(file + "mount.png")));
-		tiles[5] = new Tiles("Дом 01", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home01.png")));
+		tiles[5] = new Tiles("Дом 01", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home01.png")), 1);
 		tiles[6] = new Tiles("Кирпичная дорога", false, new ImageIcon(getClass().getResource(file + "brickPath.png")));
 		tiles[7] = new Tiles("Кирпичная стена", true, new ImageIcon(getClass().getResource(file + "brickWallP.png")));
 		tiles[8] = new Tiles("Кирпичная стена", true, new ImageIcon(getClass().getResource(file + "brickWall.png")));
@@ -22,9 +24,9 @@ public class TileList {
 		tiles[10] = new Tiles("Мост", false, new ImageIcon(getClass().getResource(file + "bridge.png")));
 		tiles[11] = new Tiles("Дерево 02", true, new ImageIcon(getClass().getResource(file + "three2.png")));
 		tiles[12] = new Tiles("Вода с пляжем", true, new ImageIcon(getClass().getResource(file + "water1.png")));
-		tiles[13] = new Tiles("Дом 02", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home02.png")));
-		tiles[14] = new Tiles("Дом 03", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home03.png")));
-		tiles[15] = new Tiles("Горящий дом", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/homeFire.png")), true, 0);
+		tiles[13] = new Tiles("Дом 02", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home02.png")), 1);
+		tiles[14] = new Tiles("Дом 03", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home03.png")), 1);
+		tiles[15] = new Tiles("Горящий дом", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/homeFire.png")), true, 0, 1);
 		tiles[16] = new Tiles("Пол в доме", false, new ImageIcon(getClass().getResource(file + "flooring.png")));
 		tiles[17] = new Tiles("Стена дома", true, new ImageIcon(getClass().getResource(file + "HomeWall.png")));
 		tiles[18] = new Tiles("Стена дома", true, new ImageIcon(getClass().getResource(file + "HomeWallRight.png")));
@@ -40,21 +42,21 @@ public class TileList {
 		tiles[28] = new Tiles("Колодец", true, new ImageIcon(getClass().getResource(file + "well.png")));
 		tiles[29] = new Tiles("Городская дорога", false, new ImageIcon(getClass().getResource(file + "townRoad.png")));
 		tiles[30] = new Tiles("Городской газон", false, new ImageIcon(getClass().getResource(file + "cityGrass.png")));
-		tiles[31] = new Tiles("Дом 04", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home04A.png")));
-		tiles[32] = new Tiles("Дом 04", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home04B.png")));
-		tiles[33] = new Tiles("Дом 04", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home04C.png")));
-		tiles[34] = new Tiles("Дом 04", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home04D.png")));
-		tiles[35] = new Tiles("Дом 05", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home05A.png")));
-		tiles[36] = new Tiles("Дом 05", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home05B.png")));
-		tiles[37] = new Tiles("Дом 05", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home05C.png")));
-		tiles[38] = new Tiles("Дом 05", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home05D.png")));
+		tiles[31] = new Tiles("Дом 04", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home04A.png")), 1);
+		tiles[32] = new Tiles("Дом 04", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home04B.png")), 1);
+		tiles[33] = new Tiles("Дом 04", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home04C.png")), 1);
+		tiles[34] = new Tiles("Дом 04", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home04D.png")), 1);
+		tiles[35] = new Tiles("Дом 05", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home05A.png")), 1);
+		tiles[36] = new Tiles("Дом 05", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home05B.png")), 1);
+		tiles[37] = new Tiles("Дом 05", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home05C.png")), 1);
+		tiles[38] = new Tiles("Дом 05", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home05D.png")), 1);
 		tiles[39] = new Tiles("Клумба", true, new ImageIcon(getClass().getResource(file + "flowerbed.png")));
 		tiles[40] = new Tiles("Фонтан", true, new ImageIcon(getClass().getResource(file + "fountain.png")));
 		tiles[41] = new Tiles("Колонна", true, new ImageIcon(getClass().getResource(file + "columnUp.png")));
 		tiles[42] = new Tiles("Колонна", true, new ImageIcon(getClass().getResource(file + "columnDown.png")));
 		tiles[43] = new Tiles("Статуя", true, new ImageIcon(getClass().getResource(file + "statues.png")));
 		tiles[44] = new Tiles("Дерево 03", true, new ImageIcon(getClass().getResource(file + "three3.png")));
-		tiles[45] = new Tiles("Асфальт", false, new ImageIcon(getClass().getResource(file + "cityF.png")));
+		tiles[45] = new Tiles("Руна на камне", false, new ImageIcon(getClass().getResource(file + "rune.png")));
 		tiles[46] = new Tiles("Асфальт", false, new ImageIcon(getClass().getResource(file + "cityFL.png")));
 		tiles[47] = new Tiles("Асфальт", false, new ImageIcon(getClass().getResource(file + "cityFR.png")));
 		tiles[48] = new Tiles("Набережная", true, new ImageIcon(getClass().getResource(file + "cityWaterR.png")));
@@ -66,10 +68,10 @@ public class TileList {
 		tiles[54] = new Tiles("Набережная", true, new ImageIcon(getClass().getResource(file + "cityWaterLD.png")));
 		tiles[55] = new Tiles("Набережная", true, new ImageIcon(getClass().getResource(file + "cityWaterRU.png")));
 		tiles[56] = new Tiles("Набережная", true, new ImageIcon(getClass().getResource(file + "cityWaterLU.png")));
-		tiles[57] = new Tiles("Дом 06", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home06A.png")));
-		tiles[58] = new Tiles("Дом 06", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home06B.png")));
-		tiles[59] = new Tiles("Дом 06", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home06C.png")));
-		tiles[60] = new Tiles("Дом 06", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home06D.png")));
+		tiles[57] = new Tiles("Дом 06", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home06A.png")), 1);
+		tiles[58] = new Tiles("Дом 06", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home06B.png")), 1);
+		tiles[59] = new Tiles("Дом 06", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home06C.png")), 1);
+		tiles[60] = new Tiles("Дом 06", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home06D.png")), 1);
 		tiles[61] = new Tiles("Клумба", true, new ImageIcon(getClass().getResource(file + "flowerbedV.png")));
 		tiles[62] = new Tiles("Доска объявлений", true, new ImageIcon(getClass().getResource(file + "cityBoard.png")));
 		tiles[63] = new Tiles("Городская стена", true, new ImageIcon(getClass().getResource(file + "cityWallUp.png")));
@@ -97,17 +99,57 @@ public class TileList {
 		tiles[85] = new Tiles("Башня городской стены (двойная)", true, new ImageIcon(getClass().getResource(file + "wallTowerRLD.png")));
 		tiles[86] = new Tiles("Фонарь (слева)", true, new ImageIcon(getClass().getResource(file + "cityLantern.png")));
 		tiles[87] = new Tiles("Фонарь (справа)", true, new ImageIcon(getClass().getResource(file + "cityLanternRigth.png")));
-		tiles[88] = new Tiles("Дом 07", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home07A.png")));
-		tiles[89] = new Tiles("Дом 07", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home07B.png")));
-		tiles[90] = new Tiles("Дом 07", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home07C.png")));
-		tiles[91] = new Tiles("Дом 07", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home07D.png")));
+		tiles[88] = new Tiles("Дом 07", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home07A.png")), 1);
+		tiles[89] = new Tiles("Дом 07", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home07B.png")), 1);
+		tiles[90] = new Tiles("Дом 07", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home07C.png")), 1);
+		tiles[91] = new Tiles("Дом 07", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home07D.png")), 1);
 		tiles[92] = new Tiles("Забор", true, new ImageIcon(getClass().getResource(file + "cityFenceLeft.png")));
 		tiles[93] = new Tiles("Забор", true, new ImageIcon(getClass().getResource(file + "cityFence.png")));
 		tiles[94] = new Tiles("Забор", true, new ImageIcon(getClass().getResource(file + "cityFenceRigth.png")));
-		tiles[95] = new Tiles("Дом 08", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home08A.png")));
-		tiles[96] = new Tiles("Дом 08", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home08B.png")));
-		tiles[97] = new Tiles("Дом 08", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home08C.png")));
-		tiles[98] = new Tiles("Дом 08", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home08D.png")));
+		tiles[95] = new Tiles("Дом 08", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home08A.png")), 1).setPoint(2, new Point(0, 0), file + "Main/home08.png");
+		tiles[96] = new Tiles("Дом 08", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home08B.png")), 1).setPoint(2, new Point(1, 0));
+		tiles[97] = new Tiles("Дом 08", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home08C.png")), 1).setPoint(2, new Point(1, 1));
+		tiles[98] = new Tiles("Дом 08", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home08D.png")), 1).setPoint(2, new Point(0, 1));
+		tiles[99] = new Tiles("Дом 09", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home09A.png")), 1).setPoint(1, new Point(0, 0), file + "Main/home09.png");
+		tiles[100] = new Tiles("Дом 09", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home09B.png")), 1).setPoint(1, new Point(1, 0));
+		tiles[101] = new Tiles("Дом 09", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home09C.png")), 1).setPoint(1, new Point(1, 1));
+		tiles[102] = new Tiles("Дом 09", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/home09D.png")), 1).setPoint(1, new Point(0, 1));
+		tiles[103] = new Tiles("Башня магов (левая часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/WizardTown1_1.png")), 1).setPoint(0, new Point(0, 0), file + "Main/wizardTown.png");
+		tiles[104] = new Tiles("Башня магов (левая часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/WizardTown1_2.png")), 1).setPoint(0, new Point(1, 0));
+		tiles[105] = new Tiles("Башня магов (левая часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/WizardTown1_3.png")), 1).setPoint(0, new Point(0, 1));
+		tiles[106] = new Tiles("Башня магов (левая часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/WizardTown1_4.png")), 1).setPoint(0, new Point(1, 1));
+		tiles[107] = new Tiles("Башня магов (центр. часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/MagicBounce/0_0.png")), true, 2, 1).setPoint(0, new Point(2, 0));
+		tiles[108] = new Tiles("Башня магов (центр. часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/MagicBounce/1_0.png")), true, 3, 1).setPoint(0, new Point(3, 0));
+		tiles[109] = new Tiles("Башня магов (центр. часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/MagicBounce/2_0.png")), true, 4, 1).setPoint(0, new Point(2, 1));
+		tiles[110] = new Tiles("Башня магов (центр. часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/MagicBounce/3_0.png")), true, 5, 1).setPoint(0, new Point(3, 1));
+		tiles[111] = new Tiles("Башня магов (правая часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/WizardTown1_5.png")), 1).setPoint(0, new Point(4, 0));
+		tiles[112] = new Tiles("Башня магов (правая часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/WizardTown1_6.png")), 1).setPoint(0, new Point(5, 0));
+		tiles[113] = new Tiles("Башня магов (правая часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/WizardTown1_7.png")), 1).setPoint(0, new Point(4, 1));
+		tiles[114] = new Tiles("Башня магов (правая часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/WizardTown1_8.png")), 1).setPoint(0, new Point(5, 1));
+		tiles[115] = new Tiles("Башня магов (левая часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/WizardTown1_9.png")), 1).setPoint(0, new Point(0, 2));
+		tiles[116] = new Tiles("Башня магов (левая часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/WizardTown1_10.png")), 1).setPoint(0, new Point(1, 2));
+		tiles[117] = new Tiles("Башня магов (левая часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/WizardTown1_11.png")), 1).setPoint(0, new Point(0, 3));
+		tiles[118] = new Tiles("Башня магов (левая часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/WizardTown1_12.png")), 1).setPoint(0, new Point(1, 3));
+		tiles[119] = new Tiles("Башня магов (центр. часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/WizardTown1_13.png")), 1).setPoint(0, new Point(2, 2));
+		tiles[120] = new Tiles("Башня магов (центр. часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/WizardTown1_14.png")), 1).setPoint(0, new Point(3, 2));
+		tiles[121] = new Tiles("Башня магов (центр. часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/WizardTown1_15.png")), 1).setPoint(0, new Point(2, 3));
+		tiles[122] = new Tiles("Башня магов (центр. часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/WizardTown1_16.png")), 1).setPoint(0, new Point(3, 3));
+		tiles[123] = new Tiles("Башня магов (правая часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/WizardTown1_17.png")), 1).setPoint(0, new Point(4, 2));
+		tiles[124] = new Tiles("Башня магов (правая часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/WizardTown1_18.png")), 1).setPoint(0, new Point(5, 2));
+		tiles[125] = new Tiles("Башня магов (правая часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/WizardTown1_19.png")), 1).setPoint(0, new Point(4, 3));
+		tiles[126] = new Tiles("Башня магов (правая часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/WizardTown1_20.png")), 1).setPoint(0, new Point(5, 3));
+		tiles[127] = new Tiles("Башня магов (левая часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/WizardTown1_21.png")), 1).setPoint(0, new Point(0, 4));
+		tiles[128] = new Tiles("Башня магов (левая часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/WizardTown1_22.png")), 1).setPoint(0, new Point(1, 4));
+		tiles[129] = new Tiles("Башня магов (левая часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/WizardTown1_23.png")), 1).setPoint(0, new Point(0, 5));
+		tiles[130] = new Tiles("Башня магов (левая часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/WizardTown1_24.png")), 1).setPoint(0, new Point(1, 5));
+		tiles[131] = new Tiles("Башня магов (центр. часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/WizardTown1_25.png")), 1).setPoint(0, new Point(2, 4));
+		tiles[132] = new Tiles("Башня магов (центр. часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/WizardTown1_26.png")), 1).setPoint(0, new Point(3, 4));
+		tiles[133] = new Tiles("Башня магов (центр. часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/WizardTown1_27.png")), 1).setPoint(0, new Point(2, 5));
+		tiles[134] = new Tiles("Башня магов (центр. часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/WizardTown1_28.png")), 1).setPoint(0, new Point(3, 5));
+		tiles[135] = new Tiles("Башня магов (правая часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/WizardTown1_29.png")), 1).setPoint(0, new Point(4, 4));
+		tiles[136] = new Tiles("Башня магов (правая часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/WizardTown1_30.png")), 1).setPoint(0, new Point(5, 4));
+		tiles[137] = new Tiles("Башня магов (правая часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/WizardTown1_31.png")), 1).setPoint(0, new Point(4, 5));
+		tiles[138] = new Tiles("Башня магов (правая часть)", true, new ImageIcon(getClass().getResource(file + "TilesBuilding/WizardTown1_32.png")), 1).setPoint(0, new Point(5, 5));
 	}
 	
 }

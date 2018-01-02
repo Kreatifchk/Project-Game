@@ -64,7 +64,7 @@ public class Game extends JFrame implements Runnable {
 	static boolean stop; //Не дает двигаться бесконечно при нажатии на кнопку
 	static boolean informB = false; //Надо ли закрыть окно с информацией
 	
-	static int currentLocation = 1; 
+	static int currentLocation = 8800; 
 	static int oldLocation = 0;
 	static int direction; //Направление движения
 
@@ -227,6 +227,7 @@ public class Game extends JFrame implements Runnable {
 			super.paintComponents(g);
 			Graphics2D g2d = (Graphics2D)g;
 			g2d.drawImage(player, pl.x, pl.y, null);
+			//g2d.drawImage(player, pl.x, pl.y, 96, 96, null);
 		}
 	}
 	

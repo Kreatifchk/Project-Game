@@ -2,7 +2,7 @@ package base;
 
 public class LocationList {
 	
-	public static Location[] locations = new Location[9];
+	public static Location[] locations = new Location[7];
 	
 	public LocationList() {
 		locations[0] = new Location(-1, "null", -1);

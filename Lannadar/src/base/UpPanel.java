@@ -199,10 +199,13 @@ public class UpPanel extends JLabel {
 			Graphics2D g2d = (Graphics2D) g;
 			g2d.setFont(determ);
 			g2d.setColor(Color.BLACK);
-			int pixW = (int) determ.getStringBounds
-					(LocationList.locations[Game.currentLocation].name, new FontRenderContext(null, true, true)).getWidth();
-			g2d.drawString(LocationList.locations[Game.currentLocation].name,
-					(getWidth() - pixW) / 2, 30);
+			try {
+				int pixW = (int) determ.getStringBounds
+						(LocationList.locations[Game.currentLocation].name, new FontRenderContext(null, true, true)).getWidth();
+				g2d.drawString(LocationList.locations[Game.currentLocation].name,
+						(getWidth() - pixW) / 2, 30);
+			} catch (Exception e) {
+			}
 		}
 	}
 	

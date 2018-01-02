@@ -4,7 +4,7 @@ import javax.swing.ImageIcon;
 
 public class Massiv {
 	
-	static ImageIcon[][] animIcon = new ImageIcon[2][];
+	static ImageIcon[][] animIcon = new ImageIcon[6][];
 	
 	public void massiv() {
 		init();
@@ -46,6 +46,22 @@ public class Massiv {
 		animIcon[1][3] = new ImageIcon(getClass().getResource(path + "Animate/GrassFire/4.png"));
 		animIcon[1][4] = new ImageIcon(getClass().getResource(path + "Animate/GrassFire/5.png"));
 		animIcon[1][5] = new ImageIcon(getClass().getResource(path + "Animate/GrassFire/6.png"));
+		
+		animIcon[2] = new ImageIcon[8];
+		animIcon[3] = new ImageIcon[8];
+		animIcon[4] = new ImageIcon[8];
+		animIcon[5] = new ImageIcon[8];
+		for (int i = 2; i < 6; i++) {
+			for (int j = 0; j < 4; j++) {
+				animIcon[i][j] = new ImageIcon(getClass().getResource(path + "TilesBuilding/MagicBounce/" + (i-2) + "_" + j + ".png"));
+			}
+			int numb = 4;
+			for (int k = 7; k > 3; k--) {
+				animIcon[i][numb] = new ImageIcon(getClass().getResource(path + "TilesBuilding/MagicBounce/" + (i-2) + "_" + (k-4) + ".png"));
+				numb++;
+			}
+			System.out.println();
+		}
 	}
 	
 }

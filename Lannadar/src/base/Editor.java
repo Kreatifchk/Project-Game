@@ -54,13 +54,15 @@ public class Editor extends JFrame implements ActionListener, AdjustmentListener
 	static int length = 0; //Подсчитывает количество заполненных строк в файле с порталами
 	static int lastToolN; //Определяет последний инструмент для заливки
 	
+	static int tab = 0; //Номер открытой вкладки
+	
 	static boolean portalClick; //Определяет: поставил ли игрок портал, прежде чем вызвать окна конфигурации
 	static boolean warning; //Определяет выдавалось ли предупрежддение о порталах
 	
 	static String numberLevel; //В нее записывается номер уровня при сохранении
 	static String[] portalConf = new String[32];
 	
-	static JLabel[][] map = new JLabel[17][12]; //Массив для отрисовки
+	static EditorPoint[][] map = new EditorPoint[17][12]; //Массив для отрисовки
 	static int[][] mapFile = new int[map.length][map[0].length];
 	//Массив для сохранения данных
 	
@@ -172,11 +174,11 @@ public class Editor extends JFrame implements ActionListener, AdjustmentListener
 	private void massiv() {
 		//Стартовое заполнение
 		int x = 0;
-		int y = 0;
+		int y = 0;	
 		for (int i = 0; i < map[0].length; i++) {
 			for (int j = 0; j < map.length; j++) {
 				mapFile[j][i] = 0;
-				map[j][i] = new JLabel();
+				map[j][i] = new EditorPoint();
 				map[j][i].setIcon(whiteOpaque);
 				map[j][i].setBounds(x, y, 48, 48);
 				basicPane.add(map[j][i], new Integer(1));
@@ -189,13 +191,34 @@ public class Editor extends JFrame implements ActionListener, AdjustmentListener
 	
 	static JLabel inList;
 	static JScrollBar scroll;
+	static JButton mainB = new JButton("MainTiles");
+	static JButton builds = new JButton("Здания");
 	protected static void tilesList() {
+		
 		tilesList = new JLabel();
-		tilesList.setBounds((Menu.ed.getWidth() - 326)/2, (Menu.ed.getHeight() - 358)/2-40, 328, 358);
+		tilesList.setBounds((Menu.ed.getWidth() - 328)/2, (Menu.ed.getHeight() - 358)/2-10, 328, 358);
 		tilesList.setBackground(new Color(100, 90, 110));
 		tilesList.setOpaque(true);
 		tilesList.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
 		Menu.ed.basicPane.add(tilesList, new Integer(9));
+		
+		/* Кнопки переключения категорий */
+		mainB.setBounds(tilesList.getX(), tilesList.getY()-30, 164, 30);
+		Menu.ed.basicPane.add(mainB, new Integer(9));
+		mainB.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent a) {
+				Menu.ed.clear(0);
+			}
+		});
+		builds.setBounds(tilesList.getX() + 164, tilesList.getY()-30, 164, 30);
+		Menu.ed.basicPane.add(builds, new Integer(9));
+		builds.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent a) {
+				Menu.ed.clear(1);
+			}
+		});
 		
 		inList = new JLabel();
 		inList.setBounds(0, 0, 300, 1432); //+358
@@ -211,6 +234,17 @@ public class Editor extends JFrame implements ActionListener, AdjustmentListener
 		Menu.ed.revalidate();
 	}
 	
+	private void clear(int tab) {
+		for (int i = 0; i < Editor.allTiles.length; i++) {
+			if (TileList.tiles[i].tab == Editor.tab) {
+				inList.remove(Editor.allTiles[i]);
+			}
+		}
+		Editor.tab = tab;
+		new EditorTile();
+		scroll.setValue(0);
+	}
+	
 	public static void click(int x, int y) {
 		if (x <= 48) {
 			xFill = 0;
@@ -224,10 +258,30 @@ public class Editor extends JFrame implements ActionListener, AdjustmentListener
 			yFill = y / 48;
 		}
 
+		//Установка тайла на карту
 		if (block >= 0 & block < allTiles.length) {
-			map[xFill][yFill].setIcon(allTiles[block].getIcon());
-			mapFile[xFill][yFill] = block;
-		}	
+			//Установка мультитайлового объкета
+			if (TileList.tiles[block].point != null) {
+				try {
+				int idKit = TileList.tiles[block].idKit;
+				//Номер объекта
+				int tl = block;
+				while (TileList.tiles[tl].idKit == idKit) {
+					//Пока тайлы в массиве относятся к данному объекту
+					int xTile = TileList.tiles[tl].point.x, yTile = TileList.tiles[tl].point.y;
+					map[xFill+xTile][yFill+yTile].setIcon(TileList.tiles[tl].ic);
+					map[xFill+xTile][yFill+yTile].oldIcon = (ImageIcon) TileList.tiles[tl].ic;
+					mapFile[xFill+xTile][yFill+yTile] = tl;
+					tl++;
+				}
+				} catch (Exception e) {}
+			} else {
+				//Установка одиночного тайла
+				map[xFill][yFill].setIcon(allTiles[block].getIcon());
+				map[xFill][yFill].oldIcon = (ImageIcon) allTiles[block].getIcon();
+				mapFile[xFill][yFill] = block;
+			}
+		}
 		
 		if (block == 996) {
 			for (int i = 0; i < map[0].length; i++) {

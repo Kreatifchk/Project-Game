@@ -30,6 +30,7 @@ MouseWheelListener {
 	@Override
 	public void mousePressed(MouseEvent a) {
 		boolean v = false;
+		//Выбор тайла в меню выбора тайлов
 		for (int i = 0; i < Editor.allTiles.length; i++) {
 			if (a.getComponent() == Editor.allTiles[i]) {
 				Editor.block = i;
@@ -40,6 +41,8 @@ MouseWheelListener {
 				//Закрывает окно
 				openedList = false;
 				Menu.ed.basicPane.remove(Editor.tilesList);
+				Menu.ed.basicPane.remove(Editor.mainB);
+				Menu.ed.basicPane.remove(Editor.builds);
 				Editor.tilesList = null;
 				Editor.inList = null;
 			}
@@ -70,22 +73,25 @@ MouseWheelListener {
 				} else {
 					openedList = false;
 					Menu.ed.basicPane.remove(Editor.tilesList);
+					Menu.ed.basicPane.remove(Editor.mainB);
+					Menu.ed.basicPane.remove(Editor.builds);
 					Editor.tilesList = null;
 					Editor.inList = null;
 				}
 			}
+			//Установка тайла на карту (одиночная) или закрытия меню тайлов
 			else {
 				if (openedList == true) {
 					openedList = false;
 					Menu.ed.basicPane.remove(Editor.tilesList);
+					Menu.ed.basicPane.remove(Editor.mainB);
+					Menu.ed.basicPane.remove(Editor.builds);
 					Editor.tilesList = null;
 					Editor.inList = null;
 				}
 				Editor.xClick = a.getX();
 				Editor.yClick = a.getY();
 				Editor.click(Editor.xClick, Editor.yClick);
-				oldX = -1;
-				oldY = -1;
 			}
 		}
 	}
@@ -97,6 +103,7 @@ MouseWheelListener {
 	//MouseMovedListener
 	
 	//Вызывается когда мышь была нажата и передвинута
+	//Множественная установка тайлов
 	@Override
 	public void mouseDragged(MouseEvent a) {
 		int x = 0, y = 0;
@@ -114,15 +121,12 @@ MouseWheelListener {
 		
 		try {
 			Editor.map[x][y].setIcon(Editor.lastTool);
+			Editor.map[x][y].oldIcon = Editor.lastTool;
 			Editor.mapFile[x][y] = Editor.lastToolN;
 		} catch (ArrayIndexOutOfBoundsException e) {
 		}
-		oldX = -1;
-		oldY = -1;
 	}
 	
-	int oldX = -1, oldY = -1;
-	ImageIcon oldIcon;
 	//Вызывается когда мышь не была нажата и передвинута
 	@Override
 	public void mouseMoved(MouseEvent a) {
@@ -141,18 +145,30 @@ MouseWheelListener {
 		
 		//Показывает на клетке с курсором выбранный тайл в данный момент
 		if (Editor.block < TileList.tiles.length) {
-			if (oldX != -1 & oldY != -1) {
-				if (x != oldX || y != oldY) {
-					Editor.map[oldX][oldY].setIcon(oldIcon);
-					oldIcon = (ImageIcon) Editor.map[x][y].getIcon();
-					Editor.map[x][y].setIcon(TileList.tiles[Editor.block].ic);
+			//Сначала возвращает всем клеткам их иконку
+			for (int i = 0; i < Editor.map.length; i++) {
+				for (int j = 0; j < Editor.map[0].length; j++) {
+					Editor.map[i][j].returnIcon();
 				}
+			}
+			//Затем той на которой стоит мышь иконку активного тайла
+			if (TileList.tiles[Editor.block].point != null) {
+				//Показ мультитайлового объекта
+				try {
+				int idKit = TileList.tiles[Editor.block].idKit;
+				//Номер объекта
+				int tl = Editor.block;
+				while (TileList.tiles[tl].idKit == idKit) {
+					//Пока тайлы в массиве относятся к данному объекту
+					int xTile = TileList.tiles[tl].point.x, yTile = TileList.tiles[tl].point.y;
+					Editor.map[x+xTile][y+yTile].setIcon(TileList.tiles[tl].ic);
+					tl++;
+				}
+				} catch (Exception e) {}
 			} else {
-				oldIcon = (ImageIcon) Editor.map[x][y].getIcon();
+				//Если объект на один тайл
 				Editor.map[x][y].setIcon(TileList.tiles[Editor.block].ic);
 			}
-			oldX = x;
-			oldY = y;
 		}
 	}
 	
