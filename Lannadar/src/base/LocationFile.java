@@ -21,6 +21,7 @@ public class LocationFile {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	public static boolean openFile(InputStream f) {
 		String hash = null;
 		try {

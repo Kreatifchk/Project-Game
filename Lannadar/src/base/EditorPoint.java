@@ -3,6 +3,7 @@ package base;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+/** Клетка в редакторе локаций */
 @SuppressWarnings("serial")
 public class EditorPoint extends JLabel {
 	

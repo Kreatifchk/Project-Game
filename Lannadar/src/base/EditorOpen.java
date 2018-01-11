@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 public class EditorOpen {
@@ -60,6 +61,7 @@ public class EditorOpen {
 			for (int j = 0; j < Editor.map.length; j++) {
 				Editor.map[j][i].setIcon(TileList.tiles[Editor.mapFile[j][i]].ic);
 				Editor.map[j][i].setBounds(x, y, Game.TILE, Game.TILE);
+				Editor.map[j][i].oldIcon = TileList.tiles[Editor.mapFile[j][i]].ic;
 				x += Game.TILE;
 			}
 			x = 0;

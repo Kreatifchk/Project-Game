@@ -211,6 +211,7 @@ public class Editor extends JFrame implements ActionListener, AdjustmentListener
 				Menu.ed.clear(0);
 			}
 		});
+		
 		builds.setBounds(tilesList.getX() + 164, tilesList.getY()-30, 164, 30);
 		Menu.ed.basicPane.add(builds, new Integer(9));
 		builds.addActionListener(new ActionListener() {
@@ -235,11 +236,13 @@ public class Editor extends JFrame implements ActionListener, AdjustmentListener
 	}
 	
 	private void clear(int tab) {
-		for (int i = 0; i < Editor.allTiles.length; i++) {
-			if (TileList.tiles[i].tab == Editor.tab) {
-				inList.remove(Editor.allTiles[i]);
+		try {
+			for (int i = 0; i < Editor.allTiles.length; i++) {
+				if (TileList.tiles[i].tab == Editor.tab) {
+					inList.removeAll();
+				}
 			}
-		}
+		} catch (NullPointerException e) {}
 		Editor.tab = tab;
 		new EditorTile();
 		scroll.setValue(0);
@@ -287,14 +290,17 @@ public class Editor extends JFrame implements ActionListener, AdjustmentListener
 			for (int i = 0; i < map[0].length; i++) {
 				for (int j = 0; j < map.length; j++) {
 					map[j][i].setIcon(lastTool);
+					map[j][i].oldIcon = lastTool;
 					mapFile[j][i] = lastToolN;
 				}
 			}
 		}
+		//Удаление тайлов
 		if (block == 997) {
 			map[xFill][yFill].setIcon(whiteOpaque);
 			mapFile[xFill][yFill] = -1;
 		}
+		//Просмотр номера тайла по x и по y
 		if (block == 999) {
 			JOptionPane.showMessageDialog(null, xFill + " " + yFill);
 		}
