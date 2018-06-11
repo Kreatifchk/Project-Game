@@ -1,22 +1,18 @@
 package ru.kreatifchk.strategy2;
 
 import java.awt.Color;
-import java.awt.Point;
 import java.util.Random;
 
-public class Player {
+public class Player extends Entity {
 	
 	Random r = new Random();
 	
-	Color cl;
-	Point capital;
-	int id = 1001;
-	int money = 100;
-	int count; //Количество захваченных ячеек
-	int pointAction = 1;
-	
-	public Player() {
+	public Player(int id) {
 		cl = new Color(r.nextInt(255), r.nextInt(255), r.nextInt(255));
+		this.id = id;
+		money = 100;
+		count = 1;
+		pointAction = 1;
 	}
 	
 }

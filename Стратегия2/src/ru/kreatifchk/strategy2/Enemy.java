@@ -1,19 +1,11 @@
 package ru.kreatifchk.strategy2;
 
 import java.awt.Color;
-import java.awt.Point;
 import java.util.Random;
 
-public class Enemy {
+public class Enemy extends Entity {
 	
 	Random r = new Random();
-	
-	Color cl;
-	Point capital;
-	int id;
-	int money = 100;
-	int count;
-	int pointAction = 1;
 	
 	public Enemy(int id) {
 		this.id = id;
@@ -25,11 +17,16 @@ public class Enemy {
 				GameFrame.pm[x][y].busy = true;
 				GameFrame.pm[x][y].owner = id;
 				GameFrame.pm[x][y].setBackground(cl);
+				GameFrame.pm[x][y].mainColor = cl;
 				GameFrame.pm[x][y].capital = true;
-				capital = new Point(x, y);
+				capital = GameFrame.pm[x][y];
 				break;
 			}
 		}
+		
+		money = 100;
+		count = 1;
+		pointAction = 1;
 	}
 	
 }

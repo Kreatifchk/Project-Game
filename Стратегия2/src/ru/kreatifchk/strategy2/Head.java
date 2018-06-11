@@ -29,13 +29,13 @@ public class Head extends JLabel {
 		g2d.fillRect(0, 0, getWidth(), getHeight());
 		g2d.setColor(Color.black);
 		
-		String str = "Ход: " + GameFrame.turn;
+		String str = "РҐРѕРґ: " + GameFrame.turn;
 		int strWidth = (int) g2d.getFont().getStringBounds(str, frc).getWidth();
 		g2d.drawString(str, (GameFrame.head.getWidth() - strWidth) / 2, 25);
 		
-		g2d.drawString("Деньги: " + GameFrame.pl.money, 15, 25);
+		g2d.drawString("Р”РµРЅСЊРіРё: " + GameFrame.pl.money, 15, 25);
 		
-		str = "Очки действий: " + GameFrame.pl.pointAction;
+		str = "РћС‡РєРё РґРµР№СЃС‚РІРёР№: " + GameFrame.pl.pointAction;
 		strWidth = (int) g2d.getFont().getStringBounds(str, frc).getWidth();
 		g2d.drawString(str, GameFrame.head.getWidth() - strWidth - 15, 25);
 	}

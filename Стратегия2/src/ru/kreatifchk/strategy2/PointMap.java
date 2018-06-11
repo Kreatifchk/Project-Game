@@ -1,5 +1,6 @@
 package ru.kreatifchk.strategy2;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -9,6 +10,7 @@ import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+/** РљР»Р°СЃСЃ - РєР»РµС‚РєР° РЅР° РєР°СЂС‚Рµ */
 @SuppressWarnings("serial")
 public class PointMap extends JLabel implements ActionListener {
 	
@@ -17,11 +19,13 @@ public class PointMap extends JLabel implements ActionListener {
 	int number;
 	int xMap, yMap;
 	
-	int owner = -1; //Владелец
-	boolean busy; //Занята ли уже клетка (для генерации)
-	boolean capital = false; //Если эта клетка столица
+	int owner = -1; //Р’Р»Р°РґРµР»РµС†
+	boolean busy; //Р—Р°РЅСЏС‚Р° Р»Рё СѓР¶Рµ РєР»РµС‚РєР° (РґР»СЏ РіРµРЅРµСЂР°С†РёРё)
+	boolean capital = false; //РЎС‚РѕР»РёС†Р°
 	
 	int army = 500;
+	
+	Color mainColor;
 	
 	public PointMap(int number, int x, int y) {
 		this.number = number;
@@ -42,7 +46,7 @@ public class PointMap extends JLabel implements ActionListener {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
+	public void actionPerformed(ActionEvent a) {
 	}
 	
 }

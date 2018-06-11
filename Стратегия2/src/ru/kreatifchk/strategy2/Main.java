@@ -14,8 +14,13 @@ public class Main {
 	public static void main(String[] args) {
 		height = Toolkit.getDefaultToolkit().getScreenSize().height;
 		width = Toolkit.getDefaultToolkit().getScreenSize().width;
-		windHeight = (int)(height / 100 * 85);
-		windWidth = (int)(width / 100 *  85);
+		if (width == 1920 & height == 1080) {
+			windHeight = (int)(height / 100 * 72);
+			windWidth = (int)(width / 100 *  72);
+		} else {
+			windHeight = (int)(height / 100 * 85);
+			windWidth = (int)(width / 100 *  85);
+		}
 		
 		gf = new GameFrame(25, 25);
 		gf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -1,7 +1,6 @@
 package ru.kreatifchk.strategy2;
 
 import java.awt.Color;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -19,26 +18,39 @@ import javax.swing.Timer;
 @SuppressWarnings("serial")
 public class GameFrame extends JFrame implements MouseListener, MouseMotionListener, ActionListener {
 	
+	/* Комментарии по разработке
+	 * 1 - уменьшить чувствительность, чтоб лучше реагировало на нажатия
+	 * Заблокировать движения окна пока открыто GUI
+	 * Для атаки - учитывать развитие технологий, типы юнитов
+	 * Сделать чтоб игроки не генерировались рядом
+	 * Сделать чтоб оставшиеся войска после атаки переходили в новую локацию
+	 * Уменьшать очки действий
+	 * Запретить атаковать когда армия - 0
+	 * Исправить проблему с заменой цвета конкурентов (при атаке)
+	 */
+	
 	static PointMap[][] pm;
-	PointInfo pInf; //������ � ����������� � ������
-	static Head head; //������� ������
+	PointInfo pInf; //Панель с информацией о клетке
+	static Head head; //Верхняя панель
 	static int sizePoint;
 	
 	static JLayeredPane mainPane = new JLayeredPane();
 	JLabel back = new JLabel();
-	static boolean info; //������� �� ������ ���������� � ������
-	static boolean attack; //������� �� ����� �����
+	static boolean info; //Открыта ли панель информации о клетке, или атака на клетку
+	static boolean attack; //Включен ли режим атаки
+	static PointMap selectPoint; //Выбранная клетка
 	
 	private Timer update = new Timer(20, this);
 	Random r = new Random();
 	
 	static Player pl;
-	ArrayList<Enemy> enemy = new ArrayList<Enemy>();
+	static ArrayList<Entity> entity = new ArrayList<Entity>();
 	
-	static int turn = 1; //����� ���� 
+	static int turn = 1; //Номер хода
+	static int idPlayer;
 	
 	public GameFrame(int x, int y) {
-		super("���������");
+		super("Стратегия");
 		genPole(x, y);
 		init();
 		
@@ -59,7 +71,7 @@ public class GameFrame extends JFrame implements MouseListener, MouseMotionListe
 		add(head);
 		
 		pm = new PointMap[x][y];
-		sizePoint = (int)(Main.width / 100 * 7); //������ ������
+		sizePoint = (int)(Main.windWidth / 100 * 7); //Размер клетки
 		
 		x = 0;
 		y = 0;
@@ -70,6 +82,7 @@ public class GameFrame extends JFrame implements MouseListener, MouseMotionListe
 				pm[i][j].setBounds(x, y, sizePoint, sizePoint);
 				pm[i][j].setOpaque(true);
 				pm[i][j].setBackground(Color.lightGray);
+				pm[i][j].mainColor = Color.LIGHT_GRAY;
 				pm[i][j].setBorder(BorderFactory.createLineBorder(Color.black, 2));
 				mainPane.add(pm[i][j], new Integer(1));
 				x += sizePoint;
@@ -79,10 +92,10 @@ public class GameFrame extends JFrame implements MouseListener, MouseMotionListe
 			y += sizePoint;
 		}
 		
-		//���� ������ ������ ��� ���� �������� ��
-		//����� �� ������
+		//Если клеток больше чем поле сдвигать их
+		//Сдвиг по ширине
 		if (pm.length * sizePoint > Main.windWidth) {
-			double z = pm.length * sizePoint - Main.windWidth; //������� �������� �� �������
+			double z = pm.length * sizePoint - Main.windWidth; //Сколько пикселей за экраном
 			z = Math.round(z / 2);
 			int s = (int) z;
 			
@@ -92,9 +105,9 @@ public class GameFrame extends JFrame implements MouseListener, MouseMotionListe
 				}
 			}
 		}
-		//����� �� ������
+		//Сдвиг по высоте
 		if (pm[0].length * sizePoint > Main.windHeight) {
-			double z = pm[0].length * sizePoint - Main.windHeight; //������� �������� �� �������
+			double z = pm[0].length * sizePoint - Main.windHeight; //Сколько пикселей за экраном
 			z = Math.round(z / 2);
 			int s = (int) z;
 			
@@ -107,43 +120,57 @@ public class GameFrame extends JFrame implements MouseListener, MouseMotionListe
 	}
 	
 	private void init() {
-		//��������� ������
-		pl = new Player();
-		pl.capital = new Point(pm.length / 2, pm[0].length / 2);
-		pm[pl.capital.x][pl.capital.y].setBackground(pl.cl);
-		pm[pl.capital.x][pl.capital.y].busy = true;
-		pm[pl.capital.x][pl.capital.y].owner = 1001;
-		pm[pl.capital.x][pl.capital.y].capital = true;
-		
-		//������ ������ - 1000 , ��� ��� id ������ 1001
-		//��������� ������
+		//Предел врагов - 1000 , так как id игрока 1001
+		//Генерация врагов
 		int ct = r.nextInt(9) + 5;
 		for (int i = 0; i < ct; i++) {
-			enemy.add(new Enemy(i));
+			entity.add(new Enemy(i));
+		}
+		
+		//Генерация игрока
+		idPlayer = entity.size();
+		pl = new Player(idPlayer);
+		entity.add(pl);
+		pl.capital = pm[pm.length/2][pm[0].length/2];
+		pm[pl.capital.xMap][pl.capital.yMap].setBackground(pl.cl);
+		pm[pl.capital.xMap][pl.capital.yMap].mainColor = pl.cl;
+		pm[pl.capital.xMap][pl.capital.yMap].busy = true;
+		pm[pl.capital.xMap][pl.capital.yMap].owner = idPlayer;
+		pm[pl.capital.xMap][pl.capital.yMap].capital = true;
+	}
+	
+	protected static void clearColor() {
+		//Возвращение своих цветов клеткам окрашеным для выделения диапазона нападения
+		for (int j = 0; j < GameFrame.pm[0].length; j++) {
+			for (int i = 0; i < GameFrame.pm.length; i++) {
+				if (!GameFrame.pm[i][j].getBackground().equals(GameFrame.pm[i][j].mainColor)) {
+					GameFrame.pm[i][j].setBackground(GameFrame.pm[i][j].mainColor);
+				}
+			}
 		}
 	}
 	
-	//MouseMovedListener
+	//MouseMovedListener - движение поля мышью
 	int startX, startY;
 	@Override
 	public void mouseDragged(MouseEvent a) {
 		if (a.getSource() == mainPane) {
 			int incX = 0, incY = 0;
 			if (a.getX() - startX > 1 & pm[0][0].getX() < 0) {
-				//���� ������
+				//Поле вправо
 				incX = 9;
 			} else if (a.getX() - startX < -1
 					& pm[pm.length-1][0].getX() > Main.windWidth - sizePoint) {
-				//���� �����
+				//Поле влево
 				incX = - 9;
 			}
 			
 			if (a.getY() - startY > 1 & pm[0][0].getY() < 0) {
-				//���� ����
+				//Поле вниз
 				incY = 9;
 			} else if (a.getY() - startY < -1
 					& pm[0][pm[0].length-1].getY() > Main.windHeight-sizePoint-25) {
-				//���� �����
+				//Поле вверх
 				incY = -9;
 			}
 			
@@ -166,17 +193,55 @@ public class GameFrame extends JFrame implements MouseListener, MouseMotionListe
 	public void mouseClicked(MouseEvent a) {
 		try {
 			PointMap pm = (PointMap) mainPane.getComponentAt(a.getX(), a.getY());
-			pInf = new PointInfo(pm.xMap, pm.yMap);
+			//Клик по клетке
 			if (attack != true) {
+				selectPoint = pm;
+				//Если не атакуешь
 				if (info == false) {
+					pInf = new PointInfo(pm.xMap, pm.yMap);
 					mainPane.add(pInf, new Integer(2));
 					info = true;
 				} else {
-					mainPane.remove(mainPane.getComponentsInLayer(2)[0]);
+					mainPane.remove(pInf); //mainPane.getComponentsInLayer(2)[0]
 					info = false;
+					selectPoint = null;
+					pInf = null;
 				}
 			} else {
-				
+				//Если нажата атака
+				if (info == false) {
+					pm = (PointMap) mainPane.getComponentAt(a.getX(), a.getY()); //На какую клетку нажали
+					AttackGUI agui = new AttackGUI(pm.xMap, pm.yMap, selectPoint.xMap, selectPoint.yMap);
+					//Нажата кнопка атака и выбрана клетка для атаки, идет проверкаЮ что нажали куда следует
+					if (pm.xMap == selectPoint.xMap + 1 & pm.yMap == selectPoint.yMap) {
+						//Rigth
+						mainPane.add(agui, new Integer(3));
+						clearColor();
+						info = true;
+					}
+					else if (pm.xMap == selectPoint.xMap - 1 & pm.yMap == selectPoint.yMap) {
+						//Left
+						mainPane.add(agui, new Integer(3));
+						clearColor();
+						info = true;
+					}
+					else if (pm.yMap == selectPoint.yMap + 1 & pm.xMap == selectPoint.xMap) {
+						//Down
+						mainPane.add(agui, new Integer(3));
+						clearColor();
+						info = true;
+					}
+					else if (pm.yMap == selectPoint.yMap - 1 & pm.xMap == selectPoint.xMap) {
+						//Up
+						mainPane.add(agui, new Integer(3));
+						clearColor();
+						info = true;
+					}
+				} else {
+					mainPane.remove(mainPane.getComponentsInLayer(3)[0]);
+					info = false;
+					attack = false;
+				}
 			}
 		} catch (Exception e) {}
 	}
