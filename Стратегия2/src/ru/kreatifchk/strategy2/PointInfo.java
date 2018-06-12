@@ -19,10 +19,13 @@ public class PointInfo extends GUICenter implements ActionListener {
 	
 	JButton attack, recruit; //Конпка атака и найм войск
 	
-	public PointInfo(int x, int y) {
-		xMap = x;
-		yMap = y;
-		
+	PointMap pm;
+	
+	public PointInfo(PointMap pm) {
+		xMap = pm.xMap;
+		yMap = pm.yMap;
+		this.pm = pm;
+	
 		attack = new JButton("Атака");
 		attack.setBounds(GUIManager.getCenter(110, 2, getWidth()), 400, 110, 50);
 		attack.addActionListener(this);
@@ -44,7 +47,7 @@ public class PointInfo extends GUICenter implements ActionListener {
 	public void actionPerformed(ActionEvent a) {
 		if (a.getSource() == attack) {
 			GameFrame.mainPane.remove(this);
-			GameFrame.info = false;
+			GameFrame.GUIOpened = false;
 			GameFrame.attack = true;
 			//GameFrame.selectPoint = new Point(xMap, yMap);
 			
@@ -61,8 +64,8 @@ public class PointInfo extends GUICenter implements ActionListener {
 			GameFrame.pm[xMap][yMap-1].setBackground(new Color(cl.getRed(),
 					cl.getBlue(), cl.getGreen(), 30));
 		} else if (a.getSource() == recruit) {
-			//GameFrame.mainPane.remove(this);
-			add(new GUIRecruit(getWidth(), getHeight()));
+			this.setVisible(false);
+			GameFrame.mainPane.add(new GUIRecruit(pm), new Integer(3));
 		}
 	}
 	

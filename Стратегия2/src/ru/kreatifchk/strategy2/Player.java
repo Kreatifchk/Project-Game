@@ -12,7 +12,6 @@ public class Player extends Entity {
 		this.id = id;
 		money = 100;
 		count = 1;
-		pointAction = 1;
 	}
 	
 }
