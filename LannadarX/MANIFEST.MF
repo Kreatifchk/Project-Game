@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: ru.kreatifchk.main.Main
+Class-Path: lib//fst-2.55.jar lib/jackson-core-2.5.3.jar lib/objenesis-2.5.1.jar
+
