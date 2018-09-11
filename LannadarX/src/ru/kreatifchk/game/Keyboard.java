@@ -21,9 +21,6 @@ public class Keyboard implements KeyListener {
 		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 			dir = Player.Direction.right;
 		}
-		if (e.getKeyCode() == KeyEvent.VK_0) {
-			System.out.println(Game.pl.xMap + " " + Game.pl.yMap);
-		}
 	}
 
 	@Override

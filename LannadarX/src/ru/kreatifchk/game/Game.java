@@ -1,8 +1,9 @@
 package ru.kreatifchk.game;
 
-import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 
-import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -15,7 +16,7 @@ import ru.kreatifchk.main.Menu;
 public class Game extends JFrame {
 	
 	protected static JLayeredPane mainPane = new JLayeredPane();
-	protected static JLabel tilePanel = new JLabel();
+	protected static JLabel tilePanel = new TileLabel();
 	
 	static Player pl;//Класс игрока
 	
@@ -45,10 +46,9 @@ public class Game extends JFrame {
 		arragement();
 		
 		//Запуск таймера для ОЗУ
-		Timer t = new Timer(16, (e) -> {
-			//long memory = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024;
-			//setTitle("lannadar " + memory);
-			//repaint();
+		Timer t = new Timer(17, (e) -> {
+			long memory = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024;
+			setTitle("lannadar " + memory);
 			updateGraphics();
 		});
 		t.start();
@@ -59,11 +59,14 @@ public class Game extends JFrame {
 	//Первичная компоновка
 	private void arragement() {
 		mainPane.setBounds(0, 0, getWidth(), getHeight());
-		mainPane.setDoubleBuffered(true);
+		//mainPane.setDoubleBuffered(true);
+		mainPane.setOpaque(true);
 		add(mainPane);
 		
 		//Панель на которой будет расположено игровое поле
 		tilePanel.setBounds(0, 0, mainPane.getWidth(), (int)(624*Main.INC));
+		tilePanel.setOpaque(true);
+		//tilePanel.setDoubleBuffered(true);
 		mainPane.add(tilePanel, new Integer(0));
 		
 		//Панель со здоровььем маной и.т.д игрока
@@ -77,15 +80,7 @@ public class Game extends JFrame {
 		
 		//Добавляем на карту игрока
 		mainPane.add(pl, new Integer(1));
-		
-		guk = new JLabel();
-		guk.setOpaque(true);
-		guk.setBackground(Color.WHITE);
-		guk.setBounds(300, 200, 70, 30);
-		guk.setText(pl.xMap + " " + pl.yMap);
-		mainPane.add(guk, new Integer(10));
 	}
-	static JLabel guk;
 	
 	//Отрисовывает карту
 	private void initMap() {
@@ -121,20 +116,13 @@ public class Game extends JFrame {
 		int x = xPrimal, y = yPrimal;
 		for (int i = 0; i < map[0].length; i++) {
 			for (int j = 0; j < map.length; j++) {
-				if (Main.INC == 1) {
-					//Из какой-то хрени с размерами
-					map[j][i].setLocation(x, y - 10);
-				} else {
-					map[j][i].setLocation(x, y);
-				}
+				map[j][i].setLocation(x, y);
 				
-				
-				tilePanel.add(map[j][i], new Integer(0));
+				//tilePanel.add(map[j][i], new Integer(0));
+				//mainPane.add(map[j][i], new Integer(0));
 				
 				//Указать местонахождение персонажа
 				if (i == pl.yMap & j == pl.xMap) {
-					pl.xFrame = j;
-					pl.yFrame = i;
 					pl.setBounds(x, y, (int)(48*Main.INC), (int)(48*Main.INC));
 				}
 				
@@ -153,16 +141,60 @@ public class Game extends JFrame {
 		}
 		
 		if (pl.localDir != Player.Direction.stand & tm % 128 == 0) {
-			//pl.changeFrame(Keyboard.dir);
 			pl.changeFrame(pl.localDir);
 		}
-		repaint();
+		mainPane.repaint();
 	}
 	
-	protected static class MapPoint extends JLabel {
-		boolean solid;
+	//Класс панели на которой рисуется карта
+	private static class TileLabel extends JLabel {
+		BufferedImage img;
+		//VolatileImage img; //Изображение создающееся с использование GPU
+		//Отрисовываем карту на буффере
+		private void drawBuffer() {
+			int width = map.length * Tile.SIZE;
+			int height = map[0].length * Tile.SIZE;
+			img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+			//img = tilePanel.createVolatileImage(width, height);
+			Graphics2D g2d = img.createGraphics();
+			
+			int x = 0, y = 0;
+			for (int i = 0; i < map[0].length; i++) {
+				for (int j = 0; j < map.length; j++) {
+					g2d.drawImage(TilesList.tiles[map[j][i].number].icon.getImage(), x, y, null);
+					x += Tile.SIZE;
+				}
+				x = 0;
+				y += Tile.SIZE;
+			}
+			
+			g2d.dispose();
+		}
+		@Override
+		public void paintComponent(Graphics g) {
+			Graphics2D g2d = (Graphics2D) g;
+			if (img == null) {
+				drawBuffer();
+			}
+			g2d.drawImage(img, map[0][0].getX(), map[0][0].getY(), null);
+		}
+	}
+	
+	protected static class MapPoint {
+		boolean solid; //твердый ли тайл
+		int number; //Номер тайла в массиве тайлов
+		private int x, y;
 		public MapPoint() {
-			//setBorder(BorderFactory.createLineBorder(Color.black, 1));
+		}
+		public int getX() {
+			return x;
+		}
+		public int getY() {
+			return y;
+		}
+		public void setLocation(int x, int y) {
+			this.x = x;
+			this.y = y;
 		}
 	}
 	
