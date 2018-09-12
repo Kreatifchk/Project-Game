@@ -66,7 +66,6 @@ public class Game extends JFrame {
 		//Панель на которой будет расположено игровое поле
 		tilePanel.setBounds(0, 0, mainPane.getWidth(), (int)(624*Main.INC));
 		tilePanel.setOpaque(true);
-		//tilePanel.setDoubleBuffered(true);
 		mainPane.add(tilePanel, new Integer(0));
 		
 		//Панель со здоровььем маной и.т.д игрока
@@ -117,9 +116,6 @@ public class Game extends JFrame {
 		for (int i = 0; i < map[0].length; i++) {
 			for (int j = 0; j < map.length; j++) {
 				map[j][i].setLocation(x, y);
-				
-				//tilePanel.add(map[j][i], new Integer(0));
-				//mainPane.add(map[j][i], new Integer(0));
 				
 				//Указать местонахождение персонажа
 				if (i == pl.yMap & j == pl.xMap) {

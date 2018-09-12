@@ -30,8 +30,7 @@ public class Player extends JComponent {
 	protected Direction localDir = Direction.stand; //Куда движется персонаж (независимая от нажатия переменная для анимации)
 	
 	/** Направление движения */
-	protected static enum Direction {up, down, left, right, stand};
-	
+	public static enum Direction {up, down, left, right, stand};
 	
 	public Player() {
 		//this.setBorder(BorderFactory.createLineBorder(Color.MAGENTA, 2));
@@ -141,7 +140,6 @@ public class Player extends JComponent {
 					SwingUtilities.invokeLater(() -> {
 						Game.map[j2][i2].setLocation(Game.map[j2][i2].getX() + x2, Game.map[j2][i2].getY() + y2);
 					});
-					//Game.mainPane.repaint();
 				}
 			}
 			Sleep.sleep(17);

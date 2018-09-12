@@ -6,8 +6,7 @@ import java.awt.Image;
 
 import javax.swing.JButton;
 
-import ru.kreatifchk.main.Main;
-import ru.kreatifchk.tools.Img;
+import ru.kreatifchk.main.ImageInit;
 
 /** Кнопки для редактора (сверху) */
 @SuppressWarnings("serial")
@@ -16,14 +15,14 @@ public class EditorButton extends JButton {
 	boolean selected, pressed;
 	int type;
 	
-	Image buttEd = Img.Image(Main.class.getResource("/ru/kreatifchk/res/image/editor/buttEd.png"));
-	Image buttEdEntered = Img.Image(Main.class.getResource("/ru/kreatifchk/res/image/editor/buttEdEntered.png"));
-	Image buttEdActivated = Img.Image(Main.class.getResource("/ru/kreatifchk/res/image/editor/buttEdActivated.png"));
+	Image buttEd = ImageInit.buttEd;
+	Image buttEdEntered = ImageInit.buttEdEntered;
+	Image buttEdActivated = ImageInit.buttEdActivated;
 	
-	Image createT = Img.Image(Main.class.getResource("/ru/kreatifchk/res/image/editor/createT.png"));
-	Image openT = Img.Image(Main.class.getResource("/ru/kreatifchk/res/image/editor/openT.png"));
-	Image saveT = Img.Image(Main.class.getResource("/ru/kreatifchk/res/image/editor/saveT.png"));
-	Image closeT = Img.Image(Main.class.getResource("/ru/kreatifchk/res/image/editor/closeT.png"));
+	Image createT = ImageInit.createT;
+	Image openT = ImageInit.openT;
+	Image saveT = ImageInit.saveT;
+	Image closeT = ImageInit.closeT;
 	
 	public EditorButton(int type, int width, int height) {
 		setSize(width, height);

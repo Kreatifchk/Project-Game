@@ -57,6 +57,8 @@ public class LoadMap {
 					//Game.map[j][i].setSize(p[j][i].getSize());
 				}
 			}
+			
+			p = null;
 		} else {
 			JOptionPane.showMessageDialog(Game.mainPane, "\u041e\u0448\u0438\u0431\u043a\u0430 "
 					+ "\u043e\u0442\u043a\u0440\u044b\u0442\u0438\u044f \u043a\u0430\u0440\u0442\u044b\u0021");

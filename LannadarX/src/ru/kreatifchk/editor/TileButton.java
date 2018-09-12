@@ -8,21 +8,22 @@ import java.awt.geom.Ellipse2D;
 
 import javax.swing.JButton;
 
+import ru.kreatifchk.main.ImageInit;
 import ru.kreatifchk.main.Main;
-import ru.kreatifchk.tools.Img;
 
 /** Кнопки для наборов тайлов и инструментов */
 @SuppressWarnings("serial")
 public class TileButton extends JButton {
 	
-	Image tileForestI = Img.Image(Main.class.getResource("/ru/kreatifchk/res/image/editor/tilesForest.png"));
-	Image tileCityI = Img.Image(Main.class.getResource("/ru/kreatifchk/res/image/editor/tilesCity.png"));
-	Image fillI = Img.Image(Main.class.getResource("/ru/kreatifchk/res/image/editor/fill.png"));
-	Image deleteI = Img.Image(Main.class.getResource("/ru/kreatifchk/res/image/editor/delete.png"));
+	Image tileForestI = ImageInit.tileForestI;
+	Image tileCityI = ImageInit.tileCityI;
+	Image fillI = ImageInit.fillI;
+	Image deleteI = ImageInit.deleteI;
+	Image transitI = ImageInit.transitI;
 	
-	Image tilesButtonBord = Img.Image(Main.class.getResource("/ru/kreatifchk/res/image/editor/tilesButtonBord.png"));
-	Image tilesButtonEnt = Img.Image(Main.class.getResource("/ru/kreatifchk/res/image/editor/tilesButtonEnt.png"));
-	Image tilesButtonAct = Img.Image(Main.class.getResource("/ru/kreatifchk/res/image/editor/tilesButtonAct.png"));
+	Image tilesButtonBord = ImageInit.tilesButtonBord;
+	Image tilesButtonEnt = ImageInit.tilesButtonEnt;
+	Image tilesButtonAct = ImageInit.tilesButtonAct;
 	
 	boolean selected, pressed;
 	int number; //Номер набора тайлов
@@ -51,10 +52,14 @@ public class TileButton extends JButton {
 		else if (number == 1) {
 			g2d.drawImage(tileCityI, 0, 0, null);
 		}
-		else if (number == 998) {
+		else if (number == 996) {
 			g2d.drawImage(deleteI, 0, 0, null);
-		}else if (number == 999) {
+		}
+		else if (number == 997) {
 			g2d.drawImage(fillI, 0, 0, null);
+		}
+		else if (number == 998) {
+			g2d.drawImage(transitI, 0, 0, null);
 		}
 		
 		

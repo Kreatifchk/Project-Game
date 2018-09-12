@@ -22,9 +22,9 @@ import ru.kreatifchk.tools.Resize;
 
 public class LannadarSliderUI extends MetalSliderUI {
 	
-	Image track = new ImageIcon(Main.class.getResource("/ru/kreatifchk/res/image/editor/123.png")).getImage();
-	Image trackFull = new ImageIcon(Main.class.getResource("/ru/kreatifchk/res/image/editor/333.png")).getImage();
-	Image thumb = new ImageIcon(Main.class.getResource("/ru/kreatifchk/res/image/editor/331.png")).getImage();
+	Image track = new ImageIcon(Main.class.getResource("/ru/kreatifchk/res/image/editor/trackSlider.png")).getImage();
+	Image trackFull = new ImageIcon(Main.class.getResource("/ru/kreatifchk/res/image/editor/trackFullSlider.png")).getImage();
+	Image thumb = new ImageIcon(Main.class.getResource("/ru/kreatifchk/res/image/editor/thumbSlider.png")).getImage();
 	
 	JSlider js;
 	

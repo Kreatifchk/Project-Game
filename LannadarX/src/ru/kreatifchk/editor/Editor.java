@@ -15,17 +15,21 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.crypto.Cipher;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JSlider;
+import javax.swing.JTextField;
 import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
@@ -35,8 +39,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import org.nustaq.serialization.FSTObjectInput;
 import org.nustaq.serialization.FSTObjectOutput;
 
+import ru.kreatifchk.game.Player;
+import ru.kreatifchk.game.Player.Direction;
 import ru.kreatifchk.game.Tile;
 import ru.kreatifchk.game.TilesList;
+import ru.kreatifchk.main.Fonts;
 import ru.kreatifchk.main.Main;
 import ru.kreatifchk.main.Menu;
 import ru.kreatifchk.tools.Aes256;
@@ -47,6 +54,9 @@ import ru.kreatifchk.tools.Sleep;
 
 public class Editor extends JFrame implements ActionListener, ChangeListener, MouseListener, MouseMotionListener, Runnable, Serializable {
 	
+	//Сделать настройку предпоказа тайлов
+	//Сделать требование чтоб все тайлы были заполнены
+	
 	private static final long serialVersionUID = 3108L;
 	
 	JLabel topPanel, bottomPanel;
@@ -55,7 +65,7 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 	static JLayeredPane mainPane = new JLayeredPane();
 	Dialog dialog; //Диалоговое окно для создания локации
 	EditorButton createButton, openButton, closeButton, saveButton; //Кнопки в верхней панели
-	TileButton tileForest, tileCity, fill, delete;
+	TileButton tileForest, tileCity, fill, delete, transit;
 	PointEditor field[][]; //Поле - массив ячеек редактора которые заполняются редактором карты
 	TileKit tk; //Окно с выбором тайла из набора
 	
@@ -67,8 +77,13 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 	boolean openTile; //Открыто ли окно с тайлами
 	boolean fillMode; //Если нажали кнопку заливка
 	boolean deleteMode; //Если нажали кнопку удаления тайлов
-	boolean draw;
+	boolean draw; //Включен ли предпоказ тайлов (не реализовано)
+	boolean transitMode = false; //Включен ли режим установки переходных тайлов
+	boolean transitDialog; //Диалоговое окно для транзит мода
 	int buttonActive; //Какая кнопка мыши нажата
+	
+	private Player.Direction dirTransit = Player.Direction.down; //Выбранное направление перемещения
+	private String transitLocation; //В какую локацию перемещение
 	
 	Timer t = new Timer(20, new Repainter());
 	
@@ -193,15 +208,20 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 		tileCity.addMouseListener(this);
 		bottomPanel.add(tileCity);
 		
-		delete = new TileButton(998);
+		delete = new TileButton(996);
 		delete.setLocation((int)(140*Main.INC), 0);
 		delete.addMouseListener(this);
 		bottomPanel.add(delete);
 		
-		fill = new TileButton(999);
+		fill = new TileButton(997);
 		fill.setLocation((int)(200*Main.INC), 0);
 		fill.addMouseListener(this);
 		bottomPanel.add(fill);
+		
+		transit = new TileButton(998);
+		transit.setLocation((int)(260*Main.INC), 0);
+		transit.addMouseListener(this);
+		bottomPanel.add(transit);
 	}
 	
 	// Диалоговое окно для кнопки: создать локацию
@@ -225,7 +245,7 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 			widtValue.setSize((int)(18*Main.INC), (int)(18*Main.INC));
 			Center.cnt(widtValue, this, (int)(8*Main.INC));
 			add(widtValue);
-			widt = new JSlider(20, 120, 20);
+			widt = new JSlider(20, 140, 20);
 			widt.setBounds((int)(13*Main.INC), (int)(35*Main.INC), (int)(245*Main.INC), (int)(35*Main.INC));
 			widt.setMajorTickSpacing(10);
 			widt.setMinorTickSpacing(5);
@@ -243,7 +263,7 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 			heigValue.setSize((int)(18*Main.INC), (int)(18*Main.INC));
 			Center.cnt(heigValue, this, (int)(78*Main.INC));
 			add(heigValue);
-			heig = new JSlider(13, 120, 13);
+			heig = new JSlider(13, 140, 13);
 			heig.setBounds((int)(13*Main.INC), (int)(105*Main.INC), (int)(245*Main.INC), (int)(35*Main.INC));
 			heig.setMajorTickSpacing(10);
 			heig.setMinorTickSpacing(5);
@@ -263,7 +283,7 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 	@Override
 	public void actionPerformed(ActionEvent a) {
 		//Открытие всплывающего окна создания карты
-		if (a.getSource() == createButton & openDialog == false) {
+		if (a.getSource() == createButton & openDialog == false & transitDialog == false) {
 			openDialog = true;
 			
 			dialog = new Dialog();
@@ -272,77 +292,19 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 			mainPane.add(dialog, new Integer(2));
 		}
 		//Открытие диалогового окна открыть карту из файла
-		if (a.getSource() == openButton & openDialog == false) {
+		if (a.getSource() == openButton & openDialog == false & transitDialog == false) {
 			//Выбор файла для чтения
 			File read = new File("data/maps/"); //Путь к директории карт
 			JFileChooser jf = new JFileChooser(read.getAbsolutePath());
 			jf.setFileFilter(new FileNameExtensionFilter("Lannadar files", "lnd"));
 			jf.showOpenDialog(mainPane);
+			
 			read = new File(jf.getSelectedFile().getAbsolutePath());
 			openMap(read);
-			
-			/*byte[] buffer = null;
-			try {
-				//Считываем байты из зашифрованного файла в массив байтов
-				FileInputStream fis = new FileInputStream(read);
-				buffer = new byte[fis.available()];
-				fis.read(buffer, 0, fis.available());
-				fis.close();
-			} catch (IOException e2) {
-				e2.printStackTrace();
-			}
-			
-			//Расшифровываем и засовываем в массив байтов
-			byte[] shifr = new Aes256().makeAes(buffer, Cipher.DECRYPT_MODE);
-			
-			File tempFile = null;
-			
-			try {
-				//Создаем временный файл
-				tempFile = File.createTempFile("serial1", ".lnd");
-				//Записываем расшифрованные байты в файл
-				FileOutputStream fw = new FileOutputStream(tempFile);
-				fw.write(shifr);
-				fw.close();
-				//Превращаем байты в объекты
-				ObjectInputStream ois = new ObjectInputStream(new FileInputStream(tempFile));
-				Point[][] p = (Point[][]) ois.readObject();
-				ois.close();
-				
-				//Сначало удалить старую карту если есть
-				if (field != null) {
-					for (int i = 0; i < field[0].length; i++) {
-						for (int j = 0; j < field.length; j++) {
-							centerPanel.remove(field[j][i]);
-						}
-					}
-					field = null;
-				}
-				
-				//Потом создавать новую
-				field = new Point[p.length][p[0].length];
-				for (int i = 0; i < p[0].length; i++) {
-					for (int j = 0; j < p.length; j++) {
-						field[j][i] = new Point(j, i);
-						field[j][i].number = p[j][i].number;
-						field[j][i].setIcon(p[j][i].getIcon());
-						field[j][i].setBounds(p[j][i].getBounds());
-						field[j][i].setBorder(BorderFactory.createLineBorder(Color.black, 1));
-						centerPanel.add(field[j][i]);
-					}
-				}
-				//Удаляем временный файл
-				tempFile.deleteOnExit();
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}*/
 		}
+		System.out.println(transitDialog);
 		//Открытие всплывающего окна сохранение карты
-		if (a.getSource() == saveButton & openDialog == false & field != null) {
+		if (a.getSource() == saveButton & openDialog == false & transitDialog == false & field != null) {
 			//Позволяем выбрать папку сохранения карт и дать название файлу
 			File write = new File("data/maps/"); //Путь к директории карт
 			JFileChooser jf = new JFileChooser(write.getAbsolutePath());
@@ -398,7 +360,7 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 			}
 		}
 		//Нажатие кнопки "в меню"
-		if (a.getSource() == closeButton & openDialog == false) {
+		if (a.getSource() == closeButton & openDialog == false & transitDialog == false) {
 			//Если поля уже есть спросить еще раз
 			int rez = -1;
 			if (field != null) {
@@ -529,6 +491,64 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 			return x.substring(pos+1, x.length());
 		}
 	}
+	
+	/** Установка тайла в редакторе */
+	private void setTile(int xClick, int yClick) {
+		//Установка мультитайла
+		if (TilesList.tiles[actTile].width != -1 | TilesList.tiles[actTile].height != -1) {
+			for (int i = 0; i < TilesList.tiles[actTile].width; i++) {
+				for (int j = 0; j < TilesList.tiles[actTile].height; j++) {
+					field[xClick+j][yClick+i].setIcon(Img.ImageIcon(Main.class.getResource(
+							"/ru/kreatifchk/res/image/tiles/bigTiles/" + TilesList.tiles[actTile].nameFile + "" + j + "" + i + ".png")));
+					field[xClick+j][yClick+i].number = actTile;
+					field[xClick+j][yClick+i].izm = false;
+				}
+			}
+		} else {
+			//Или установка одного тайла
+			if (deleteMode == false & transitMode == false) {
+				//Если тайл анимированный то записать в клетку для потока анимации и установить иконку
+				if (TilesList.tiles[actTile].animate == true) {
+					field[xClick][yClick].anim = true;
+					field[xClick][yClick].setIcon(new AnimatedIcon(TilesList.tiles[actTile].icon2));
+				} else {
+					field[xClick][yClick].anim = false;
+					field[xClick][yClick].setIcon(TilesList.tiles[actTile].icon);
+				}
+				field[xClick][yClick].number = actTile;
+				field[xClick][yClick].izm = false;
+			} else if (deleteMode == true) {
+				//Режим удаления тайлов
+				field[xClick][yClick].setIcon(null);
+				field[xClick][yClick].number = -1;
+			} else if (transitMode == true) {
+				//Установка перемещений между локациями
+				if (field[xClick][yClick].transition.equals("")) {
+					int top = 1, left = 1, bottom = 1, right = 1;
+					if (dirTransit == Player.Direction.left) {
+						left = 5;
+					}
+					if (dirTransit == Player.Direction.right) {
+						right = 5;
+					}
+					if (dirTransit == Player.Direction.up) {
+						top = 5;
+					}
+					if (dirTransit == Player.Direction.down) {
+						bottom = 5;
+					}
+					field[xClick][yClick].setBorder(BorderFactory.createMatteBorder(top, left, bottom, right, Color.BLACK));
+					field[xClick][yClick].dirTrans = dirTransit;
+					field[xClick][yClick].transition = transitLocation;
+				} else {
+					//Удаление перемещений
+					field[xClick][yClick].setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+					field[xClick][yClick].dirTrans = null;
+					field[xClick][yClick].transition = "";
+				}
+			}
+		}
+	}
 
 	//Лисенер для JSLider во всплывающем окне
 	@Override
@@ -613,7 +633,7 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 		}
 		
 		//Рисование левой кнопкой мыши
-		if (a.getSource() == centerPanel & field != null & buttonActive == 1 & openTile == false) {
+		if (a.getSource() == centerPanel & field != null & buttonActive == 1 & openTile == false & transitMode == false) {
 			/*На какую клетку нажали
 			 * Берем клетку 0,0 и получаем значене в клетках до той что стоит в левом верхнем углу,
 			 * делаем значение положительным, и прибавляем к месту нажатия c учетом неполной клетки слева (и сверху если есть) 
@@ -622,43 +642,30 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 			int xClick = (-(field[0][0].getX() / Tile.SIZE)) + ((a.getX() + rem) / Tile.SIZE);
 			rem = -(field[0][0].getY() % Tile.SIZE);
 			int yClick = (-(field[0][0].getY() / Tile.SIZE)) + ((a.getY() + rem) / Tile.SIZE);
-			if (deleteMode == false) {
-				//Если тайл анимированный то записать в клетку для потока анимации
-				if (TilesList.tiles[actTile].animate == true) {
-					field[xClick][yClick].anim = true;
-				} else {
-					field[xClick][yClick].anim = false;
-				}
-				field[xClick][yClick].setIcon(TilesList.tiles[actTile].icon);
-				field[xClick][yClick].number = actTile;
-			} else {
-				field[xClick][yClick].setIcon(null);
-				field[xClick][yClick].number = -1;
-			}
-			field[xClick][yClick].izm = false; //Не дает убрать первый тайл системе предпоказа тайлов
+			
+			setTile(xClick, yClick);
 		}
 	}
 	
 	@Override
 	public void mouseMoved(MouseEvent a) {
 		//Показывает выбранный тайл на карте
-		if (field != null & deleteMode == false & openTile == false & draw == false) {
+		if (field != null & deleteMode == false & openTile == false & draw == false & transitMode == false) {
 			//Если какой-то тайл менял иконку возвращаем ему истинную иконку
 			for (int i = 0; i < field[0].length; i++) {
 				for (int j = 0; j < field.length; j++) {
 					if (field[j][i].izm == true) {
 						field[j][i].setIcon(field[j][i].oldIcon);
+						field[j][i].oldIcon = null;
 						field[j][i].izm = false;
 					}
 				}
 			}
-			
 			//Вычисляем клетку на которой курсор
 			int rem = -(field[0][0].getX() % Tile.SIZE);
 			int xClick = (-(field[0][0].getX() / Tile.SIZE)) + ((a.getX() + rem) / Tile.SIZE);
 			rem = -(field[0][0].getY() % Tile.SIZE);
 			int yClick = (-(field[0][0].getY() / Tile.SIZE)) + ((a.getY() + rem) / Tile.SIZE);
-			
 			//Устанавливаем "нашу иконку"
 			if (TilesList.tiles[actTile].width != -1 | TilesList.tiles[actTile].height != -1) {
 				//Для мультитайла
@@ -687,38 +694,13 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 		//Установка тайлов по одному, левой кнопкой мыши
 		if (a.getSource() == centerPanel & field != null & buttonActive == 1 & openTile == false) {
 			//Принцип аналогичен рисованию в mouseDragged
+			//Вычисляем клетку на которой курсор
 			int rem = -(field[0][0].getX() % Tile.SIZE);
 			int xClick = (-(field[0][0].getX() / Tile.SIZE)) + ((a.getX() + rem) / Tile.SIZE);
 			rem = -(field[0][0].getY() % Tile.SIZE);
 			int yClick = (-(field[0][0].getY() / Tile.SIZE)) + ((a.getY() + rem) / Tile.SIZE);
-			//Установка мультитайлов
-			if (TilesList.tiles[actTile].width != -1 | TilesList.tiles[actTile].height != -1) {
-				for (int i = 0; i < TilesList.tiles[actTile].width; i++) {
-					for (int j = 0; j < TilesList.tiles[actTile].height; j++) {
-						field[xClick+j][yClick+i].setIcon(Img.ImageIcon(Main.class.getResource(
-								"/ru/kreatifchk/res/image/tiles/bigTiles/" + TilesList.tiles[actTile].nameFile + "" + j + "" + i + ".png")));
-						field[xClick+j][yClick+i].number = actTile;
-						field[xClick+j][yClick+i].izm = false;
-					}
-				}
-			} else {
-				//Или установка одного тайла
-				if (deleteMode == false) {
-					//Если тайл анимированный то записать в клетку для потока анимации и установить иконку
-					if (TilesList.tiles[actTile].animate == true) {
-						field[xClick][yClick].anim = true;
-						field[xClick][yClick].setIcon(new AnimatedIcon(TilesList.tiles[actTile].icon2));
-					} else {
-						field[xClick][yClick].anim = false;
-						field[xClick][yClick].setIcon(TilesList.tiles[actTile].icon);
-					}
-					field[xClick][yClick].number = actTile;
-				} else {
-					field[xClick][yClick].setIcon(null);
-					field[xClick][yClick].number = -1;
-				}
-			}
-			field[xClick][yClick].izm = false; //Не дает убрать первый тайл системе предпоказа тайлов
+			
+			setTile(xClick, yClick);
 		}
 		//Закрыть окно с тайлами
 		if (a.getSource() == centerPanel & openTile == true) {
@@ -789,26 +771,118 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 			if (comp.number == 0) {
 				tk = new TileKit(0);
 				centerPanel.add(tk);
+				openTile = true;
 			}
 			if (comp.number == 1) {
 				tk = new TileKit(1);
 				centerPanel.add(tk);
+				openTile = true;
 			}
-			
-			openTile = true;
 			
 			//Инструменты
-			if (comp.number == 998) {
-				openTile = false;
+			if (comp.number == 996) {
 				if (deleteMode == false) {
 					deleteMode = true;
+					selectTile.setIcon(new ImageIcon(Resize.resizeA(comp.deleteI, (int)(43*Main.INC), (int)(43*Main.INC))));
 				} else {
 					deleteMode = false;
+					selectTile.setIcon(Resize.resizeIcon(TilesList.tiles[actTile].icon.getImage(), (int)(46*Main.INC), (int)(46*Main.INC)));
 				}
 			}
-			if (comp.number == 999) {
-				openTile = false;
+			if (comp.number == 997) {
 				fillMode = true;
+			}
+			if (comp.number == 998) {
+				if (transitMode == false) {
+					transitMode = true;
+					//Диалоговое окно для выбора названия файла и стороны перемещения
+					JLabel pd = new JLabel() {
+						private static final long serialVersionUID = 1L;
+						{
+							setOpaque(true);
+							setBackground(Color.LIGHT_GRAY);
+							setSize((int)(200*Main.INC), (int)(125*Main.INC));
+							setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
+							Center.cnt(this, mainPane);
+							
+							JLabel name = new JLabel("Название локации для перехода");
+							name.setOpaque(true);
+							name.setBackground(Color.WHITE);
+							name.setVerticalAlignment(JLabel.CENTER);
+							name.setHorizontalAlignment(JLabel.CENTER);
+							name.setFont(Fonts.chemuRetro.deriveFont(15F));
+							name.setBounds((int)(3*Main.INC), (int)(2*Main.INC), (int)(195*Main.INC), (int)(18*Main.INC));
+							add(name);
+							
+							JTextField jtf = new JTextField(12);
+							jtf.setBounds((int)(10*Main.INC), (int)(25*Main.INC), (int)(180*Main.INC), (int)(20*Main.INC));
+							jtf.setFont(Fonts.digitalThin.deriveFont(26F));
+							add(jtf);
+							
+							JLabel dir = new JLabel("Сторона с переходом");
+							dir.setOpaque(true);
+							dir.setBackground(Color.WHITE);
+							dir.setVerticalAlignment(JLabel.CENTER);
+							dir.setHorizontalAlignment(JLabel.CENTER);
+							dir.setFont(Fonts.chemuRetro.deriveFont(15F));
+							dir.setBounds((int)(3*Main.INC), (int)(50*Main.INC), (int)(195*Main.INC), (int)(18*Main.INC));
+							add(dir);
+							
+							String[] elements = {"Левая", "Правая", "Центр", "Низ", "Верх"};
+							JComboBox<String> jcb = new JComboBox<String>(elements);
+							jcb.setBounds((int)(44*Main.INC), (int)(71*Main.INC), (int)(110*Main.INC), (int)(20*Main.INC));
+							jcb.setFont(Fonts.harpseal.deriveFont(15F));
+							add(jcb);
+							
+							JButton ok = new JButton("Потвердить");
+							ok.setBounds((int)(10*Main.INC), (int)(95*Main.INC), (int)(80*Main.INC), (int)(25*Main.INC));
+							add(ok);
+							
+							JButton cancel = new JButton("Закрыть");
+							cancel.setBounds((int)(110*Main.INC), (int)(95*Main.INC), (int)(80*Main.INC), (int)(25*Main.INC));
+							cancel.addActionListener((e) -> mainPane.remove(this));
+							add(cancel);
+							
+							Pattern pat = Pattern.compile("[A-Za-z0-9А-я\\-]+");
+							
+							ok.addActionListener((e) -> {
+								Matcher m1 = pat.matcher(jtf.getText());
+								if (jtf.getText().length() > 15 || jtf.getText().length() <= 0) {
+									JOptionPane.showMessageDialog(this, "Длина названия должна быть в пределах от 0 до 15 символов!",
+											"Ошибка", JOptionPane.DEFAULT_OPTION);
+								} else if (!m1.matches()) {
+									JOptionPane.showMessageDialog(this, "В названии можно использовать только буквы"
+											+ "  английского \nи русского алфавита, цифры и тире!",
+											"Ошибка", JOptionPane.DEFAULT_OPTION);
+								} else {
+									//Если все умпешно закрываем окно и устанавливаем данные
+									transitLocation = jtf.getText() + ".lnd";
+									if (jcb.getSelectedIndex() == 0) {
+										dirTransit = Direction.left;
+									}
+									if (jcb.getSelectedIndex() == 1) {
+										dirTransit = Direction.right;
+									}
+									if (jcb.getSelectedIndex() == 2) {
+										dirTransit = Direction.stand;
+									}
+									if (jcb.getSelectedIndex() == 3) {
+										dirTransit = Direction.down;
+									}
+									if (jcb.getSelectedIndex() == 4) {
+										dirTransit = Direction.up;
+									}
+									mainPane.remove(this);
+								}
+							});
+						}
+					};
+					mainPane.add(pd, new Integer(10));
+					selectTile.setIcon(new ImageIcon(Resize.resizeA(comp.transitI, (int)(43*Main.INC), (int)(43*Main.INC))));
+				} else {
+					transitMode = false;
+					selectTile.setIcon(Resize.resizeIcon(TilesList.tiles[actTile].icon.getImage(), (int)(46*Main.INC), (int)(46*Main.INC)));
+				}
 			}
 		}
 	}
