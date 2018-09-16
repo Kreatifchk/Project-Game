@@ -8,8 +8,6 @@ import java.io.Serializable;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-import org.nustaq.serialization.annotations.Version;
-
 import ru.kreatifchk.game.Player;
 import ru.kreatifchk.game.Player.Direction;
 import ru.kreatifchk.game.Tile;
@@ -24,10 +22,9 @@ public class PointEditor extends JLabel implements Serializable {
 	transient ImageIcon oldIcon;
 	transient boolean izm; //Изменяли ли иконку (для предпросмотра тайлов
 	boolean anim; //Анимированный ли тайл
-	@Version(value = 1)
 	public String transition = ""; //На какую локацию можно перейти из этого тайла
-	@Version(value = 1)
 	public Player.Direction dirTrans = null; //В какую сторону необходимо двигаться для перехода
+	public int xTrans = -1, yTrans = -1; //Местоположение перемещения
 	
 	public PointEditor(int j, int i) {
 		//Подпись номеров боковых клеток

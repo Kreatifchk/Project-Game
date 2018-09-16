@@ -15,21 +15,17 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.crypto.Cipher;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JSlider;
-import javax.swing.JTextField;
 import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
@@ -40,10 +36,8 @@ import org.nustaq.serialization.FSTObjectInput;
 import org.nustaq.serialization.FSTObjectOutput;
 
 import ru.kreatifchk.game.Player;
-import ru.kreatifchk.game.Player.Direction;
 import ru.kreatifchk.game.Tile;
 import ru.kreatifchk.game.TilesList;
-import ru.kreatifchk.main.Fonts;
 import ru.kreatifchk.main.Main;
 import ru.kreatifchk.main.Menu;
 import ru.kreatifchk.tools.Aes256;
@@ -62,8 +56,9 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 	JLabel topPanel, bottomPanel;
 	static JLabel centerPanel;
 	
-	static JLayeredPane mainPane = new JLayeredPane();
+	static JLayeredPane mainPane;
 	Dialog dialog; //Диалоговое окно для создания локации
+	JLabel transDialog;
 	EditorButton createButton, openButton, closeButton, saveButton; //Кнопки в верхней панели
 	TileButton tileForest, tileCity, fill, delete, transit;
 	PointEditor field[][]; //Поле - массив ячеек редактора которые заполняются редактором карты
@@ -73,17 +68,18 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 	
 	JSlider widt, heig; //Слайдеры во всплывающем окне для выбора размера карты
 	
-	boolean openDialog; //Открыто ли диалоговое окно
-	boolean openTile; //Открыто ли окно с тайлами
-	boolean fillMode; //Если нажали кнопку заливка
+	private boolean openDialog; //Открыто ли диалоговое окно
+	private boolean openTile; //Открыто ли окно с тайлами
+	private boolean fillMode; //Если нажали кнопку заливка
 	boolean deleteMode; //Если нажали кнопку удаления тайлов
 	boolean draw; //Включен ли предпоказ тайлов (не реализовано)
-	boolean transitMode = false; //Включен ли режим установки переходных тайлов
+	static boolean transitMode = false; //Включен ли режим установки переходных тайлов
 	boolean transitDialog; //Диалоговое окно для транзит мода
 	int buttonActive; //Какая кнопка мыши нажата
 	
-	private Player.Direction dirTransit = Player.Direction.down; //Выбранное направление перемещения
-	private String transitLocation; //В какую локацию перемещение
+	protected static Player.Direction dirTransit = Player.Direction.down; //Выбранное направление перемещения
+	protected static String transitLocation; //В какую локацию перемещение
+	protected static int xTrans = 0, yTrans = 0; //На какое поле перемещается персонаж
 	
 	Timer t = new Timer(20, new Repainter());
 	
@@ -141,6 +137,7 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 	
 	// Первичная компоновка
 	private void arrangement() {
+		mainPane = new JLayeredPane();
 		mainPane.setBounds(0, 0, getWidth(), getHeight());
 		add(mainPane);
 		
@@ -245,7 +242,7 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 			widtValue.setSize((int)(18*Main.INC), (int)(18*Main.INC));
 			Center.cnt(widtValue, this, (int)(8*Main.INC));
 			add(widtValue);
-			widt = new JSlider(20, 140, 20);
+			widt = new JSlider(20, 120, 20);
 			widt.setBounds((int)(13*Main.INC), (int)(35*Main.INC), (int)(245*Main.INC), (int)(35*Main.INC));
 			widt.setMajorTickSpacing(10);
 			widt.setMinorTickSpacing(5);
@@ -263,7 +260,7 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 			heigValue.setSize((int)(18*Main.INC), (int)(18*Main.INC));
 			Center.cnt(heigValue, this, (int)(78*Main.INC));
 			add(heigValue);
-			heig = new JSlider(13, 140, 13);
+			heig = new JSlider(13, 120, 13);
 			heig.setBounds((int)(13*Main.INC), (int)(105*Main.INC), (int)(245*Main.INC), (int)(35*Main.INC));
 			heig.setMajorTickSpacing(10);
 			heig.setMinorTickSpacing(5);
@@ -302,7 +299,6 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 			read = new File(jf.getSelectedFile().getAbsolutePath());
 			openMap(read);
 		}
-		System.out.println(transitDialog);
 		//Открытие всплывающего окна сохранение карты
 		if (a.getSource() == saveButton & openDialog == false & transitDialog == false & field != null) {
 			//Позволяем выбрать папку сохранения карт и дать название файлу
@@ -368,6 +364,11 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 						"Потверждение", JOptionPane.YES_NO_OPTION);
 			}
 			if (field == null || rez == 0) {
+				field = null;
+				mainPane.remove(centerPanel);
+				centerPanel = null;
+				mainPane = null;
+				
 				setVisible(false);
 				dispose();
 				new Menu();
@@ -456,11 +457,32 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 				for (int j = 0; j < p.length; j++) {
 					field[j][i] = new PointEditor(j, i);
 					field[j][i].number = p[j][i].number;
+					field[j][i].dirTrans = p[j][i].dirTrans;
+					field[j][i].xTrans = p[j][i].xTrans;
+					field[j][i].yTrans = p[j][i].yTrans;
+					field[j][i].transition = p[j][i].transition;
 					field[j][i].setIcon(TilesList.tiles[p[j][i].number].getIcon());
 					field[j][i].setBounds(x, y, Tile.SIZE, Tile.SIZE);
 					field[j][i].setBorder(BorderFactory.createLineBorder(Color.black, 1));
 					centerPanel.add(field[j][i]);
 					x += Tile.SIZE;
+					
+					int left = 1, right = 1, top = 1, bottom = 1;
+					if (field[j][i].dirTrans != null) {
+						if (field[j][i].dirTrans == Player.Direction.left) {
+							left = 5;
+						}
+						if (field[j][i].dirTrans == Player.Direction.right) {
+							right = 5;
+						}
+						if (field[j][i].dirTrans == Player.Direction.up) {
+							top = 5;
+						}
+						if (field[j][i].dirTrans == Player.Direction.down) {
+							bottom = 5;
+						}
+						field[j][i].setBorder(BorderFactory.createMatteBorder(top, left, bottom, right, Color.BLACK));
+					}
 				}
 				x = 0;
 				y += Tile.SIZE;
@@ -494,6 +516,7 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 	
 	/** Установка тайла в редакторе */
 	private void setTile(int xClick, int yClick) {
+		field[xClick][yClick].oldIcon = null;
 		//Установка мультитайла
 		if (TilesList.tiles[actTile].width != -1 | TilesList.tiles[actTile].height != -1) {
 			for (int i = 0; i < TilesList.tiles[actTile].width; i++) {
@@ -540,11 +563,15 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 					field[xClick][yClick].setBorder(BorderFactory.createMatteBorder(top, left, bottom, right, Color.BLACK));
 					field[xClick][yClick].dirTrans = dirTransit;
 					field[xClick][yClick].transition = transitLocation;
+					field[xClick][yClick].xTrans = xTrans;
+					field[xClick][yClick].yTrans = yTrans;
 				} else {
 					//Удаление перемещений
 					field[xClick][yClick].setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 					field[xClick][yClick].dirTrans = null;
 					field[xClick][yClick].transition = "";
+					field[xClick][yClick].xTrans = -1;
+					field[xClick][yClick].yTrans = -1;
 				}
 			}
 		}
@@ -793,93 +820,14 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 				fillMode = true;
 			}
 			if (comp.number == 998) {
-				if (transitMode == false) {
-					transitMode = true;
-					//Диалоговое окно для выбора названия файла и стороны перемещения
-					JLabel pd = new JLabel() {
-						private static final long serialVersionUID = 1L;
-						{
-							setOpaque(true);
-							setBackground(Color.LIGHT_GRAY);
-							setSize((int)(200*Main.INC), (int)(125*Main.INC));
-							setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
-							Center.cnt(this, mainPane);
-							
-							JLabel name = new JLabel("Название локации для перехода");
-							name.setOpaque(true);
-							name.setBackground(Color.WHITE);
-							name.setVerticalAlignment(JLabel.CENTER);
-							name.setHorizontalAlignment(JLabel.CENTER);
-							name.setFont(Fonts.chemuRetro.deriveFont(15F));
-							name.setBounds((int)(3*Main.INC), (int)(2*Main.INC), (int)(195*Main.INC), (int)(18*Main.INC));
-							add(name);
-							
-							JTextField jtf = new JTextField(12);
-							jtf.setBounds((int)(10*Main.INC), (int)(25*Main.INC), (int)(180*Main.INC), (int)(20*Main.INC));
-							jtf.setFont(Fonts.digitalThin.deriveFont(26F));
-							add(jtf);
-							
-							JLabel dir = new JLabel("Сторона с переходом");
-							dir.setOpaque(true);
-							dir.setBackground(Color.WHITE);
-							dir.setVerticalAlignment(JLabel.CENTER);
-							dir.setHorizontalAlignment(JLabel.CENTER);
-							dir.setFont(Fonts.chemuRetro.deriveFont(15F));
-							dir.setBounds((int)(3*Main.INC), (int)(50*Main.INC), (int)(195*Main.INC), (int)(18*Main.INC));
-							add(dir);
-							
-							String[] elements = {"Левая", "Правая", "Центр", "Низ", "Верх"};
-							JComboBox<String> jcb = new JComboBox<String>(elements);
-							jcb.setBounds((int)(44*Main.INC), (int)(71*Main.INC), (int)(110*Main.INC), (int)(20*Main.INC));
-							jcb.setFont(Fonts.harpseal.deriveFont(15F));
-							add(jcb);
-							
-							JButton ok = new JButton("Потвердить");
-							ok.setBounds((int)(10*Main.INC), (int)(95*Main.INC), (int)(80*Main.INC), (int)(25*Main.INC));
-							add(ok);
-							
-							JButton cancel = new JButton("Закрыть");
-							cancel.setBounds((int)(110*Main.INC), (int)(95*Main.INC), (int)(80*Main.INC), (int)(25*Main.INC));
-							cancel.addActionListener((e) -> mainPane.remove(this));
-							add(cancel);
-							
-							Pattern pat = Pattern.compile("[A-Za-z0-9А-я\\-]+");
-							
-							ok.addActionListener((e) -> {
-								Matcher m1 = pat.matcher(jtf.getText());
-								if (jtf.getText().length() > 15 || jtf.getText().length() <= 0) {
-									JOptionPane.showMessageDialog(this, "Длина названия должна быть в пределах от 0 до 15 символов!",
-											"Ошибка", JOptionPane.DEFAULT_OPTION);
-								} else if (!m1.matches()) {
-									JOptionPane.showMessageDialog(this, "В названии можно использовать только буквы"
-											+ "  английского \nи русского алфавита, цифры и тире!",
-											"Ошибка", JOptionPane.DEFAULT_OPTION);
-								} else {
-									//Если все умпешно закрываем окно и устанавливаем данные
-									transitLocation = jtf.getText() + ".lnd";
-									if (jcb.getSelectedIndex() == 0) {
-										dirTransit = Direction.left;
-									}
-									if (jcb.getSelectedIndex() == 1) {
-										dirTransit = Direction.right;
-									}
-									if (jcb.getSelectedIndex() == 2) {
-										dirTransit = Direction.stand;
-									}
-									if (jcb.getSelectedIndex() == 3) {
-										dirTransit = Direction.down;
-									}
-									if (jcb.getSelectedIndex() == 4) {
-										dirTransit = Direction.up;
-									}
-									mainPane.remove(this);
-								}
-							});
-						}
-					};
-					mainPane.add(pd, new Integer(10));
+				if (transitMode == false & field != null) {
+					transDialog = new TransitDialog();
+					mainPane.add(transDialog, new Integer(10));
 					selectTile.setIcon(new ImageIcon(Resize.resizeA(comp.transitI, (int)(43*Main.INC), (int)(43*Main.INC))));
 				} else {
+					if (transDialog != null) {
+						mainPane.remove(transDialog);
+					}
 					transitMode = false;
 					selectTile.setIcon(Resize.resizeIcon(TilesList.tiles[actTile].icon.getImage(), (int)(46*Main.INC), (int)(46*Main.INC)));
 				}

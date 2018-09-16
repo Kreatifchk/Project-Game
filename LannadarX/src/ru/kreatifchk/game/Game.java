@@ -9,14 +9,16 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.Timer;
 
+import ru.kreatifchk.game.Player.Direction;
 import ru.kreatifchk.main.Main;
 import ru.kreatifchk.main.Menu;
+import ru.kreatifchk.tools.Center;
 
 @SuppressWarnings("serial")
 public class Game extends JFrame {
 	
 	protected static JLayeredPane mainPane = new JLayeredPane();
-	protected static JLabel tilePanel = new TileLabel();
+	protected static TileLabel tilePanel = new TileLabel();
 	
 	static Player pl;//Класс игрока
 	
@@ -82,7 +84,9 @@ public class Game extends JFrame {
 	}
 	
 	//Отрисовывает карту
-	private void initMap() {
+	protected static void initMap() {
+		//new LoadMap(pl.currentLocation + "");
+		
 		int xPrimal = 0, yPrimal = 0;
 		//Проверяем на какой позиции находится игрок, если слишком близко к краям то рисовать его не в центре
 		if (pl.xMap <= 8) {
@@ -129,6 +133,24 @@ public class Game extends JFrame {
 		}
 	}
 	
+	//Загрузка новой карты
+	protected static void changeFrame() {
+		//Создаем прогресс бар
+		GradientProgressBar gpb = new GradientProgressBar();
+		gpb.setSize((int)(350*Main.INC), (int)(18*Main.INC));
+		gpb.setIndeterminate(true);
+		Center.cnt(gpb, tilePanel);
+		tilePanel.add(gpb);
+		
+		//Загружаем карту
+		new LoadMap(pl.currentLocation + "");
+		tilePanel.drawBuffer();
+		initMap();
+		
+		//Удаляем прогресс бар
+		tilePanel.remove(gpb);
+	}
+	
 	//Метод в таймере, реализует анимацию
 	private void updateGraphics() {
 		tm += 16;
@@ -143,15 +165,13 @@ public class Game extends JFrame {
 	}
 	
 	//Класс панели на которой рисуется карта
-	private static class TileLabel extends JLabel {
+	protected static class TileLabel extends JLabel {
 		BufferedImage img;
-		//VolatileImage img; //Изображение создающееся с использование GPU
 		//Отрисовываем карту на буффере
 		private void drawBuffer() {
 			int width = map.length * Tile.SIZE;
 			int height = map[0].length * Tile.SIZE;
 			img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-			//img = tilePanel.createVolatileImage(width, height);
 			Graphics2D g2d = img.createGraphics();
 			
 			int x = 0, y = 0;
@@ -179,7 +199,11 @@ public class Game extends JFrame {
 	protected static class MapPoint {
 		boolean solid; //твердый ли тайл
 		int number; //Номер тайла в массиве тайлов
+		Direction transfer; //Сторона с которой будет происходить переход
+		int xTrans, yTrans; //На какой клетке появится персонаж в новой локации
+		String newLocation; //Название файла с целевой локацией
 		private int x, y;
+		
 		public MapPoint() {
 		}
 		public int getX() {

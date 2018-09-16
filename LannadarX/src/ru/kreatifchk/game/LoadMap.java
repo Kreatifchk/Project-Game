@@ -33,7 +33,7 @@ public class LoadMap {
 			FileOutputStream fw = new FileOutputStream(tempFile);
 			fw.write(shifr);
 			fw.close();
-
+			
 			FSTObjectInput ois = new FSTObjectInput(new FileInputStream(tempFile));
 					
 			p = (PointEditor[][]) ois.readObject();
@@ -53,11 +53,14 @@ public class LoadMap {
 					Game.map[j][i] = new Game.MapPoint();
 					Game.map[j][i].solid = TilesList.tiles[p[j][i].number].solid;
 					Game.map[j][i].number = p[j][i].number;
+					Game.map[j][i].transfer = p[j][i].dirTrans;
+					Game.map[j][i].xTrans = p[j][i].xTrans;
+					Game.map[j][i].yTrans = p[j][i].yTrans;
+					Game.map[j][i].newLocation = p[j][i].transition;
 					//Game.map[j][i].setIcon(TilesList.tiles[p[j][i].number].getIcon());
 					//Game.map[j][i].setSize(p[j][i].getSize());
 				}
 			}
-			
 			p = null;
 		} else {
 			JOptionPane.showMessageDialog(Game.mainPane, "\u041e\u0448\u0438\u0431\u043a\u0430 "

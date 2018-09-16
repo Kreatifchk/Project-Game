@@ -14,14 +14,14 @@ import ru.kreatifchk.tools.Sleep;
 @SuppressWarnings("serial")
 public class Player extends JComponent {
 	
-	int hpMax = 300, mpMax = 100, ep = 0; //Очки здоровья, маны и опыта (максимальные)
-	int hp = 200, mp = 90;
-	int level = 999; //Уровень персонажа
+	protected int hpMax = 300, mpMax = 100, ep = 0; //Очки здоровья, маны и опыта (максимальные)
+	protected int hp = 200, mp = 90;
+	protected int level = 999; //Уровень персонажа
 	int type = 0; //Класс персонажа (на данный момент недоступно)
 	
-	int currentLocation = 0; //Текущая локация
+	protected String currentLocation = "15"; //Текущая локация
 	
-	int xMap = 12, yMap = 10; //Положение на локации (в тайлах)
+	int xMap = 12, yMap = 11; //Положение на локации (в тайлах)
 	int xFrame, yFrame; //Положение на экране
 	
 	private Image act;
@@ -46,13 +46,18 @@ public class Player extends JComponent {
 	
 	/** Движение персонажа */
 	protected void move() {
+		boolean stop = false;
 		while (true) {
 			Sleep.sleep(2);
 			try {
+			//Проверяем в начале, что игрок не заходит в портал, если зашел то дальнейшие действия не делаем
+			stop = false;
+			if (transfer()) {
+				stop = true;
+			}
 			//Проверяем, что нажата соответствующая кнопка, а так-же, что следующий тайл не твердый,
 			//но только если игрок уже полностью стоит на текущем
-			if (Keyboard.dir == Direction.up & yMap - 1 >= 0 &&
-					!(Game.map[xMap][yMap-1].solid == true & Game.map[xMap][yMap].getY() == getY())) {
+			if (Keyboard.dir == Direction.up & yMap - 1 >= 0 && Game.map[xMap][yMap-1].solid == false & !stop) {
 				//Если верхний ряд за экраном, а персонаж в центре двигать поле вниз
 				if (Game.map[0][0].getY() < 0 & yFrame == 6) {
 					movedMap(Keyboard.dir, 0, Tile.SIZE);
@@ -62,8 +67,7 @@ public class Player extends JComponent {
 				}
 			}
 			
-			else if (Keyboard.dir == Direction.down & yMap + 1 < Game.map.length &&
-					!(Game.map[xMap][yMap+1].solid == true & Game.map[xMap][yMap].getY() == getY())) {
+			if (Keyboard.dir == Direction.down & yMap + 1 < Game.map.length && Game.map[xMap][yMap+1].solid == false & !stop) {
 				if (Game.map[0][Game.map[0].length-1].getY() > Game.tilePanel.getHeight() - Tile.SIZE & yFrame == 6) {
 					movedMap(Keyboard.dir, 0, -Tile.SIZE);
 				} else {
@@ -71,8 +75,7 @@ public class Player extends JComponent {
 				}
 			}
 			
-			else if (Keyboard.dir == Direction.left & xMap - 1 >= 0 &&
-					!(Game.map[xMap-1][yMap].solid == true & Game.map[xMap][yMap].getX() == getX())) {
+			if (Keyboard.dir == Direction.left & xMap - 1 >= 0 && Game.map[xMap-1][yMap].solid == false & !stop) {
 				if (Game.map[0][0].getX() < 0 & xFrame == 8) {
 					movedMap(Keyboard.dir, Tile.SIZE, 0);
 				} else {
@@ -80,15 +83,28 @@ public class Player extends JComponent {
 				}
 			}
 			
-			else if (Keyboard.dir == Direction.right & xMap + 1 < Game.map.length &&
-					!(Game.map[xMap+1][yMap].solid == true & Game.map[xMap][yMap].getX() == getX())) {
+			if (Keyboard.dir == Direction.right & xMap + 1 < Game.map.length && Game.map[xMap+1][yMap].solid == false & !stop) {
 				if (Game.map[Game.map.length-1][0].getX() > Game.mainPane.getWidth() - Tile.SIZE & xFrame == 8) {
 					movedMap(Keyboard.dir, -Tile.SIZE, 0);
 				} else {
 					movedPlayer(Keyboard.dir, Tile.SIZE, 0);
 				}
 			}
+			localDir = Keyboard.dir;
 			} catch (Exception e) {}
+		}
+	}
+	
+	//Проверка попытки перехода на другую локацию
+	private boolean transfer() {
+		if (Keyboard.dir == Game.map[xMap][yMap].transfer & Game.map[xMap][yMap].transfer != Direction.stand) {
+			currentLocation = Game.map[xMap][yMap].newLocation;
+			xMap = Game.map[xMap][yMap].xTrans;
+			yMap = Game.map[xMap][yMap].yTrans;
+			Game.changeFrame();
+			return true;
+		} else {
+			return false;
 		}
 	}
 	
