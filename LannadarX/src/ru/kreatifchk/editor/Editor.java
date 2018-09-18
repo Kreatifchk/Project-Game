@@ -816,13 +816,13 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 		if (a.getComponent() instanceof TileButton & openDialog == false) {
 			TileButton comp = (TileButton) a.getComponent();
 			comp.pressed = false;
-			if (comp.number == 0 & openDialog == false) {
+			if (comp.number == 0) {
 				tk = new TileKit(0);
 				Center.cnt(tk, mainPane);
 				mainPane.add(tk, new Integer(10));
 				openDialog = true;
 			}
-			if (comp.number == 1 & openDialog == false) {
+			if (comp.number == 1) {
 				tk = new TileKit(1);
 				Center.cnt(tk, mainPane);
 				mainPane.add(tk, new Integer(10));
@@ -830,7 +830,7 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 			}
 			
 			//Инструменты
-			if (comp.number == 996 & openDialog == false) {
+			if (comp.number == 996) {
 				if (deleteMode == false) {
 					deleteMode = true;
 					selectTile.setIcon(new ImageIcon(Resize.resizeA(comp.deleteI, (int)(43*Main.INC), (int)(43*Main.INC))));
@@ -840,12 +840,12 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 				}
 			}
 			//Заливка
-			if (comp.number == 997 & openDialog == false) {
+			if (comp.number == 997) {
 				fillMode = true;
 			}
 			//Установка перемещений
 			if (comp.number == 998) {
-				if (currentMode == Mode.standart & openDialog == false & field != null) {
+				if (currentMode == Mode.standart & field != null) {
 					//Первое нажатие на кнопку включает окно, если все успешно то и соответствующий режим
 					transDialog = new TransitDialog(comp);
 					mainPane.add(transDialog, new Integer(10));
@@ -857,9 +857,9 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 				}
 			}
 			//Установка монстров
-			if (comp.number == 999 & openDialog == false) {
-				if (currentMode == Mode.standart & openDialog == false) {
-					MonsterDialog md = new MonsterDialog();
+			if (comp.number == 999) {
+				if (currentMode == Mode.standart) {
+					MonsterDialog md = new MonsterDialog(comp);
 					md.addMouseListener(this);
 					mainPane.add(md, new Integer(10));
 					openDialog = true;

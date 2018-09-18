@@ -1,5 +1,6 @@
 package ru.kreatifchk.main;
 
+import ru.kreatifchk.game.MonsterList;
 import ru.kreatifchk.game.TilesList;
 
 public class Initialization {
@@ -8,6 +9,8 @@ public class Initialization {
 		new TilesList();
 		new Fonts();
 		new ImageInit();
+		
+		new MonsterList();
 	}
 	
 }

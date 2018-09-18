@@ -9,7 +9,7 @@ import ru.kreatifchk.tools.Img;
 public class ImageInit {
 	
 	public static Image buttEd, buttEdEntered, buttEdActivated, createT, openT, saveT, closeT;
-	public static Image tileForestI, tileCityI, fillI, deleteI, transitI,
+	public static Image tileForestI, tileCityI, fillI, deleteI, transitI, monsterI,
 	tilesButtonBord, tilesButtonEnt, tilesButtonAct;
 	
 	public static Image plUp, plDown, plLeft, plRight;
@@ -34,6 +34,7 @@ public class ImageInit {
 		fillI = Img.Image(Main.class.getResource("/ru/kreatifchk/res/image/editor/fill.png"));
 		deleteI = Img.Image(Main.class.getResource("/ru/kreatifchk/res/image/editor/delete.png"));
 		transitI = Img.Image(Main.class.getResource("/ru/kreatifchk/res/image/editor/transit.png"));
+		monsterI = Img.Image(Main.class.getResource("/ru/kreatifchk/res/image/editor/monster.png"));
 		
 		tilesButtonBord = Img.Image(Main.class.getResource("/ru/kreatifchk/res/image/editor/tilesButtonBord.png"));
 		tilesButtonEnt = Img.Image(Main.class.getResource("/ru/kreatifchk/res/image/editor/tilesButtonEnt.png"));

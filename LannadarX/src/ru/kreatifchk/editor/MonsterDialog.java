@@ -24,6 +24,7 @@ import ru.kreatifchk.game.Tile;
 import ru.kreatifchk.main.Fonts;
 import ru.kreatifchk.main.Main;
 import ru.kreatifchk.tools.Center;
+import ru.kreatifchk.tools.Resize;
 
 /** Диалоговое окно для выбора и конфигурирования монстров */
 @SuppressWarnings("serial")
@@ -36,7 +37,7 @@ public class MonsterDialog extends JLabel {
 	static int hpMax, mpMax, level, danger;
 	static int selectMonster = -1;
 	
-	public MonsterDialog() {
+	public MonsterDialog(TileButton comp) {
 		setSize((int)(342*Main.INC), (int)(300*Main.INC));//240
 		Center.cnt(this, Editor.mainPane);
 		setOpaque(true);
@@ -156,6 +157,7 @@ public class MonsterDialog extends JLabel {
 				Editor.mainPane.remove(this);
 				Editor.openDialog = false;
 				Editor.currentMode = Mode.monster;
+				Editor.selectTile.setIcon(new ImageIcon(Resize.resizeA(comp.monsterI, (int)(48*Main.INC), (int)(48*Main.INC))));
 			}
 		});
 		add(ok);

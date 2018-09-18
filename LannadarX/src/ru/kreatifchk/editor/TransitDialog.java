@@ -18,7 +18,6 @@ import javax.swing.JTextField;
 
 import ru.kreatifchk.editor.Editor.Mode;
 import ru.kreatifchk.game.Player.Direction;
-import ru.kreatifchk.game.TilesList;
 import ru.kreatifchk.main.Fonts;
 import ru.kreatifchk.main.Main;
 import ru.kreatifchk.tools.Center;
@@ -159,7 +158,6 @@ public class TransitDialog extends JLabel {
 		cancel.addActionListener((e) -> {
 			Editor.mainPane.remove(this);
 			Editor.openDialog = false;
-			Editor.selectTile.setIcon(Resize.resizeIcon(TilesList.tiles[Editor.actTile].icon.getImage(), (int)(46*Main.INC), (int)(46*Main.INC)));
 		});
 		cancel.setFont(Fonts.harpseal.deriveFont(8*Main.INC));
 		add(cancel);
