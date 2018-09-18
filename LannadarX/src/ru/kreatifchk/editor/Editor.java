@@ -1,6 +1,7 @@
 package ru.kreatifchk.editor;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -15,6 +16,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import javax.crypto.Cipher;
 import javax.swing.BorderFactory;
@@ -35,6 +37,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import org.nustaq.serialization.FSTObjectInput;
 import org.nustaq.serialization.FSTObjectOutput;
 
+import ru.kreatifchk.game.Monster;
 import ru.kreatifchk.game.Player;
 import ru.kreatifchk.game.Tile;
 import ru.kreatifchk.game.TilesList;
@@ -55,26 +58,27 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 	
 	JLabel topPanel, bottomPanel;
 	static JLabel centerPanel;
-	
 	static JLayeredPane mainPane;
+
 	Dialog dialog; //Диалоговое окно для создания локации
-	JLabel transDialog;
+	JLabel transDialog; //Диалоговое окно для трансфера
 	EditorButton createButton, openButton, closeButton, saveButton; //Кнопки в верхней панели
-	TileButton tileForest, tileCity, fill, delete, transit;
+	TileButton tileForest, tileCity, fill, delete, transit, monster;
 	PointEditor field[][]; //Поле - массив ячеек редактора которые заполняются редактором карты
 	TileKit tk; //Окно с выбором тайла из набора
 	
-	static JLabel selectTile = new JLabel();
+	static JLabel selectTile = new JLabel(); //Показывает выбранный тайл или инструмент
 	
 	JSlider widt, heig; //Слайдеры во всплывающем окне для выбора размера карты
 	
-	private boolean openDialog; //Открыто ли диалоговое окно
-	private boolean openTile; //Открыто ли окно с тайлами
+	protected static boolean openDialog; //Открыты ли диалоговое ок
 	private boolean fillMode; //Если нажали кнопку заливка
 	boolean deleteMode; //Если нажали кнопку удаления тайлов
 	boolean draw; //Включен ли предпоказ тайлов (не реализовано)
-	static boolean transitMode = false; //Включен ли режим установки переходных тайлов
-	boolean transitDialog; //Диалоговое окно для транзит мода
+	
+	protected enum Mode {standart, fill, delete, transit, monster}; //Вместо boolean, будет доработано позже
+	static Mode currentMode = Mode.standart; //Текущий мод
+	
 	int buttonActive; //Какая кнопка мыши нажата
 	
 	protected static Player.Direction dirTransit = Player.Direction.down; //Выбранное направление перемещения
@@ -86,6 +90,8 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 	static int actTile; //Выбранный тайл
 	
 	Thread animated = new Thread(this);
+	
+	ArrayList<Monster> monsters = new ArrayList<Monster>();
 	
 	public Editor() {
 		setTitle("Lannadar");
@@ -151,7 +157,7 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 		
 		centerPanel = new JLabel();
 		centerPanel.setBounds(0, (int)(48*Main.INC), getWidth()-(int)(4*Main.INC), (int)(576*Main.INC));
-		centerPanel.setIcon(Img.ImageIcon(Main.class.getResource("/ru/kreatifchk/res/image/menu/centerPanel.png")));
+		centerPanel.setIcon(Img.ImageIcon(Main.class.getResource("/ru/kreatifchk/res/image/editor/centerPanel.png")));
 		centerPanel.addMouseMotionListener(this);
 		centerPanel.addMouseListener(this);
 		
@@ -219,6 +225,11 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 		transit.setLocation((int)(260*Main.INC), 0);
 		transit.addMouseListener(this);
 		bottomPanel.add(transit);
+		
+		monster = new TileButton(999);
+		monster.setLocation((int)(320*Main.INC), 0);
+		monster.addMouseListener(this);
+		bottomPanel.add(monster);
 	}
 	
 	// Диалоговое окно для кнопки: создать локацию
@@ -227,7 +238,7 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 		JButton create = new JButton("Создать");
 		JButton cancel = new JButton("Отмена");
 		JLabel widtValue = new JLabel("20");
-		JLabel heigValue = new JLabel("13");
+		JLabel heigValue = new JLabel("12");
 		Image bg = Img.Image(Main.class.getResource("/ru/kreatifchk/res/image/editor/dialogBackground.png"));
 		public Dialog() {
 			setSize((int)(270*Main.INC), (int)(220*Main.INC));
@@ -236,7 +247,7 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 			create.addActionListener(Editor.this);
 			add(create);
 			cancel.setBounds((int)(145*Main.INC), (int)(175*Main.INC), (int)(85*Main.INC), (int)(35*Main.INC));
-			cancel.addActionListener(Editor.this);
+			cancel.addActionListener((e) -> {mainPane.remove(this); openDialog = false;});
 			add(cancel);
 			
 			widtValue.setSize((int)(18*Main.INC), (int)(18*Main.INC));
@@ -260,6 +271,7 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 			heigValue.setSize((int)(18*Main.INC), (int)(18*Main.INC));
 			Center.cnt(heigValue, this, (int)(78*Main.INC));
 			add(heigValue);
+			heig = new JSlider(12, 120, 12);
 			heig = new JSlider(13, 120, 13);
 			heig.setBounds((int)(13*Main.INC), (int)(105*Main.INC), (int)(245*Main.INC), (int)(35*Main.INC));
 			heig.setMajorTickSpacing(10);
@@ -280,16 +292,16 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 	@Override
 	public void actionPerformed(ActionEvent a) {
 		//Открытие всплывающего окна создания карты
-		if (a.getSource() == createButton & openDialog == false & transitDialog == false) {
+		if (a.getSource() == createButton & openDialog == false) {
 			openDialog = true;
 			
 			dialog = new Dialog();
 			Center.cnt(dialog, mainPane);
 			dialog.setBorder(BorderFactory.createLineBorder(Color.black, 3));
-			mainPane.add(dialog, new Integer(2));
+			mainPane.add(dialog, new Integer(10));
 		}
 		//Открытие диалогового окна открыть карту из файла
-		if (a.getSource() == openButton & openDialog == false & transitDialog == false) {
+		if (a.getSource() == openButton & openDialog == false) {
 			//Выбор файла для чтения
 			File read = new File("data/maps/"); //Путь к директории карт
 			JFileChooser jf = new JFileChooser(read.getAbsolutePath());
@@ -300,7 +312,7 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 			openMap(read);
 		}
 		//Открытие всплывающего окна сохранение карты
-		if (a.getSource() == saveButton & openDialog == false & transitDialog == false & field != null) {
+		if (a.getSource() == saveButton & openDialog == false & field != null) {
 			//Позволяем выбрать папку сохранения карт и дать название файлу
 			File write = new File("data/maps/"); //Путь к директории карт
 			JFileChooser jf = new JFileChooser(write.getAbsolutePath());
@@ -352,11 +364,14 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 					e.printStackTrace();
 				}  catch (IOException e) {
 					e.printStackTrace();
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(this, "Ошибка");
+					e.printStackTrace();
 				}
 			}
 		}
 		//Нажатие кнопки "в меню"
-		if (a.getSource() == closeButton & openDialog == false & transitDialog == false) {
+		if (a.getSource() == closeButton & openDialog == false) {
 			//Если поля уже есть спросить еще раз
 			int rez = -1;
 			if (field != null) {
@@ -374,14 +389,8 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 				new Menu();
 			}
 		}
-		//Отменить создание карты кнопкой Cancel в диалоговом окне
-		if (openDialog == true && a.getSource() == dialog.cancel) {
-			mainPane.remove(dialog);
-			openDialog = false;
-			repaint();
-		}
 		//Создание новой пустой карты в диалоговом окне
-		if (openDialog == true && a.getSource() == dialog.create) {
+		if (dialog != null && a.getSource() == dialog.create) {
 			//Перед созданием новой карты очистка старой
 			field = null;
 			centerPanel.removeAll();
@@ -461,6 +470,12 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 					field[j][i].xTrans = p[j][i].xTrans;
 					field[j][i].yTrans = p[j][i].yTrans;
 					field[j][i].transition = p[j][i].transition;
+					field[j][i].anim = p[j][i].anim;
+					if (p[j][i].anim) {
+						field[j][i].setIcon(new AnimatedIcon(TilesList.tiles[p[j][i].number].icon2));
+					} else {
+						field[j][i].setIcon(TilesList.tiles[p[j][i].number].getIcon());
+					}
 					field[j][i].setIcon(TilesList.tiles[p[j][i].number].getIcon());
 					field[j][i].setBounds(x, y, Tile.SIZE, Tile.SIZE);
 					field[j][i].setBorder(BorderFactory.createLineBorder(Color.black, 1));
@@ -482,6 +497,9 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 							bottom = 5;
 						}
 						field[j][i].setBorder(BorderFactory.createMatteBorder(top, left, bottom, right, Color.BLACK));
+					}
+					if (field[j][i] == null) {
+						System.out.println("null");
 					}
 				}
 				x = 0;
@@ -518,7 +536,7 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 	private void setTile(int xClick, int yClick) {
 		field[xClick][yClick].oldIcon = null;
 		//Установка мультитайла
-		if (TilesList.tiles[actTile].width != -1 | TilesList.tiles[actTile].height != -1) {
+		if (TilesList.tiles[actTile].width != -1 | TilesList.tiles[actTile].height != -1 & currentMode == Mode.standart) {
 			for (int i = 0; i < TilesList.tiles[actTile].width; i++) {
 				for (int j = 0; j < TilesList.tiles[actTile].height; j++) {
 					field[xClick+j][yClick+i].setIcon(Img.ImageIcon(Main.class.getResource(
@@ -529,7 +547,7 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 			}
 		} else {
 			//Или установка одного тайла
-			if (deleteMode == false & transitMode == false) {
+			if (deleteMode == false & currentMode == Mode.standart) {
 				//Если тайл анимированный то записать в клетку для потока анимации и установить иконку
 				if (TilesList.tiles[actTile].animate == true) {
 					field[xClick][yClick].anim = true;
@@ -544,8 +562,10 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 				//Режим удаления тайлов
 				field[xClick][yClick].setIcon(null);
 				field[xClick][yClick].number = -1;
-			} else if (transitMode == true) {
+			} else if (currentMode == Mode.transit) {
 				//Установка перемещений между локациями
+				if (field[xClick][yClick].transition == null) {
+				}
 				if (field[xClick][yClick].transition.equals("")) {
 					int top = 1, left = 1, bottom = 1, right = 1;
 					if (dirTransit == Player.Direction.left) {
@@ -660,7 +680,7 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 		}
 		
 		//Рисование левой кнопкой мыши
-		if (a.getSource() == centerPanel & field != null & buttonActive == 1 & openTile == false & transitMode == false) {
+		if (a.getSource() == centerPanel & field != null & buttonActive == 1 & openDialog == false & currentMode == Mode.standart) {
 			/*На какую клетку нажали
 			 * Берем клетку 0,0 и получаем значене в клетках до той что стоит в левом верхнем углу,
 			 * делаем значение положительным, и прибавляем к месту нажатия c учетом неполной клетки слева (и сверху если есть) 
@@ -677,7 +697,7 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 	@Override
 	public void mouseMoved(MouseEvent a) {
 		//Показывает выбранный тайл на карте
-		if (field != null & deleteMode == false & openTile == false & draw == false & transitMode == false) {
+		if (field != null & deleteMode == false & openDialog == false & draw == false & currentMode == Mode.standart) {
 			//Если какой-то тайл менял иконку возвращаем ему истинную иконку
 			for (int i = 0; i < field[0].length; i++) {
 				for (int j = 0; j < field.length; j++) {
@@ -719,7 +739,7 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 	@Override
 	public void mouseClicked(MouseEvent a) {
 		//Установка тайлов по одному, левой кнопкой мыши
-		if (a.getSource() == centerPanel & field != null & buttonActive == 1 & openTile == false) {
+		if (a.getSource() == centerPanel & field != null & buttonActive == 1 & openDialog == false) {
 			//Принцип аналогичен рисованию в mouseDragged
 			//Вычисляем клетку на которой курсор
 			int rem = -(field[0][0].getX() % Tile.SIZE);
@@ -729,11 +749,12 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 			
 			setTile(xClick, yClick);
 		}
-		//Закрыть окно с тайлами
-		if (a.getSource() == centerPanel & openTile == true) {
-			mainPane.remove(tk.jsp);
-			tk = null;
-			openTile = false;
+		//Закрытие диаоговых окон на уровне 10
+		if (a.getSource() == centerPanel & openDialog == true) {
+			for (Component i: mainPane.getComponentsInLayer(10)) {
+				mainPane.remove(i);
+			}
+			openDialog = false;
 		}
 		//Заливка
 		if (a.getComponent() == centerPanel & fillMode == true) {
@@ -792,22 +813,24 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 			EditorButton eb = (EditorButton) a.getComponent();
 			eb.pressed = false;
 		}
-		if (a.getComponent() instanceof TileButton & openTile == false) {
+		if (a.getComponent() instanceof TileButton & openDialog == false) {
 			TileButton comp = (TileButton) a.getComponent();
 			comp.pressed = false;
-			if (comp.number == 0) {
+			if (comp.number == 0 & openDialog == false) {
 				tk = new TileKit(0);
-				centerPanel.add(tk);
-				openTile = true;
+				Center.cnt(tk, mainPane);
+				mainPane.add(tk, new Integer(10));
+				openDialog = true;
 			}
-			if (comp.number == 1) {
+			if (comp.number == 1 & openDialog == false) {
 				tk = new TileKit(1);
-				centerPanel.add(tk);
-				openTile = true;
+				Center.cnt(tk, mainPane);
+				mainPane.add(tk, new Integer(10));
+				openDialog = true;
 			}
 			
 			//Инструменты
-			if (comp.number == 996) {
+			if (comp.number == 996 & openDialog == false) {
 				if (deleteMode == false) {
 					deleteMode = true;
 					selectTile.setIcon(new ImageIcon(Resize.resizeA(comp.deleteI, (int)(43*Main.INC), (int)(43*Main.INC))));
@@ -816,20 +839,30 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 					selectTile.setIcon(Resize.resizeIcon(TilesList.tiles[actTile].icon.getImage(), (int)(46*Main.INC), (int)(46*Main.INC)));
 				}
 			}
-			if (comp.number == 997) {
+			//Заливка
+			if (comp.number == 997 & openDialog == false) {
 				fillMode = true;
 			}
+			//Установка перемещений
 			if (comp.number == 998) {
-				if (transitMode == false & field != null) {
-					transDialog = new TransitDialog();
+				if (currentMode == Mode.standart & openDialog == false & field != null) {
+					//Первое нажатие на кнопку включает окно, если все успешно то и соответствующий режим
+					transDialog = new TransitDialog(comp);
 					mainPane.add(transDialog, new Integer(10));
-					selectTile.setIcon(new ImageIcon(Resize.resizeA(comp.transitI, (int)(43*Main.INC), (int)(43*Main.INC))));
-				} else {
-					if (transDialog != null) {
-						mainPane.remove(transDialog);
-					}
-					transitMode = false;
+					openDialog = true;
+				} else if (currentMode == Mode.transit) {
+					//Повторное не открывает окно, но отключает режим
+					currentMode = Mode.standart;
 					selectTile.setIcon(Resize.resizeIcon(TilesList.tiles[actTile].icon.getImage(), (int)(46*Main.INC), (int)(46*Main.INC)));
+				}
+			}
+			//Установка монстров
+			if (comp.number == 999 & openDialog == false) {
+				if (currentMode == Mode.standart & openDialog == false) {
+					MonsterDialog md = new MonsterDialog();
+					md.addMouseListener(this);
+					mainPane.add(md, new Integer(10));
+					openDialog = true;
 				}
 			}
 		}
@@ -851,6 +884,7 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 				for (int i = 0; i < field[0].length; i++) {
 					for (int j = 0; j < field.length; j++) {
 						if (field[j][i].anim == true) {
+							//System.out.println(j + " " + i);
 							((AnimatedIcon) field[j][i].getIcon()).frameChange();
 						}
 					}
