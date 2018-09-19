@@ -21,6 +21,7 @@ public class TileButton extends JButton {
 	Image deleteI = ImageInit.deleteI;
 	Image transitI = ImageInit.transitI;
 	Image monsterI = ImageInit.monsterI;
+	Image drawI = ImageInit.drawI;
 	
 	Image tilesButtonBord = ImageInit.tilesButtonBord;
 	Image tilesButtonEnt = ImageInit.tilesButtonEnt;
@@ -53,16 +54,18 @@ public class TileButton extends JButton {
 		else if (number == 1) {
 			g2d.drawImage(tileCityI, 0, 0, null);
 		}
-		else if (number == 996) {
+		else if (number == 995) {
 			g2d.drawImage(deleteI, 0, 0, null);
 		}
-		else if (number == 997) {
+		else if (number == 996) {
 			g2d.drawImage(fillI, 0, 0, null);
 		}
-		else if (number == 998) {
+		else if (number == 997) {
 			g2d.drawImage(transitI, 0, 0, null);
-		} else if (number == 999) {
+		} else if (number == 998) {
 			g2d.drawImage(monsterI, 0, 0, null);
+		} else if (number == 999) {
+			g2d.drawImage(drawI, 0, 0, null);
 		}
 		
 		

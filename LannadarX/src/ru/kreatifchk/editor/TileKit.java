@@ -28,7 +28,7 @@ public class TileKit extends JLabel {
 	JButton tiles[]; //Массив кнопок - тайлов
 	public TileKit(int number) {
 		setSize((int)(342*Main.INC), (int)(240*Main.INC));
-		Center.cnt(this, Editor.centerPanel);
+		Center.cnt(this, Editor.mainPane);
 		
 		//Инициализация наборов тайлов
 		forestKit = new JLabel();
@@ -80,9 +80,7 @@ public class TileKit extends JLabel {
 		jsp.setBounds(0, 0, getWidth(), getHeight());
 		jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		jsp.setBorder(BorderFactory.createLineBorder(Color.black, 5));
-		
-		Editor.mainPane.add(jsp, new Integer(9));
-		Center.cnt(jsp, Editor.mainPane);
+		add(jsp);
 	}
 	
 }

@@ -8,6 +8,7 @@ import java.io.Serializable;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+import ru.kreatifchk.game.Monster;
 import ru.kreatifchk.game.Player;
 import ru.kreatifchk.game.Player.Direction;
 import ru.kreatifchk.game.Tile;
@@ -26,6 +27,8 @@ public class PointEditor extends JLabel implements Serializable {
 	public Player.Direction dirTrans = null; //В какую сторону необходимо двигаться для перехода
 	public int xTrans = -1, yTrans = -1; //Местоположение перемещения
 	
+	private int i, j;
+	
 	public PointEditor(int j, int i) {
 		//Подпись номеров боковых клеток
 		if (i == 0) {
@@ -33,6 +36,9 @@ public class PointEditor extends JLabel implements Serializable {
 		} else if (j == 0) {
 			setText(i + "");
 		}
+		
+		this.i = i;
+		this.j = j;
 	}
 	
 	@Override
@@ -49,6 +55,12 @@ public class PointEditor extends JLabel implements Serializable {
 			g2d.setColor(new Color(255, 255, 255));
 			g2d.fillRect(0, 0, getWidth(), getHeight());
 		}
+		
+		//Данный код может тормозить UI поток, исправить
+		try {
+			Monster mr = Map.monsters.stream().filter((e) -> e.startX == j & e.startY == i).findFirst().get();
+			g2d.drawImage(mr.view, 0, 0, null);
+		} catch (Exception e) {}
 		
 		if (dirTrans == Direction.stand) {
 			g2d.setColor(Color.YELLOW);

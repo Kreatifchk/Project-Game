@@ -16,12 +16,14 @@ public class Monster extends Entity {
 		super(name, hpMax, mpMax, level);
 		view = new ImageIcon(Game.class.getResource("/ru/kreatifchk/res/image/entity/monster/" + imageName + ".png")).getImage();
 		view = Resize.resize(view, Tile.SIZE, Tile.SIZE);
+		this.imageName = imageName;
 	}
 	
 	public Monster(String name, String imageName, int hpMax, int mpMax, int level, int danger) {
 		super(name, hpMax, mpMax, level, danger);
 		view = new ImageIcon(Game.class.getResource("/ru/kreatifchk/res/image/entity/monster/" + imageName + ".png")).getImage();
 		view = Resize.resize(view, Tile.SIZE, Tile.SIZE);
+		this.imageName = imageName;
 	}
 
 	//Вызывается по очереди для всех entity, отсюда идет выполнение различных задач

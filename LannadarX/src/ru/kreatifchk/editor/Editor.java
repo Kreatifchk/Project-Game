@@ -2,9 +2,6 @@ package ru.kreatifchk.editor;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -16,22 +13,17 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 import javax.crypto.Cipher;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
-import javax.swing.JSlider;
 import javax.swing.Timer;
-import javax.swing.UIManager;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.nustaq.serialization.FSTObjectInput;
@@ -49,37 +41,30 @@ import ru.kreatifchk.tools.Img;
 import ru.kreatifchk.tools.Resize;
 import ru.kreatifchk.tools.Sleep;
 
-public class Editor extends JFrame implements ActionListener, ChangeListener, MouseListener, MouseMotionListener, Runnable, Serializable {
+public class Editor extends JFrame implements ActionListener, MouseListener, MouseMotionListener, Runnable, Serializable {
 	
-	//Сделать настройку предпоказа тайлов
 	//Сделать требование чтоб все тайлы были заполнены
-	
 	private static final long serialVersionUID = 3108L;
 	
 	JLabel topPanel, bottomPanel;
 	static JLabel centerPanel;
 	static JLayeredPane mainPane;
 
-	Dialog dialog; //Диалоговое окно для создания локации
+	CreateDialog dialog; //Диалоговое окно для создания локации
 	JLabel transDialog; //Диалоговое окно для трансфера
 	EditorButton createButton, openButton, closeButton, saveButton; //Кнопки в верхней панели
-	TileButton tileForest, tileCity, fill, delete, transit, monster;
-	PointEditor field[][]; //Поле - массив ячеек редактора которые заполняются редактором карты
-	TileKit tk; //Окно с выбором тайла из набора
+	TileButton tileForest, tileCity, fill, delete, transit, monster, drawB; //Конпки тайлов и инструментов снизу
+	static PointEditor field[][]; //Поле - массив ячеек редактора которые заполняются редактором карты
 	
 	static JLabel selectTile = new JLabel(); //Показывает выбранный тайл или инструмент
 	
-	JSlider widt, heig; //Слайдеры во всплывающем окне для выбора размера карты
-	
 	protected static boolean openDialog; //Открыты ли диалоговое ок
-	private boolean fillMode; //Если нажали кнопку заливка
-	boolean deleteMode; //Если нажали кнопку удаления тайлов
-	boolean draw; //Включен ли предпоказ тайлов (не реализовано)
+	private boolean draw = true; //Включен ли предпоказ тайлов
 	
 	protected enum Mode {standart, fill, delete, transit, monster}; //Вместо boolean, будет доработано позже
 	static Mode currentMode = Mode.standart; //Текущий мод
 	
-	int buttonActive; //Какая кнопка мыши нажата
+	private int buttonActive; //Какая кнопка мыши нажата
 	
 	protected static Player.Direction dirTransit = Player.Direction.down; //Выбранное направление перемещения
 	protected static String transitLocation; //В какую локацию перемещение
@@ -90,8 +75,6 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 	static int actTile; //Выбранный тайл
 	
 	Thread animated = new Thread(this);
-	
-	ArrayList<Monster> monsters = new ArrayList<Monster>();
 	
 	public Editor() {
 		setTitle("Lannadar");
@@ -108,32 +91,6 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 		t.start();
 		animated.setDaemon(true);
 		animated.start(); //Включить поток анимирования тайлов
-		
-		//Локализация JFileChooser
-		UIManager.put("FileChooser.fileNameHeaderText", "Имя");
-		UIManager.put("FileChooser.acceptAllFileFilterText", "Все файлы");
-		UIManager.put("FileChooser.homeFolderToolTipText", "Домой");
-		UIManager.put("FileChooser.fileNameLabelText", "Имя файла");
-		UIManager.put("FileChooser.fileTypeHeaderText", "Тип");
-		UIManager.put("FileChooser.fileSizeHeaderText", "Размер");
-		UIManager.put("FileChooser.upFolderToolTipText", "Вверх");
-		UIManager.put("FileChooser.newFolderToolTipText", "Создать папку");
-		UIManager.put("FileChooser.detailsViewButtonToolTipText", "Подробно");
-		UIManager.put("FileChooser.listViewButtonToolTipText", "Список");
-		UIManager.put("FileChooser.viewMenuLabelText", "Настроить вид");
-		UIManager.put("FileChooser.refreshActionLabelText", "Обновить");
-		UIManager.put("FileChooser.newFolderActionLabelText", "Новая папка");
-		UIManager.put("FileChooser.filesOfTypeLabelText", "Тип файлов");
-		UIManager.put("FileChooser.lookInLabelText", "Смотреть в");
-		UIManager.put("FileChooser.fileNameHeaderText", "Имя");
-		UIManager.put("FileChooser.openButtonText", "Открыть");
-		UIManager.put("FileChooser.saveButtonText", "Сохранить");
-		UIManager.put("FileChooser.saveButtonToolTipText", "Сохранить");
-		UIManager.put("FileChooser.openButtonToolTipText", "Открыть");
-		UIManager.put("FileChooser.cancelButtonText", "Отмена");
-		UIManager.put("FileChooser.cancelButtonText", "Отмена");
-		UIManager.put("FileChooser.openDialogTitleText", "Открыть");
-		UIManager.put("FileChooser.saveDialogTitleText", "Сохранить");
 	}
 	
 	public Editor setFileParametr(File f) {
@@ -211,82 +168,30 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 		tileCity.addMouseListener(this);
 		bottomPanel.add(tileCity);
 		
-		delete = new TileButton(996);
+		delete = new TileButton(995);
 		delete.setLocation((int)(140*Main.INC), 0);
 		delete.addMouseListener(this);
 		bottomPanel.add(delete);
 		
-		fill = new TileButton(997);
+		fill = new TileButton(996);
 		fill.setLocation((int)(200*Main.INC), 0);
 		fill.addMouseListener(this);
 		bottomPanel.add(fill);
 		
-		transit = new TileButton(998);
+		transit = new TileButton(997);
 		transit.setLocation((int)(260*Main.INC), 0);
 		transit.addMouseListener(this);
 		bottomPanel.add(transit);
 		
-		monster = new TileButton(999);
+		monster = new TileButton(998);
 		monster.setLocation((int)(320*Main.INC), 0);
 		monster.addMouseListener(this);
 		bottomPanel.add(monster);
-	}
-	
-	// Диалоговое окно для кнопки: создать локацию
-	@SuppressWarnings("serial")
-	private class Dialog extends JLabel {
-		JButton create = new JButton("Создать");
-		JButton cancel = new JButton("Отмена");
-		JLabel widtValue = new JLabel("20");
-		JLabel heigValue = new JLabel("12");
-		Image bg = Img.Image(Main.class.getResource("/ru/kreatifchk/res/image/editor/dialogBackground.png"));
-		public Dialog() {
-			setSize((int)(270*Main.INC), (int)(220*Main.INC));
-			
-			create.setBounds((int)(30*Main.INC), (int)(175*Main.INC), (int)(85*Main.INC), (int)(35*Main.INC));
-			create.addActionListener(Editor.this);
-			add(create);
-			cancel.setBounds((int)(145*Main.INC), (int)(175*Main.INC), (int)(85*Main.INC), (int)(35*Main.INC));
-			cancel.addActionListener((e) -> {mainPane.remove(this); openDialog = false;});
-			add(cancel);
-			
-			widtValue.setSize((int)(18*Main.INC), (int)(18*Main.INC));
-			Center.cnt(widtValue, this, (int)(8*Main.INC));
-			add(widtValue);
-			widt = new JSlider(20, 120, 20);
-			widt.setBounds((int)(13*Main.INC), (int)(35*Main.INC), (int)(245*Main.INC), (int)(35*Main.INC));
-			widt.setMajorTickSpacing(10);
-			widt.setMinorTickSpacing(5);
-			widt.setPaintTicks(true);
-			widt.setPaintLabels(true);
-			widt.addChangeListener(Editor.this);
-			widt.setUI(new LannadarSliderUI(widt));
-			add(widt);
-			
-			/*LannadarSlider lnd = new LannadarSlider(20, 120, 12);
-			lnd.setBounds((int)(13*Main.INC), (int)(105*Main.INC), (int)(245*Main.INC), (int)(35*Main.INC));
-			lnd.setMajorTickSpacing(10);
-			lnd.setMinorTickSpacing(5);
-			add(lnd);*/
-			heigValue.setSize((int)(18*Main.INC), (int)(18*Main.INC));
-			Center.cnt(heigValue, this, (int)(78*Main.INC));
-			add(heigValue);
-			heig = new JSlider(12, 120, 12);
-			heig = new JSlider(13, 120, 13);
-			heig.setBounds((int)(13*Main.INC), (int)(105*Main.INC), (int)(245*Main.INC), (int)(35*Main.INC));
-			heig.setMajorTickSpacing(10);
-			heig.setMinorTickSpacing(5);
-			heig.setPaintTicks(true);
-			heig.setPaintLabels(true);
-			heig.addChangeListener(Editor.this);
-			heig.setUI(new LannadarSliderUI(heig));
-			add(heig);
-		}
-		@Override
-		public void paintComponent(Graphics g) {
-			Graphics2D g2d = (Graphics2D) g;
-			g2d.drawImage(bg, 0, 0, null);
-		}
+		
+		drawB = new TileButton(999);
+		drawB.setLocation((int)(380*Main.INC), 0);
+		drawB.addMouseListener(this);
+		bottomPanel.add(drawB);
 	}
 	
 	@Override
@@ -294,8 +199,7 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 		//Открытие всплывающего окна создания карты
 		if (a.getSource() == createButton & openDialog == false) {
 			openDialog = true;
-			
-			dialog = new Dialog();
+			dialog = new CreateDialog();
 			Center.cnt(dialog, mainPane);
 			dialog.setBorder(BorderFactory.createLineBorder(Color.black, 3));
 			mainPane.add(dialog, new Integer(10));
@@ -324,7 +228,7 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 				write = new File(jf.getSelectedFile() + ".lnd");
 			}
 			
-			//Задаем вопрос про перезапись файла
+			//Задаем вопрос про перезапись файла, если необходимо
 			int rez = 0;
 			if (write.exists()) {
 				rez = JOptionPane.showConfirmDialog(mainPane, "Перезаписать файл?", "Потверждение", JOptionPane.YES_NO_OPTION);
@@ -388,34 +292,6 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 				dispose();
 				new Menu();
 			}
-		}
-		//Создание новой пустой карты в диалоговом окне
-		if (dialog != null && a.getSource() == dialog.create) {
-			//Перед созданием новой карты очистка старой
-			field = null;
-			centerPanel.removeAll();
-			//Создание карты заданных размеров
-			mainPane.remove(dialog);
-			
-			openDialog = false;
-			int x = Integer.parseInt(dialog.widtValue.getText()), y = Integer.parseInt(dialog.heigValue.getText()); //Кол-во полей по x и по н
-			field = new PointEditor[x][y];
-			int xPoint = (int)(4*Main.INC), yPoint = 0;
-			for (int i = 0; i < field[0].length; i++) {
-				for (int j = 0; j < field.length; j++) {
-					field[j][i] = new PointEditor(j, i);
-					field[j][i].setBorder(BorderFactory.createLineBorder(Color.black, 1));
-					field[j][i].setBounds(xPoint, yPoint, (int)(48*Main.INC), (int)(48*Main.INC));
-					field[j][i].setOpaque(true);
-					field[j][i].setBackground(new Color(255, 255, 255, 240));
-					centerPanel.add(field[j][i]);
-					xPoint += (int)(48*Main.INC);
-				}
-				yPoint += (int)(48*Main.INC);
-				xPoint = (int)(4*Main.INC);
-			}
-			
-			repaint();
 		}
 	}
 	
@@ -547,7 +423,7 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 			}
 		} else {
 			//Или установка одного тайла
-			if (deleteMode == false & currentMode == Mode.standart) {
+			if (currentMode == Mode.standart) {
 				//Если тайл анимированный то записать в клетку для потока анимации и установить иконку
 				if (TilesList.tiles[actTile].animate == true) {
 					field[xClick][yClick].anim = true;
@@ -558,55 +434,73 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 				}
 				field[xClick][yClick].number = actTile;
 				field[xClick][yClick].izm = false;
-			} else if (deleteMode == true) {
-				//Режим удаления тайлов
-				field[xClick][yClick].setIcon(null);
-				field[xClick][yClick].number = -1;
-			} else if (currentMode == Mode.transit) {
-				//Установка перемещений между локациями
-				if (field[xClick][yClick].transition == null) {
+			}
+		}
+		//Удаление тайлов
+		if (currentMode == Mode.delete) {
+			//Режим удаления тайлов
+			field[xClick][yClick].setIcon(null);
+			field[xClick][yClick].number = -1;
+			field[xClick][yClick].izm = false;
+		}
+		//Установка перемещений между локациями
+		if (currentMode == Mode.transit) {
+			if (field[xClick][yClick].transition == null) {
+			}
+			if (field[xClick][yClick].transition.equals("")) {
+				int top = 1, left = 1, bottom = 1, right = 1;
+				if (dirTransit == Player.Direction.left) {
+					left = 5;
 				}
-				if (field[xClick][yClick].transition.equals("")) {
-					int top = 1, left = 1, bottom = 1, right = 1;
-					if (dirTransit == Player.Direction.left) {
-						left = 5;
-					}
-					if (dirTransit == Player.Direction.right) {
-						right = 5;
-					}
-					if (dirTransit == Player.Direction.up) {
-						top = 5;
-					}
-					if (dirTransit == Player.Direction.down) {
-						bottom = 5;
-					}
-					field[xClick][yClick].setBorder(BorderFactory.createMatteBorder(top, left, bottom, right, Color.BLACK));
-					field[xClick][yClick].dirTrans = dirTransit;
-					field[xClick][yClick].transition = transitLocation;
-					field[xClick][yClick].xTrans = xTrans;
-					field[xClick][yClick].yTrans = yTrans;
-				} else {
-					//Удаление перемещений
-					field[xClick][yClick].setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-					field[xClick][yClick].dirTrans = null;
-					field[xClick][yClick].transition = "";
-					field[xClick][yClick].xTrans = -1;
-					field[xClick][yClick].yTrans = -1;
+				if (dirTransit == Player.Direction.right) {
+					right = 5;
 				}
+				if (dirTransit == Player.Direction.up) {
+					top = 5;
+				}
+				if (dirTransit == Player.Direction.down) {
+					bottom = 5;
+				}
+				field[xClick][yClick].setBorder(BorderFactory.createMatteBorder(top, left, bottom, right, Color.BLACK));
+				field[xClick][yClick].dirTrans = dirTransit;
+				field[xClick][yClick].transition = transitLocation;
+				field[xClick][yClick].xTrans = xTrans;
+				field[xClick][yClick].yTrans = yTrans;
+			} else {
+				//Удаление перемещений
+				field[xClick][yClick].setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+				field[xClick][yClick].dirTrans = null;
+				field[xClick][yClick].transition = "";
+				field[xClick][yClick].xTrans = -1;
+				field[xClick][yClick].yTrans = -1;
+			}
+		}
+		//Установка мобов
+		if (currentMode == Mode.monster) {
+			try {
+				//Если на данных координатах уже есть монстр то удалить его
+				Map.monsters.remove(Map.monsters.stream().
+						filter((e) -> e.startX == xClick & e.startY == yClick).findFirst().get());
+			} catch(NoSuchElementException e) {
+				//Иначе - наборот поставить
+				Monster mr = MonsterDialog.mr;
+				Map.monsters.add((Monster) new Monster(mr.getName(), mr.getImageName(), mr.getHpMax(),
+						mr.getMpMax(), mr.getLevel(), mr.getDanger()).setStart(xClick, yClick));
 			}
 		}
 	}
-
-	//Лисенер для JSLider во всплывающем окне
-	@Override
-	public void stateChanged(ChangeEvent a) {
-		if (a.getSource() == widt) {
-			dialog.widtValue.setText(widt.getValue() + "");
+	
+	//Возвращает всем клеткам их истинные иконки
+	private void returnIcon() {
+		for (int i = 0; i < field[0].length; i++) {
+			for (int j = 0; j < field.length; j++) {
+				if (field[j][i].izm == true) {
+					field[j][i].setIcon(field[j][i].oldIcon);
+					field[j][i].oldIcon = null;
+					field[j][i].izm = false;
+				}
+			}
 		}
-		if (a.getSource() == heig) {
-			dialog.heigValue.setText(heig.getValue() + "");
-		}
-		repaint();
 	}
 
 	int x = 0, y = 0, dv; //dv - смещение поля в определенную сторону
@@ -697,17 +591,9 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 	@Override
 	public void mouseMoved(MouseEvent a) {
 		//Показывает выбранный тайл на карте
-		if (field != null & deleteMode == false & openDialog == false & draw == false & currentMode == Mode.standart) {
+		if (field != null & !openDialog & draw & currentMode == Mode.standart) {
 			//Если какой-то тайл менял иконку возвращаем ему истинную иконку
-			for (int i = 0; i < field[0].length; i++) {
-				for (int j = 0; j < field.length; j++) {
-					if (field[j][i].izm == true) {
-						field[j][i].setIcon(field[j][i].oldIcon);
-						field[j][i].oldIcon = null;
-						field[j][i].izm = false;
-					}
-				}
-			}
+			returnIcon();
 			//Вычисляем клетку на которой курсор
 			int rem = -(field[0][0].getX() % Tile.SIZE);
 			int xClick = (-(field[0][0].getX() / Tile.SIZE)) + ((a.getX() + rem) / Tile.SIZE);
@@ -757,14 +643,15 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 			openDialog = false;
 		}
 		//Заливка
-		if (a.getComponent() == centerPanel & fillMode == true) {
+		if (a.getComponent() == centerPanel & currentMode == Mode.fill) {
 			for (int i = 0; i < field[0].length; i++) {
 				for (int j = 0; j < field.length; j++) {
 					field[j][i].setIcon(TilesList.tiles[actTile].icon);
+					field[j][i].izm = false;
 					field[j][i].number = actTile;
 				}
 			}
-			fillMode = false;
+			currentMode = Mode.standart;
 		}
 	}
 	@Override
@@ -813,39 +700,38 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 			EditorButton eb = (EditorButton) a.getComponent();
 			eb.pressed = false;
 		}
-		if (a.getComponent() instanceof TileButton & openDialog == false) {
+		if (a.getComponent() instanceof TileButton & openDialog == false & field != null) {
 			TileButton comp = (TileButton) a.getComponent();
 			comp.pressed = false;
+			returnIcon();
+			//Наборы тайлов
 			if (comp.number == 0) {
-				tk = new TileKit(0);
-				Center.cnt(tk, mainPane);
-				mainPane.add(tk, new Integer(10));
+				mainPane.add(new TileKit(0), new Integer(10));
 				openDialog = true;
 			}
 			if (comp.number == 1) {
-				tk = new TileKit(1);
-				Center.cnt(tk, mainPane);
-				mainPane.add(tk, new Integer(10));
+				mainPane.add(new TileKit(1), new Integer(10));
 				openDialog = true;
 			}
 			
 			//Инструменты
-			if (comp.number == 996) {
-				if (deleteMode == false) {
-					deleteMode = true;
+			//Удаление
+			if (comp.number == 995) {
+				if (currentMode == Mode.standart) {
+					currentMode = Mode.delete;
 					selectTile.setIcon(new ImageIcon(Resize.resizeA(comp.deleteI, (int)(43*Main.INC), (int)(43*Main.INC))));
-				} else {
-					deleteMode = false;
+				} else if (currentMode == Mode.delete ){
+					currentMode = Mode.standart;
 					selectTile.setIcon(Resize.resizeIcon(TilesList.tiles[actTile].icon.getImage(), (int)(46*Main.INC), (int)(46*Main.INC)));
 				}
 			}
 			//Заливка
-			if (comp.number == 997) {
-				fillMode = true;
+			if (comp.number == 996) {
+				currentMode = Mode.fill;
 			}
 			//Установка перемещений
-			if (comp.number == 998) {
-				if (currentMode == Mode.standart & field != null) {
+			if (comp.number == 997) {
+				if (currentMode == Mode.standart) {
 					//Первое нажатие на кнопку включает окно, если все успешно то и соответствующий режим
 					transDialog = new TransitDialog(comp);
 					mainPane.add(transDialog, new Integer(10));
@@ -857,14 +743,25 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 				}
 			}
 			//Установка монстров
-			if (comp.number == 999) {
+			if (comp.number == 998) {
 				if (currentMode == Mode.standart) {
 					MonsterDialog md = new MonsterDialog(comp);
 					md.addMouseListener(this);
 					mainPane.add(md, new Integer(10));
 					openDialog = true;
+				} else if (currentMode == Mode.monster) {
+					currentMode = Mode.standart;
+					selectTile.setIcon(Resize.resizeIcon(TilesList.tiles[actTile].icon.getImage(), (int)(46*Main.INC), (int)(46*Main.INC)));
 				}
 			}
+			//Включение или отключение предпоказа тайлов
+			if (comp.number == 999) {
+				draw = (draw == true) ? false: true; //Если выражение в скобках равно то присваивается false иначе true (тенарный оператор)
+			}
+		} else if (a.getComponent() instanceof TileButton) {
+			//На кнопку нажали но условия не соответствуют, просто сменить вид конпки
+			TileButton comp = (TileButton) a.getComponent();
+			comp.pressed = false;
 		}
 	}
 	
@@ -884,7 +781,6 @@ public class Editor extends JFrame implements ActionListener, ChangeListener, Mo
 				for (int i = 0; i < field[0].length; i++) {
 					for (int j = 0; j < field.length; j++) {
 						if (field[j][i].anim == true) {
-							//System.out.println(j + " " + i);
 							((AnimatedIcon) field[j][i].getIcon()).frameChange();
 						}
 					}

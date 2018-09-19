@@ -34,8 +34,7 @@ public class MonsterDialog extends JLabel {
 	
 	JButton mon[] = new JButton[MonsterList.monsters.size()];
 	
-	static int hpMax, mpMax, level, danger;
-	static int selectMonster = -1;
+	static Monster mr;
 	
 	public MonsterDialog(TileButton comp) {
 		setSize((int)(342*Main.INC), (int)(300*Main.INC));//240
@@ -127,12 +126,11 @@ public class MonsterDialog extends JLabel {
 			//Добавление слушателя
 			final int j2 = j;
 			mon[j].addActionListener((e) -> {
-				Monster mr = MonsterList.monsters.get(j2);
+				mr = MonsterList.monsters.get(j2);
 				hpT.setText(mr.getHpMax() + "");
 				mpT.setText(mr.getMpMax() + "");
 				lvlT.setText(mr.getLevel() + "");
 				jcb.setSelectedIndex(mr.getDanger() - 1);
-				selectMonster = j2;
 			});
 			
 			x += (int)((30+48)*Main.INC);
@@ -147,24 +145,20 @@ public class MonsterDialog extends JLabel {
 		JButton ok = new JButton("Выбор");
 		ok.setBounds((int)(4*Main.INC), getHeight()-(int)(20*Main.INC), (int)(167*Main.INC), (int)(16*Main.INC));
 		ok.addActionListener((e) -> {
-			if (selectMonster == -1) {
+			if (mr == null) {
 				JOptionPane.showMessageDialog(this, "Выберите монстра", "Ошибка!", JOptionPane.ERROR_MESSAGE);
 			} else {
-				hpMax = Integer.parseInt(hpT.getText());
-				mpMax = Integer.parseInt(mpT.getText());
-				level = Integer.parseInt(lvlT.getText());
-				danger = jcb.getSelectedIndex() + 1;
 				Editor.mainPane.remove(this);
 				Editor.openDialog = false;
 				Editor.currentMode = Mode.monster;
-				Editor.selectTile.setIcon(new ImageIcon(Resize.resizeA(comp.monsterI, (int)(48*Main.INC), (int)(48*Main.INC))));
+				Editor.selectTile.setIcon(new ImageIcon(Resize.resizeA(comp.monsterI, (int)(46*Main.INC), (int)(46*Main.INC))));
 			}
 		});
 		add(ok);
 		
 		JButton cancel = new JButton("Отмена");
 		cancel.setBounds((int)(171*Main.INC), getHeight()-(int)(20*Main.INC), (int)(168*Main.INC), (int)(16*Main.INC));
-		cancel.addActionListener((e) -> {Editor.mainPane.remove(this); Editor.openDialog = false;});
+		cancel.addActionListener((e) -> {mr = null; Editor.mainPane.remove(this); Editor.openDialog = false;});
 		add(cancel);
 	}
 

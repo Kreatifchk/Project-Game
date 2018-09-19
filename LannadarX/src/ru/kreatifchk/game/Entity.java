@@ -11,10 +11,11 @@ public abstract class Entity {
 	int hp, mp, level;
 	int danger = 1; //Уровень опасности
 	
-	String name;
+	private String name;
+	protected String imageName;
 	
 	int x, y; //Текущие x и y
-	int startX, startY; //Те на которых он появляется
+	public int startX, startY; //Те на которых он появляется
 	int location; //Локация
 	
 	private Random r = new Random();
@@ -45,6 +46,13 @@ public abstract class Entity {
 	protected void setSpecific(int hpMax, int mpMax, int level, int danger) {
 		setSpecific(hpMax, mpMax, level);
 		this.danger = danger;
+	}
+	
+	/** Устанавливаем начальные ккординаты*/
+	public Entity setStart(int x, int y) {
+		startX = x;
+		startY = y;
+		return this;
 	}
 	
 	//Движение к определенной точке
@@ -97,9 +105,14 @@ public abstract class Entity {
 	public int getLevel() {
 		return level;
 	}
-	
 	public int getDanger() {
 		return danger;
+	}
+	public String getName() {
+		return name;
+	}
+	public String getImageName() {
+		return imageName;
 	}
 	
 }
