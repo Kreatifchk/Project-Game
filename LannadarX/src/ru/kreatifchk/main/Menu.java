@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -43,6 +44,8 @@ public class Menu extends JFrame implements MouseListener {
 	JButton exit = new MenuButton(5);
 	
 	JLabel am = new JLabel();
+	
+	public static Point loc;
 	
 	public Menu() {
 		setTitle("Lannadar");
@@ -162,6 +165,8 @@ public class Menu extends JFrame implements MouseListener {
 	public void mouseReleased(MouseEvent a) {
 		MenuButton mb = (MenuButton) a.getComponent();
 		mb.pressed = false;
+		
+		loc = getLocation();
 		
 		if (mb.number == 0) {
 			setVisible(false);

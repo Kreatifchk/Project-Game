@@ -32,7 +32,7 @@ public class MonsterDialog extends JLabel {
 	
 	JLabel inDialog; //Панель на которую будет добавлен скролл
 	
-	JButton mon[] = new JButton[MonsterList.monsters.size()];
+	JButton mon[] = new JButton[MonsterList.monsters.length];
 	
 	static Monster mr;
 	
@@ -119,14 +119,14 @@ public class MonsterDialog extends JLabel {
 		for (Monster i: MonsterList.monsters) {
 			mon[j] = new JButton();
 			mon[j].setBounds(x, y, Tile.SIZE, Tile.SIZE);
-			mon[j].setIcon(new ImageIcon(i.view));
+			mon[j].setIcon(i.currentView);
 			mon[j].setContentAreaFilled(false);
 			inDialog.add(mon[j]);
 			
 			//Добавление слушателя
 			final int j2 = j;
 			mon[j].addActionListener((e) -> {
-				mr = MonsterList.monsters.get(j2);
+				mr = MonsterList.monsters[j2];
 				hpT.setText(mr.getHpMax() + "");
 				mpT.setText(mr.getMpMax() + "");
 				lvlT.setText(mr.getLevel() + "");
@@ -148,6 +148,8 @@ public class MonsterDialog extends JLabel {
 			if (mr == null) {
 				JOptionPane.showMessageDialog(this, "Выберите монстра", "Ошибка!", JOptionPane.ERROR_MESSAGE);
 			} else {
+				mr = new Monster(mr.getName(), mr.getImageName(), Integer.parseInt(hpT.getText()),
+						Integer.parseInt(mpT.getText()), Integer.parseInt(lvlT.getText()), jcb.getSelectedIndex() + 1);
 				Editor.mainPane.remove(this);
 				Editor.openDialog = false;
 				Editor.currentMode = Mode.monster;

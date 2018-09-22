@@ -1,16 +1,16 @@
 package ru.kreatifchk.game;
 
-import java.util.ArrayList;
-
 public class MonsterList {
 	
-	public static ArrayList<Monster> monsters = new ArrayList<Monster>();
+	//public static Monster[] monsters = new Monster[4];
+	public static Monster[] monsters = new Monster[1];
 	
 	public MonsterList() {
-		monsters.add(new Monster("Зомби", "zombie", 50, 0, 1));
-		monsters.add(new Monster("Скелет", "skelet", 75, 0, 2));
-		monsters.add(new Monster("Некромант", "necromancer", 120, 0, 3, 2));
-		monsters.add(new Monster("Кристальный монстр", "cristal", 200, 0, 4));
+//		monsters[0] = new Monster("Зомби", "zombie", 50, 0, 1);
+//		monsters[1] = new Monster("Скелет", "skelet", 75, 0, 2);
+//		monsters[2] = new Monster("Некромант", "necromancer", 120, 0, 3, 2);
+//		monsters[3] = new Monster("Кристальный монстр", "cristal", 200, 0, 4);
+		monsters[0] = new Monster("Зомби", "zombie2", 50, 0, 1);
 	}
 	
 }

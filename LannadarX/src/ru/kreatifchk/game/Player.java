@@ -19,7 +19,7 @@ public class Player extends JComponent {
 	protected int level = 999; //Уровень персонажа
 	int type = 0; //Класс персонажа (на данный момент недоступно)
 	
-	protected String currentLocation = "15"; //Текущая локация
+	protected String currentLocation = "exp3"; //Текущая локация
 	
 	int xMap = 12, yMap = 11; //Положение на локации (в тайлах)
 	int xFrame, yFrame; //Положение на экране
@@ -101,7 +101,7 @@ public class Player extends JComponent {
 			currentLocation = Game.map[xMap][yMap].newLocation;
 			xMap = Game.map[xMap][yMap].xTrans;
 			yMap = Game.map[xMap][yMap].yTrans;
-			Game.changeFrame();
+			Game.changeMap();
 			return true;
 		} else {
 			return false;

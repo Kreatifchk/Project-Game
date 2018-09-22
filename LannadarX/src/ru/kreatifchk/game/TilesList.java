@@ -3,7 +3,7 @@ package ru.kreatifchk.game;
 /** Класс соо всеми тайлами */
 public class TilesList {
 	
-	public static Tile[] tiles = new Tile[15];
+	public static Tile[] tiles = new Tile[18];
 	
 	public static int forestCount, cityCount;
 	
@@ -25,6 +25,9 @@ public class TilesList {
 		tiles[12] = new Tile(false, "Мост", "bridge", 0);
 		tiles[13] = new Tile(true, "Колодец", "well", 0);
 		tiles[14] = new Tile(true, "Горы", "mount", 0);
+		tiles[15] = new Tile(true, "Ночная трава", "grassDark", 0);
+		tiles[16] = new Tile(true, "Ночное дерево", "threeDark", 0);
+		tiles[17] = new Tile(true, "Ночное дерево 2", "three2Dark", 0);
 	}
 	
 	private void city() {

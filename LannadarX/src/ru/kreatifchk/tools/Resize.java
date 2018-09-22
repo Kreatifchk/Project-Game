@@ -30,7 +30,7 @@ public class Resize {
 	
 	public static ImageIcon resizeIcon(Image img, int width, int height) {
 		Image im;
-		BufferedImage bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_RGB);
+		BufferedImage bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 		Graphics g = bi.getGraphics();
 		g.drawImage(img, 0, 0, null);
 		im = bi.getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH);

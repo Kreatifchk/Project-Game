@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 import javax.crypto.Cipher;
@@ -36,7 +37,6 @@ import ru.kreatifchk.game.TilesList;
 import ru.kreatifchk.main.Main;
 import ru.kreatifchk.main.Menu;
 import ru.kreatifchk.tools.Aes256;
-import ru.kreatifchk.tools.Center;
 import ru.kreatifchk.tools.Img;
 import ru.kreatifchk.tools.Resize;
 import ru.kreatifchk.tools.Sleep;
@@ -84,7 +84,8 @@ public class Editor extends JFrame implements ActionListener, MouseListener, Mou
 		setResizable(false);
 		setLayout(null);
 		setVisible(true);
-		setLocationRelativeTo(null);	
+		//setLocationRelativeTo(null);
+		setLocation(Menu.loc);
 		setIconImage(Menu.icon);
 		arrangement();
 		
@@ -199,10 +200,7 @@ public class Editor extends JFrame implements ActionListener, MouseListener, Mou
 		//Открытие всплывающего окна создания карты
 		if (a.getSource() == createButton & openDialog == false) {
 			openDialog = true;
-			dialog = new CreateDialog();
-			Center.cnt(dialog, mainPane);
-			dialog.setBorder(BorderFactory.createLineBorder(Color.black, 3));
-			mainPane.add(dialog, new Integer(10));
+			new CreateDialog();
 		}
 		//Открытие диалогового окна открыть карту из файла
 		if (a.getSource() == openButton & openDialog == false) {
@@ -244,6 +242,7 @@ public class Editor extends JFrame implements ActionListener, MouseListener, Mou
 					//Записываем данные в файл сериализацией то есть байтами
 					oos = new FSTObjectOutput(new FileOutputStream(tempFile));
 					oos.writeObject(field);
+					oos.writeObject(Map.monsters);
 					oos.writeObject("Miku");
 					oos.close();
 					//Читаем данные из этого файла и записываем их в массив байтов
@@ -296,6 +295,7 @@ public class Editor extends JFrame implements ActionListener, MouseListener, Mou
 	}
 	
 	//Открытие карты (сделано отдельно по причине открытия карты внешне
+	@SuppressWarnings("unchecked")
 	private void openMap(File read) {
 		byte[] buffer = null;
 		try {
@@ -323,6 +323,7 @@ public class Editor extends JFrame implements ActionListener, MouseListener, Mou
 			//Превращаем байты в объекты
 			FSTObjectInput ois = new FSTObjectInput(new FileInputStream(tempFile));
 			PointEditor[][] p = (PointEditor[][]) ois.readObject();
+			Map.monsters = (ArrayList<Monster>) ois.readObject();
 			ois.close();
 			
 			//Сначало удалить старую карту если есть
@@ -375,7 +376,6 @@ public class Editor extends JFrame implements ActionListener, MouseListener, Mou
 						field[j][i].setBorder(BorderFactory.createMatteBorder(top, left, bottom, right, Color.BLACK));
 					}
 					if (field[j][i] == null) {
-						System.out.println("null");
 					}
 				}
 				x = 0;
@@ -383,11 +383,7 @@ public class Editor extends JFrame implements ActionListener, MouseListener, Mou
 			}
 			//Удаляем временный файл
 			tempFile.deleteOnExit();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
+		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
@@ -408,7 +404,7 @@ public class Editor extends JFrame implements ActionListener, MouseListener, Mou
 		}
 	}
 	
-	/** Установка тайла в редакторе */
+	/** Установка тайла в редакторе, а также других объектов на карту */
 	private void setTile(int xClick, int yClick) {
 		field[xClick][yClick].oldIcon = null;
 		//Установка мультитайла
@@ -574,7 +570,7 @@ public class Editor extends JFrame implements ActionListener, MouseListener, Mou
 		}
 		
 		//Рисование левой кнопкой мыши
-		if (a.getSource() == centerPanel & field != null & buttonActive == 1 & openDialog == false & currentMode == Mode.standart) {
+		if (a.getSource() == centerPanel & field != null & buttonActive == 1 & !openDialog & currentMode == Mode.standart) {
 			/*На какую клетку нажали
 			 * Берем клетку 0,0 и получаем значене в клетках до той что стоит в левом верхнем углу,
 			 * делаем значение положительным, и прибавляем к месту нажатия c учетом неполной клетки слева (и сверху если есть) 
@@ -625,7 +621,7 @@ public class Editor extends JFrame implements ActionListener, MouseListener, Mou
 	@Override
 	public void mouseClicked(MouseEvent a) {
 		//Установка тайлов по одному, левой кнопкой мыши
-		if (a.getSource() == centerPanel & field != null & buttonActive == 1 & openDialog == false) {
+		if (a.getSource() == centerPanel & field != null & buttonActive == 1 & !openDialog) {
 			//Принцип аналогичен рисованию в mouseDragged
 			//Вычисляем клетку на которой курсор
 			int rem = -(field[0][0].getX() % Tile.SIZE);
@@ -636,7 +632,7 @@ public class Editor extends JFrame implements ActionListener, MouseListener, Mou
 			setTile(xClick, yClick);
 		}
 		//Закрытие диаоговых окон на уровне 10
-		if (a.getSource() == centerPanel & openDialog == true) {
+		if (a.getSource() == centerPanel & openDialog) {
 			for (Component i: mainPane.getComponentsInLayer(10)) {
 				mainPane.remove(i);
 			}

@@ -1,28 +1,24 @@
 package ru.kreatifchk.game;
 
+import java.io.Serializable;
 import java.util.Random;
 
-import javax.swing.ImageIcon;
+import ru.kreatifchk.game.Player.Direction;
 
-import ru.kreatifchk.tools.Resize;
-
-public class Monster extends Entity {
+@SuppressWarnings("serial")
+public class Monster extends Entity implements Serializable {
 	
-	private int area = 0; //Область перемещения в состоянии простоя, если 0 стоит на месте
-	
-	private Random r = new Random();
+	private int area = 2; //Область перемещения в состоянии простоя, если 0 стоит на месте
 
 	public Monster(String name, String imageName, int hpMax, int mpMax, int level) {
 		super(name, hpMax, mpMax, level);
-		view = new ImageIcon(Game.class.getResource("/ru/kreatifchk/res/image/entity/monster/" + imageName + ".png")).getImage();
-		view = Resize.resize(view, Tile.SIZE, Tile.SIZE);
+		setIcon(imageName);
 		this.imageName = imageName;
 	}
 	
 	public Monster(String name, String imageName, int hpMax, int mpMax, int level, int danger) {
 		super(name, hpMax, mpMax, level, danger);
-		view = new ImageIcon(Game.class.getResource("/ru/kreatifchk/res/image/entity/monster/" + imageName + ".png")).getImage();
-		view = Resize.resize(view, Tile.SIZE, Tile.SIZE);
+		setIcon(imageName);
 		this.imageName = imageName;
 	}
 
@@ -41,24 +37,36 @@ public class Monster extends Entity {
 	private void moving() {
 		//Здесь будет блок посвященный преследованию персонажа, включается если рядом персонаж
 		
-		while(true) {
-			int dir = r.nextInt(4);
-			if (dir == 0 & y - 1 >= 0 && startY - (y-1) <= area) {
-				y--;
-				break;
+		//Просто хаотичное движение во время простоя
+		/*P.S изменить, каждый монстр делает небольшое движение в определеноом направлении, изменяет кадр анимации и передает управление
+		следующему, потом продолжает это двжиение в том же направлении*/
+		if (dir == Direction.stand) {
+			while(true) {
+				//Ищем подходящую сторону для движения
+				int dir = new Random().nextInt(8);
+				if (dir == 0 & y - 1 >= 0 && startY - (y-1) <= area) {
+					this.dir = Direction.up;
+					break;
+				}
+				if (dir == 1 & y + 1 < Game.map[0].length && y+1 - startY <= area) {
+					this.dir = Direction.down;
+					break;
+				}
+				if (dir == 2 & x - 1 >= 0 && startX - (x-1) <= area) {
+					this.dir = Direction.left;
+					break;
+				}
+				if (dir == 3 & x + 1 < Game.map.length && x+1 - startX <= area) {
+					this.dir = Direction.right;
+					break;
+				}
+				//Просто стоять, пока должным образом не работает
+				if (dir >= 4) {
+					break;
+				}
 			}
-			if (dir == 1 & y + 1 < Game.map[0].length && y+1 - startY <= area) {
-				y++;
-				break;
-			}
-			if (dir == 2 & x - 1 >= 0 && startX - (-1) <= area) {
-				x--;
-				break;
-			}
-			if (dir == 3 & x + 1 < Game.map.length && x+1 - startX <= area) {
-				x++;
-				break;
-			}
+		} else {
+			move(dir);
 		}
 	}
 	

@@ -4,18 +4,21 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.crypto.Cipher;
 import javax.swing.JOptionPane;
 
 import org.nustaq.serialization.FSTObjectInput;
 
+import ru.kreatifchk.editor.Map;
 import ru.kreatifchk.editor.PointEditor;
 import ru.kreatifchk.tools.Aes256;
 
 /** Загружает карту из файла */
 public class LoadMap {
 	
+	@SuppressWarnings("unchecked")
 	public LoadMap(String location) {
 		PointEditor[][] p = null;
 		String password = null;
@@ -37,6 +40,7 @@ public class LoadMap {
 			FSTObjectInput ois = new FSTObjectInput(new FileInputStream(tempFile));
 					
 			p = (PointEditor[][]) ois.readObject();
+			Map.monsters = (ArrayList<Monster>) ois.readObject();
 			password = (String) ois.readObject();
 			ois.close();
 					
@@ -47,18 +51,17 @@ public class LoadMap {
 				
 		//Проверяем не подменили ли карту
 		if (password.equals("Miku")) {
-			Game.map = new Game.MapPoint[p.length][p[0].length];
+			//Загрузка непосредственно карты
+			Game.map = new MapPoint[p.length][p[0].length];
 			for (int i = 0; i < Game.map[0].length; i++) {
 				for (int j = 0; j < Game.map.length; j++) {
-					Game.map[j][i] = new Game.MapPoint();
+					Game.map[j][i] = new MapPoint();
 					Game.map[j][i].solid = TilesList.tiles[p[j][i].number].solid;
 					Game.map[j][i].number = p[j][i].number;
 					Game.map[j][i].transfer = p[j][i].dirTrans;
 					Game.map[j][i].xTrans = p[j][i].xTrans;
 					Game.map[j][i].yTrans = p[j][i].yTrans;
 					Game.map[j][i].newLocation = p[j][i].transition;
-					//Game.map[j][i].setIcon(TilesList.tiles[p[j][i].number].getIcon());
-					//Game.map[j][i].setSize(p[j][i].getSize());
 				}
 			}
 			p = null;

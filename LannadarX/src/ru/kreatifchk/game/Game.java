@@ -9,7 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.Timer;
 
-import ru.kreatifchk.game.Player.Direction;
+import ru.kreatifchk.editor.Map;
 import ru.kreatifchk.main.Main;
 import ru.kreatifchk.main.Menu;
 import ru.kreatifchk.tools.Center;
@@ -26,6 +26,8 @@ public class Game extends JFrame {
 	
 	int tm; //Для таймера и отрисовки анимаций
 	
+	Thread game = new Thread(new GameCycle());
+	
 	public Game(boolean load) {
 		setTitle("Lannadar");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -33,7 +35,8 @@ public class Game extends JFrame {
 		setResizable(false);
 		setLayout(null);
 		setVisible(true);
-		setLocationRelativeTo(null);	
+		//setLocationRelativeTo(null);
+		setLocation(Menu.loc);
 		setIconImage(Menu.icon);
 		setFocusable(true);
 		addKeyListener(new Keyboard());
@@ -56,6 +59,7 @@ public class Game extends JFrame {
 		t.start();
 		
 		pl.startMoveThread();
+		game.start();
 	}
 	
 	//Первичная компоновка
@@ -81,6 +85,9 @@ public class Game extends JFrame {
 		
 		//Добавляем на карту игрока
 		mainPane.add(pl, new Integer(1));
+		
+		//Инициализируем мобов
+		initMonsters();
 	}
 	
 	//Отрисовывает карту
@@ -134,7 +141,7 @@ public class Game extends JFrame {
 	}
 	
 	//Загрузка новой карты
-	protected static void changeFrame() {
+	protected static void changeMap() {
 		//Создаем прогресс бар
 		GradientProgressBar gpb = new GradientProgressBar();
 		gpb.setSize((int)(350*Main.INC), (int)(18*Main.INC));
@@ -164,10 +171,21 @@ public class Game extends JFrame {
 		mainPane.repaint();
 	}
 	
+	//Инициализация монстров
+	private void initMonsters() {
+		for (Monster i: Map.monsters) {
+			i.setCurrentView(1, 0);
+			i.x = i.startX;
+			i.y = i.startY;
+			i.realX = map[i.x][i.y].getX();
+			i.realY = map[i.x][i.y].getY();
+		}
+	}
+	
 	//Класс панели на которой рисуется карта
 	protected static class TileLabel extends JLabel {
 		BufferedImage img;
-		//Отрисовываем карту на буффере
+		//Отрисовываем карту на буфере
 		private void drawBuffer() {
 			int width = map.length * Tile.SIZE;
 			int height = map[0].length * Tile.SIZE;
@@ -193,28 +211,11 @@ public class Game extends JFrame {
 				drawBuffer();
 			}
 			g2d.drawImage(img, map[0][0].getX(), map[0][0].getY(), null);
-		}
-	}
-	
-	protected static class MapPoint {
-		boolean solid; //твердый ли тайл
-		int number; //Номер тайла в массиве тайлов
-		Direction transfer; //Сторона с которой будет происходить переход
-		int xTrans, yTrans; //На какой клетке появится персонаж в новой локации
-		String newLocation; //Название файла с целевой локацией
-		private int x, y;
-		
-		public MapPoint() {
-		}
-		public int getX() {
-			return x;
-		}
-		public int getY() {
-			return y;
-		}
-		public void setLocation(int x, int y) {
-			this.x = x;
-			this.y = y;
+			
+			//Отрисовка монстров, будет в отдельном буфере
+			for (Monster i: Map.monsters) {
+				g2d.drawImage(i.currentView.getImage(), i.realX, i.realY, null);
+			}
 		}
 	}
 	
