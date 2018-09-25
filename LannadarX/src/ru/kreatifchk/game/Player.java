@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
+import ru.kreatifchk.editor.Map;
 import ru.kreatifchk.main.ImageInit;
 import ru.kreatifchk.tools.Sleep;
 
@@ -29,11 +30,7 @@ public class Player extends JComponent {
 	
 	protected Direction localDir = Direction.stand; //Куда движется персонаж (независимая от нажатия переменная для анимации)
 	
-	/** Направление движения */
-	public static enum Direction {up, down, left, right, stand};
-	
 	public Player() {
-		//this.setBorder(BorderFactory.createLineBorder(Color.MAGENTA, 2));
 		changeFrame(Direction.down);
 	}
 	
@@ -48,7 +45,7 @@ public class Player extends JComponent {
 	protected void move() {
 		boolean stop = false;
 		while (true) {
-			Sleep.sleep(2);
+			Sleep.sleep(1);
 			try {
 			//Проверяем в начале, что игрок не заходит в портал, если зашел то дальнейшие действия не делаем
 			stop = false;
@@ -57,7 +54,11 @@ public class Player extends JComponent {
 			}
 			//Проверяем, что нажата соответствующая кнопка, а так-же, что следующий тайл не твердый,
 			//но только если игрок уже полностью стоит на текущем
-			if (Keyboard.dir == Direction.up & yMap - 1 >= 0 && Game.map[xMap][yMap-1].solid == false & !stop) {
+			if (Keyboard.dir == Direction.up & yMap - 1 >= 0 && !Game.map[xMap][yMap-1].solid & !stop
+					& !Game.map[xMap][yMap-1].busy) {
+				//Освобождаем старую клетку, после чего целевую обозначем занятой
+				Game.map[xMap][yMap].busy = false;
+				Game.map[xMap][yMap-1].busy = true;
 				//Если верхний ряд за экраном, а персонаж в центре двигать поле вниз
 				if (Game.map[0][0].getY() < 0 & yFrame == 6) {
 					movedMap(Keyboard.dir, 0, Tile.SIZE);
@@ -67,7 +68,10 @@ public class Player extends JComponent {
 				}
 			}
 			
-			if (Keyboard.dir == Direction.down & yMap + 1 < Game.map.length && Game.map[xMap][yMap+1].solid == false & !stop) {
+			if (Keyboard.dir == Direction.down & yMap + 1 < Game.map.length && !Game.map[xMap][yMap+1].solid & !stop
+					& !Game.map[xMap][yMap+1].busy) {
+				Game.map[xMap][yMap].busy = false;
+				Game.map[xMap][yMap+1].busy = true;
 				if (Game.map[0][Game.map[0].length-1].getY() > Game.tilePanel.getHeight() - Tile.SIZE & yFrame == 6) {
 					movedMap(Keyboard.dir, 0, -Tile.SIZE);
 				} else {
@@ -75,7 +79,10 @@ public class Player extends JComponent {
 				}
 			}
 			
-			if (Keyboard.dir == Direction.left & xMap - 1 >= 0 && Game.map[xMap-1][yMap].solid == false & !stop) {
+			if (Keyboard.dir == Direction.left & xMap - 1 >= 0 && !Game.map[xMap-1][yMap].solid & !stop
+					& !Game.map[xMap-1][yMap].busy) {
+				Game.map[xMap][yMap].busy = false;
+				Game.map[xMap-1][yMap].busy = true;
 				if (Game.map[0][0].getX() < 0 & xFrame == 8) {
 					movedMap(Keyboard.dir, Tile.SIZE, 0);
 				} else {
@@ -83,7 +90,10 @@ public class Player extends JComponent {
 				}
 			}
 			
-			if (Keyboard.dir == Direction.right & xMap + 1 < Game.map.length && Game.map[xMap+1][yMap].solid == false & !stop) {
+			if (Keyboard.dir == Direction.right & xMap + 1 < Game.map.length && !Game.map[xMap+1][yMap].solid & !stop
+					& !Game.map[xMap+1][yMap].busy) {
+				Game.map[xMap][yMap].busy = false;
+				Game.map[xMap+1][yMap].busy = true;
 				if (Game.map[Game.map.length-1][0].getX() > Game.mainPane.getWidth() - Tile.SIZE & xFrame == 8) {
 					movedMap(Keyboard.dir, -Tile.SIZE, 0);
 				} else {
@@ -112,30 +122,33 @@ public class Player extends JComponent {
 	private void movedPlayer(Direction dir, int x, int y) {
 		x /= 24;
 		y /= 24;
-		
+
 		localDir = dir;
 		for (int i = 0; i < 24; i++) {
-			setLocation(getX() + x, getY() + y);
-			Sleep.sleep(16);
+			final int x2 = x, y2 = y;
+			SwingUtilities.invokeLater(() -> {
+				setLocation(getX() + x2, getY() + y2);
+			});
+			Sleep.sleep(20);
 		}
 		localDir = Direction.stand;
 		
-		if (dir == Player.Direction.down) {
+		if (dir == Direction.down) {
 			yMap++;
 			if (yFrame < 12) {
 				yFrame++;
 			}
-		} else if (dir == Player.Direction.up) {
+		} else if (dir == Direction.up) {
 			yMap--;
 			if (yFrame > 0) {
 				yFrame--;
 			}
-		} else if (dir == Player.Direction.left) {
+		} else if (dir == Direction.left) {
 			xMap--;
 			if (xFrame < 20) {
 				xFrame++;
 			}
-		} else if (dir == Player.Direction.right) {
+		} else if (dir == Direction.right) {
 			xMap++;
 			if (xFrame > 0) {
 				xFrame--;
@@ -156,19 +169,24 @@ public class Player extends JComponent {
 					SwingUtilities.invokeLater(() -> {
 						Game.map[j2][i2].setLocation(Game.map[j2][i2].getX() + x2, Game.map[j2][i2].getY() + y2);
 					});
+					
 				}
 			}
-			Sleep.sleep(17);
+			//Так-же двигаем мобов вместе с картой
+			final int x2 = x, y2 = y;
+			Map.monsters.stream().forEach((e) -> {e.realX += x2; e.realY += y2;});
+			
+			Sleep.sleep(20);
 		}
 		
 		localDir = Direction.stand;
-		if (dir == Player.Direction.down) {
+		if (dir == Direction.down) {
 			yMap++;
-		} else if (dir == Player.Direction.up) {
+		} else if (dir == Direction.up) {
 			yMap--;
-		} else if (dir == Player.Direction.left) {
+		} else if (dir == Direction.left) {
 			xMap--;
-		} else if (dir == Player.Direction.right) {
+		} else if (dir == Direction.right) {
 			xMap++;
 		}
 	}

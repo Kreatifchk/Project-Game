@@ -17,7 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import ru.kreatifchk.editor.Editor.Mode;
-import ru.kreatifchk.game.Player.Direction;
+import ru.kreatifchk.game.Direction;
 import ru.kreatifchk.main.Fonts;
 import ru.kreatifchk.main.Main;
 import ru.kreatifchk.tools.Center;

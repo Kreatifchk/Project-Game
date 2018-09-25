@@ -1,11 +1,12 @@
 package ru.kreatifchk.game;
 
-import ru.kreatifchk.game.Player.Direction;
+import ru.kreatifchk.game.Direction;
 
 /** Класс игрового тайла  */
 public class MapPoint {
 	
 	boolean solid; //твердый ли тайл
+	boolean busy = false; //Занят ли тайл кем-то (если занят, то пройти по нему нельзя)
 	
 	Direction transfer; //Сторона с которой будет происходить переход
 	

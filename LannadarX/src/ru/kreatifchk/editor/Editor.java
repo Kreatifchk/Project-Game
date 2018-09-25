@@ -30,8 +30,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import org.nustaq.serialization.FSTObjectInput;
 import org.nustaq.serialization.FSTObjectOutput;
 
+import ru.kreatifchk.game.Direction;
 import ru.kreatifchk.game.Monster;
-import ru.kreatifchk.game.Player;
 import ru.kreatifchk.game.Tile;
 import ru.kreatifchk.game.TilesList;
 import ru.kreatifchk.main.Main;
@@ -61,12 +61,12 @@ public class Editor extends JFrame implements ActionListener, MouseListener, Mou
 	protected static boolean openDialog; //Открыты ли диалоговое ок
 	private boolean draw = true; //Включен ли предпоказ тайлов
 	
-	protected enum Mode {standart, fill, delete, transit, monster}; //Вместо boolean, будет доработано позже
+	protected enum Mode {standart, fill, delete, transit, monster}; //Выбранный редим, установка тайлов, монстров и.т.д
 	static Mode currentMode = Mode.standart; //Текущий мод
 	
 	private int buttonActive; //Какая кнопка мыши нажата
 	
-	protected static Player.Direction dirTransit = Player.Direction.down; //Выбранное направление перемещения
+	protected static Direction dirTransit = Direction.down; //Выбранное направление перемещения
 	protected static String transitLocation; //В какую локацию перемещение
 	protected static int xTrans = 0, yTrans = 0; //На какое поле перемещается персонаж
 	
@@ -92,6 +92,12 @@ public class Editor extends JFrame implements ActionListener, MouseListener, Mou
 		t.start();
 		animated.setDaemon(true);
 		animated.start(); //Включить поток анимирования тайлов
+		
+		//Узнаем ОЗУ
+		new Timer(20, (e) -> {
+			long memory = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024;
+			setTitle("Lannadar " + memory);
+		}).start();
 	}
 	
 	public Editor setFileParametr(File f) {
@@ -282,10 +288,12 @@ public class Editor extends JFrame implements ActionListener, MouseListener, Mou
 						"Потверждение", JOptionPane.YES_NO_OPTION);
 			}
 			if (field == null || rez == 0) {
+				Map.field = null;
 				field = null;
 				mainPane.remove(centerPanel);
 				centerPanel = null;
 				mainPane = null;
+				Map.monsters = null;
 				
 				setVisible(false);
 				dispose();
@@ -361,16 +369,16 @@ public class Editor extends JFrame implements ActionListener, MouseListener, Mou
 					
 					int left = 1, right = 1, top = 1, bottom = 1;
 					if (field[j][i].dirTrans != null) {
-						if (field[j][i].dirTrans == Player.Direction.left) {
+						if (field[j][i].dirTrans == Direction.left) {
 							left = 5;
 						}
-						if (field[j][i].dirTrans == Player.Direction.right) {
+						if (field[j][i].dirTrans == Direction.right) {
 							right = 5;
 						}
-						if (field[j][i].dirTrans == Player.Direction.up) {
+						if (field[j][i].dirTrans == Direction.up) {
 							top = 5;
 						}
-						if (field[j][i].dirTrans == Player.Direction.down) {
+						if (field[j][i].dirTrans == Direction.down) {
 							bottom = 5;
 						}
 						field[j][i].setBorder(BorderFactory.createMatteBorder(top, left, bottom, right, Color.BLACK));
@@ -445,16 +453,16 @@ public class Editor extends JFrame implements ActionListener, MouseListener, Mou
 			}
 			if (field[xClick][yClick].transition.equals("")) {
 				int top = 1, left = 1, bottom = 1, right = 1;
-				if (dirTransit == Player.Direction.left) {
+				if (dirTransit == Direction.left) {
 					left = 5;
 				}
-				if (dirTransit == Player.Direction.right) {
+				if (dirTransit == Direction.right) {
 					right = 5;
 				}
-				if (dirTransit == Player.Direction.up) {
+				if (dirTransit == Direction.up) {
 					top = 5;
 				}
-				if (dirTransit == Player.Direction.down) {
+				if (dirTransit == Direction.down) {
 					bottom = 5;
 				}
 				field[xClick][yClick].setBorder(BorderFactory.createMatteBorder(top, left, bottom, right, Color.BLACK));

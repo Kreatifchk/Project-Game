@@ -13,6 +13,7 @@ import ru.kreatifchk.editor.Map;
 import ru.kreatifchk.main.Main;
 import ru.kreatifchk.main.Menu;
 import ru.kreatifchk.tools.Center;
+import ru.kreatifchk.tools.Sleep;
 
 @SuppressWarnings("serial")
 public class Game extends JFrame {
@@ -26,7 +27,7 @@ public class Game extends JFrame {
 	
 	int tm; //Для таймера и отрисовки анимаций
 	
-	Thread game = new Thread(new GameCycle());
+	Thread game = new Thread(new GameCycle()); //Игровой цикл
 	
 	public Game(boolean load) {
 		setTitle("Lannadar");
@@ -35,13 +36,12 @@ public class Game extends JFrame {
 		setResizable(false);
 		setLayout(null);
 		setVisible(true);
-		//setLocationRelativeTo(null);
 		setLocation(Menu.loc);
 		setIconImage(Menu.icon);
 		setFocusable(true);
 		addKeyListener(new Keyboard());
 		
-		//Если load =  true то игра загружается из сохранения, иначе то начинается снова
+		//Если load =  true то игра загружается из сохранения, иначе начинается с начала
 		if (load) {
 			
 		} else {
@@ -50,16 +50,21 @@ public class Game extends JFrame {
 		
 		arragement();
 		
-		//Запуск таймера для ОЗУ
-		Timer t = new Timer(17, (e) -> {
+		//Запуск таймера для ОЗУ и перерисовки
+		Timer t = new Timer(15, (e) -> {
 			long memory = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024;
-			setTitle("lannadar " + memory);
+			setTitle("Lannadar " + memory);
 			updateGraphics();
 		});
 		t.start();
 		
 		pl.startMoveThread();
 		game.start();
+		
+		//Поток демон для большей точности времени сна
+		Thread dm = new Thread(() -> {Sleep.sleep(Integer.MAX_VALUE);});
+		dm.setDaemon(true);
+		dm.start();
 	}
 	
 	//Первичная компоновка
@@ -85,6 +90,7 @@ public class Game extends JFrame {
 		
 		//Добавляем на карту игрока
 		mainPane.add(pl, new Integer(1));
+		Game.map[pl.xMap][pl.yMap].busy = true;
 		
 		//Инициализируем мобов
 		initMonsters();
@@ -92,8 +98,6 @@ public class Game extends JFrame {
 	
 	//Отрисовывает карту
 	protected static void initMap() {
-		//new LoadMap(pl.currentLocation + "");
-		
 		int xPrimal = 0, yPrimal = 0;
 		//Проверяем на какой позиции находится игрок, если слишком близко к краям то рисовать его не в центре
 		if (pl.xMap <= 8) {
@@ -160,12 +164,12 @@ public class Game extends JFrame {
 	
 	//Метод в таймере, реализует анимацию
 	private void updateGraphics() {
-		tm += 16;
-		if (tm > 960) {
+		tm += 15;
+		if (tm > 990) {
 			tm = 0;
 		}
 		
-		if (pl.localDir != Player.Direction.stand & tm % 128 == 0) {
+		if (pl.localDir != Direction.stand & tm % 150 == 0) {
 			pl.changeFrame(pl.localDir);
 		}
 		mainPane.repaint();
@@ -179,6 +183,7 @@ public class Game extends JFrame {
 			i.y = i.startY;
 			i.realX = map[i.x][i.y].getX();
 			i.realY = map[i.x][i.y].getY();
+			map[i.x][i.y].busy = true;
 		}
 	}
 	
@@ -186,7 +191,7 @@ public class Game extends JFrame {
 	protected static class TileLabel extends JLabel {
 		BufferedImage img;
 		//Отрисовываем карту на буфере
-		private void drawBuffer() {
+		protected void drawBuffer() {
 			int width = map.length * Tile.SIZE;
 			int height = map[0].length * Tile.SIZE;
 			img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -196,6 +201,7 @@ public class Game extends JFrame {
 			for (int i = 0; i < map[0].length; i++) {
 				for (int j = 0; j < map.length; j++) {
 					g2d.drawImage(TilesList.tiles[map[j][i].number].icon.getImage(), x, y, null);
+					//g2d.drawRect(x, y, Tile.SIZE, Tile.SIZE);
 					x += Tile.SIZE;
 				}
 				x = 0;

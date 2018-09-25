@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import ru.kreatifchk.editor.Editor;
 import ru.kreatifchk.game.Game;
@@ -93,6 +94,12 @@ public class Menu extends JFrame implements MouseListener {
 		pan.add(about);
 		pan.add(settings);
 		pan.add(exit);
+		
+		//Узнаем ОЗУ
+		new Timer(20, (e) -> {
+			long memory = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024;
+			setTitle("Lannadar " + memory);
+		}).start();
 	}
 	
 	private class MainPanel extends JPanel {
