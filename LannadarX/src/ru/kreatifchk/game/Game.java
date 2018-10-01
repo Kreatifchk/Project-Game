@@ -10,6 +10,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.Timer;
 
 import ru.kreatifchk.editor.Map;
+import ru.kreatifchk.game.Entity.State;
 import ru.kreatifchk.main.Main;
 import ru.kreatifchk.main.Menu;
 import ru.kreatifchk.tools.Center;
@@ -25,9 +26,13 @@ public class Game extends JFrame {
 	
 	static MapPoint[][] map; //Массив клеток игровой карты
 	
+	static EntityStatusBar esb;
+	
 	int tm; //Для таймера и отрисовки анимаций
 	
 	Thread game = new Thread(new GameCycle()); //Игровой цикл
+	
+	static int fps;
 	
 	public Game(boolean load) {
 		setTitle("Lannadar");
@@ -45,15 +50,15 @@ public class Game extends JFrame {
 		if (load) {
 			
 		} else {
-			pl = new Player();
+			pl = Player.getPlayer();
 		}
 		
 		arragement();
 		
 		//Запуск таймера для ОЗУ и перерисовки
-		Timer t = new Timer(15, (e) -> {
+		Timer t = new Timer(16, (e) -> {
 			long memory = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024;
-			setTitle("Lannadar " + memory);
+			setTitle("Lannadar  ОЗУ: " + memory + " MB  FPS: " + fps);
 			updateGraphics();
 		});
 		t.start();
@@ -77,12 +82,19 @@ public class Game extends JFrame {
 		//Панель на которой будет расположено игровое поле
 		tilePanel.setBounds(0, 0, mainPane.getWidth(), (int)(624*Main.INC));
 		tilePanel.setOpaque(true);
+		tilePanel.addMouseListener(new MapListener());
 		mainPane.add(tilePanel, new Integer(0));
 		
 		//Панель со здоровььем маной и.т.д игрока
 		StatusBar sb = new StatusBar();
 		sb.setLocation(0, 0);
 		mainPane.add(sb, new Integer(2));
+		
+		//Аналогичная панель для монстров (изначально скрытая)
+		esb = new EntityStatusBar();
+		esb.setLocation((mainPane.getWidth() - esb.getWidth()) - (int)(4*Main.INC), 0);
+		esb.setVisible(false);
+		mainPane.add(esb, new Integer(2));
 		
 		//Добавляем игровое поле
 		new LoadMap(pl.currentLocation + "");
@@ -162,6 +174,7 @@ public class Game extends JFrame {
 		tilePanel.remove(gpb);
 	}
 	
+	public static int count;
 	//Метод в таймере, реализует анимацию
 	private void updateGraphics() {
 		tm += 15;
@@ -173,6 +186,9 @@ public class Game extends JFrame {
 			pl.changeFrame(pl.localDir);
 		}
 		mainPane.repaint();
+		
+		//Подсчитывает fps
+		count++;
 	}
 	
 	//Инициализация монстров
@@ -184,6 +200,10 @@ public class Game extends JFrame {
 			i.realX = map[i.x][i.y].getX();
 			i.realY = map[i.x][i.y].getY();
 			map[i.x][i.y].busy = true;
+			
+			//Удалить позже
+			i.hp = i.hpMax;
+			i.mp = i.mpMax;
 		}
 	}
 	
@@ -191,7 +211,7 @@ public class Game extends JFrame {
 	protected static class TileLabel extends JLabel {
 		BufferedImage img;
 		//Отрисовываем карту на буфере
-		protected void drawBuffer() {
+		private void drawBuffer() {
 			int width = map.length * Tile.SIZE;
 			int height = map[0].length * Tile.SIZE;
 			img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -220,6 +240,7 @@ public class Game extends JFrame {
 			
 			//Отрисовка монстров, будет в отдельном буфере
 			for (Monster i: Map.monsters) {
+				if (i.state != State.dead)
 				g2d.drawImage(i.currentView.getImage(), i.realX, i.realY, null);
 			}
 		}

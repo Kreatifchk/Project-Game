@@ -24,7 +24,7 @@ public class Keyboard implements KeyListener {
 			dir = Direction.right;
 		}
 		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-			Map.monsters.stream().forEach((u) -> {u.moveTo(Game.pl.xMap, Game.pl.yMap-1); });
+			Map.monsters.stream().forEach((u) -> {u.moveTo(Game.pl.xMap, Game.pl.yMap-1);});
 		}
 		if (e.getKeyCode() == KeyEvent.VK_0) {
 			System.out.println(Game.pl.xMap + " " + Game.pl.yMap);

@@ -16,8 +16,9 @@ import ru.kreatifchk.tools.Sleep;
 public class Player extends JComponent {
 	
 	protected int hpMax = 300, mpMax = 100, ep = 0; //Очки здоровья, маны и опыта (максимальные)
-	protected int hp = 200, mp = 90;
-	protected int level = 999; //Уровень персонажа
+	protected int hp = 300, mp = 90;
+	protected int level = 873; //Уровень персонажа
+	protected int attack = 10, deffence;
 	int type = 0; //Класс персонажа (на данный момент недоступно)
 	
 	protected String currentLocation = "exp3"; //Текущая локация
@@ -30,7 +31,9 @@ public class Player extends JComponent {
 	
 	protected Direction localDir = Direction.stand; //Куда движется персонаж (независимая от нажатия переменная для анимации)
 	
-	public Player() {
+	boolean battle = false;
+	
+	private Player() {
 		changeFrame(Direction.down);
 	}
 	
@@ -45,7 +48,7 @@ public class Player extends JComponent {
 	protected void move() {
 		boolean stop = false;
 		while (true) {
-			Sleep.sleep(1);
+			Sleep.sleep(2);
 			try {
 			//Проверяем в начале, что игрок не заходит в портал, если зашел то дальнейшие действия не делаем
 			stop = false;
@@ -191,6 +194,14 @@ public class Player extends JComponent {
 		}
 	}
 	
+	protected Entity enemy; //На кого нажали мышью
+	protected void battle() {
+		//Срабатывает раз в секунду (пока, потом в зависимости от скорости боя)
+		enemy.hp -= attack;
+		Game.esb.changeHp(enemy.hp);
+		Game.esb.changeMp(enemy.mp);
+	}
+	
 	//Смена кадра анимации
 	protected void changeFrame(Direction dir) {
 		BufferedImage bi = new BufferedImage(144, 96, BufferedImage.TYPE_INT_ARGB);
@@ -224,6 +235,12 @@ public class Player extends JComponent {
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.drawImage(act, 0, 0, null);
 		g2d.dispose();
+	}
+	
+	//Синглтон
+	private final transient static Player player = new Player();
+	public static Player getPlayer() {
+		return player;
 	}
 	
 }

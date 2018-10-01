@@ -18,7 +18,7 @@ public class StatusBar extends JLabel {
 	
 	private Font dt;
 	
-	int alpha = 255;
+	private int alpha = 255;
 	private int stroke;
 	
 	private int hpMpPix;
@@ -43,7 +43,7 @@ public class StatusBar extends JLabel {
 		hpMpPix = (getWidth() - stroke + 1) - (int)(Tile.SIZE / 1.5);
 	}
 	
-	protected void setFontSize(float size) {
+	private void setFontSize(float size) {
 		dt = Fonts.digitalThin.deriveFont(size);
 	}
 	

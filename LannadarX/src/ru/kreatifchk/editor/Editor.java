@@ -487,9 +487,8 @@ public class Editor extends JFrame implements ActionListener, MouseListener, Mou
 						filter((e) -> e.startX == xClick & e.startY == yClick).findFirst().get());
 			} catch(NoSuchElementException e) {
 				//Иначе - наборот поставить
-				Monster mr = MonsterDialog.mr;
-				Map.monsters.add((Monster) new Monster(mr.getName(), mr.getImageName(), mr.getHpMax(),
-						mr.getMpMax(), mr.getLevel(), mr.getDanger()).setStart(xClick, yClick));
+				Monster mr = MonsterDialog.mr.clone();
+				Map.monsters.add((Monster)mr.setStart(xClick, yClick));
 			}
 		}
 	}

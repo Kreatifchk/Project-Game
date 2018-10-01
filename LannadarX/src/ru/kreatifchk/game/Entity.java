@@ -8,18 +8,19 @@ import java.util.Queue;
 
 import javax.swing.ImageIcon;
 
-import ru.kreatifchk.game.Direction;
 import ru.kreatifchk.main.Main;
 import ru.kreatifchk.tools.Resize;
 
 public abstract class Entity {
 	
 	private ImageIcon[][] view; //Изображение существа, полное со всеми анимациями
-	public transient ImageIcon currentView; //Текущий кадр
-	private int currentFrame;
+	public transient ImageIcon currentView; //Текущий изображение
+	private transient int dirView; //Направление взгляда
+	private int currentFrame; //Текущий кад анимации
 	
-	private int hpMax, mpMax;
-	int hp, mp, level;
+	protected int hpMax, mpMax;
+	int hp = hpMax, mp = mpMax, level;
+	int attack, defence; //Сила атаки, защита
 	int danger = 1; //Уровень опасности
 	
 	private String name;
@@ -27,11 +28,15 @@ public abstract class Entity {
 	
 	int x, y; //Текущие x и y в тайловой координатной системе
 	public int startX, startY; //Те на которых он появляется
-	int realX, realY; //Координаты x и y в пикселах относительно экрана
+	protected int realX, realY; //Координаты x и y в пикселах относительно экрана
 	protected int targetX = -1, targetY = -1; //Координаты куда необходимо двигаться монстру
-	private int stageMove = 0; //Процесс движения
+	
+	private transient int stageMove = 0; //Процесс движения
 	
 	protected Direction dir = Direction.stand; //Направление движения
+	
+	protected enum State {normal, battle, dead};
+	public State state = State.normal;
 	
 	public Entity(String name, int hpMax, int mpMax, int level) {
 		this.name = name;
@@ -72,7 +77,7 @@ public abstract class Entity {
 	}
 	
 	/** Устанавливает изображения для разных ситуаций entity */
-	protected void setIcon(String imageName) {
+	protected final void setIcon(String imageName) {
 		//Получаем общее изображение и растягиваем его при необходимости
 		Image img = new ImageIcon(Game.class.getResource("/ru/kreatifchk/res/image/entity/monster/" + imageName + ".png")).getImage();
 		img = Resize.resize(img, (int)(img.getWidth(null)*Main.INC), (int)(img.getHeight(null)*Main.INC));
@@ -99,25 +104,50 @@ public abstract class Entity {
 	protected void move(Direction dir) {
 		//Если частота цикла - 20мс, то делить на 24, а анимацию обновлять по stageMove % 8
 		if (dir == Direction.up) {
+			dirView = 3;
+			
 			realY -= Tile.SIZE / 12;
 			//Обновление анимации
 			if (stageMove % 4 == 0) 
 			currentView = (currentFrame == 3) ? view[currentFrame = 0][3] : view[currentFrame++][3];
+			//Меняем занятое поле
+			if (stageMove == 0) {
+				Game.map[x][y].busy = false;
+				Game.map[x][y-1].busy = true;
+			}
 		}
 		if (dir == Direction.down) {
+			dirView = 0;
+			
 			realY += Tile.SIZE / 12;
 			if (stageMove % 4 == 0)
 			currentView = (currentFrame == 3) ? view[currentFrame = 0][0] : view[currentFrame++][0];
+			if (stageMove == 0) {
+				Game.map[x][y].busy = false;
+				Game.map[x][y+1].busy = true;
+			}
 		}
 		if (dir == Direction.left) {
+			dirView = 1;
+			
 			realX -= Tile.SIZE / 12;
 			if (stageMove % 4 == 0)
 			currentView = (currentFrame == 3) ? view[currentFrame = 0][1] : view[currentFrame++][1];
+			if (stageMove == 0) {
+				Game.map[x][y].busy = false;
+				Game.map[x-1][y].busy = true;
+			}
 		}
 		if (dir == Direction.right) {
+			dirView = 2;
+			
 			realX += Tile.SIZE / 12;
 			if (stageMove % 4 == 0)
 			currentView = (currentFrame == 3) ? view[currentFrame = 0][2] : view[currentFrame++][2];
+			if (stageMove == 0) {
+				Game.map[x][y].busy = false;
+				Game.map[x+1][y].busy = true;
+			}
 		}
 		stageMove++;
 		
@@ -129,10 +159,12 @@ public abstract class Entity {
 			if (dir == Direction.left) x--;
 			if (dir == Direction.right) x++;
 			this.dir = Direction.stand;
+			//Сбрасываем анимацию
+			setCurrentView(1);
 		}
 	}
 	
-	//Движение к определенной точке, куда двигаться задается из следующего метода
+	/** Непосредственно направляет entity к точке */
 	protected void moveTo() {
 		MovePoint[][] pole = new MovePoint[Game.map.length][Game.map[0].length]; //Здесь будет записываться дальность
 		for (int i = 0; i < Game.map[0].length; i++) {
@@ -228,8 +260,7 @@ public abstract class Entity {
 	}
 	
 	/** Дает указание двигаться к определенной точке */
-	protected void moveTo(int targetX, int targetY) {
-		System.out.println(targetX + " " + targetY);
+	public final void moveTo(int targetX, int targetY) {
 		//Предусмотреть чтоб нельзя было отправить на занятую клетку
 		this.targetX = targetX;
 		this.targetY = targetY;
@@ -243,13 +274,17 @@ public abstract class Entity {
 	}
 	
 	/** Установка местоположениия по тайлам */
-	protected void setLocation(int x, int y) {
+	protected final void setLocation(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
-	/** Установка текущего кадра */
+	/** Установка текущего изображения */
 	public void setCurrentView(int x, int y) {
 		currentView = view[x][y];
+	}
+	/** Установка только кадра анимации без изменения стороны в которую смотрим entity */
+	public void setCurrentView(int y) {
+		currentView = view[1][dirView];
 	}
 	
 	
@@ -267,6 +302,12 @@ public abstract class Entity {
 	public int getDanger() {
 		return danger;
 	}
+	public int getAttack() {
+		return attack;
+	}
+	public int getDefence() {
+		return defence;
+	}
 	public String getName() {
 		return name;
 	}
@@ -274,4 +315,13 @@ public abstract class Entity {
 		return imageName;
 	}
 	
+	public Entity setAttack(int attack) {
+		this.attack = attack;
+		return this;
+	}
+	
+	public Entity setDefence(int defence) {
+		this.defence = defence;
+		return this;
+	}
 }
